@@ -147,9 +147,9 @@ Ez a projekt a [MIT licenc](LICENSE) alatt érhető el.
 
 ## 💻 Fejlesztők
 
-- **Név 1** – *Frontend fejlesztés*
-- **Név 2** – *Backend fejlesztés*
-- **Név 3** – *API fejlesztés*
+- **Kocsis András Barnabás** 
+- **Petz Dávid** 
+- **Kórodi-Juhász Dávid Attila** 
 
 ---
 
