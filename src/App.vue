@@ -12,7 +12,7 @@
 
       <!-- Product List -->
       <main class="flex-1 p-6">
-        <ProductList />
+        <RouterView />
       </main>
     </div>
 
