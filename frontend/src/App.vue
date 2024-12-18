@@ -12,7 +12,7 @@
 
       <!-- Product List -->
       <main class="flex-1 p-6">
-        <RouterView />
+        <RouterView @addToCart="addItemToCart" />
       </main>
     </div>
 
@@ -21,6 +21,7 @@
       :isOpen="isCartOpen"
       :cartItems="cartItems"
       @close="toggleCart"
+      @remove-item="removeItemFromCart"
     />
   </div>
 </template>
@@ -28,24 +29,19 @@
 <script>
 import Navbar from './components/Navbar.vue';
 import FilterPanel from './components/FilterPanel.vue';
-import ProductList from './components/ProductList.vue';
 import CartPanel from './components/CartPanel.vue';
 
 export default {
   components: {
     Navbar,
     FilterPanel,
-    ProductList,
     CartPanel,
   },
   data() {
     return {
       isFilterOpen: false,
       isCartOpen: false,
-      cartItems: [
-        { id: 1, name: 'Termék 1', price: 1000 },
-        { id: 2, name: 'Termék 2', price: 2000 },
-      ],
+      cartItems: [],
     };
   },
   methods: {
@@ -54,6 +50,21 @@ export default {
     },
     toggleCart() {
       this.isCartOpen = !this.isCartOpen;
+    },
+    addItemToCart(product) {
+      const existingItem = this.cartItems.find((item) => item.id === product.id);
+      if (existingItem) {
+        alert('Ez a termék már a kosárban van!');
+      } else {
+        this.cartItems.push(product);
+        alert(`${product.name} hozzáadva a kosárhoz!`);
+      }
+    },
+    removeItemFromCart(item) {
+      const index = this.cartItems.findIndex((cartItem) => cartItem.id === item.id);
+      if (index !== -1) {
+        this.cartItems.splice(index, 1);
+      }
     },
   },
 };

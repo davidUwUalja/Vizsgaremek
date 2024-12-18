@@ -2,7 +2,7 @@
     <div class="min-h-screen bg-gray-100 flex flex-col items-center py-8">
       <h1 class="text-3xl font-bold mb-6">Kosár</h1>
   
-      <div class="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
+    <div class="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
         <h2 class="text-2xl font-semibold mb-4">Kosár</h2>
         <div v-if="basket.length === 0" class="text-gray-600 text-center">
           A kosarad üres.
