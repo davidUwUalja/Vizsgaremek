@@ -1,71 +1,62 @@
 <template>
   <div class="min-h-screen bg-gray-100">
-    <!-- Navbar -->
-    <Navbar
-      @toggleFilter="toggleFilter"
-      @toggleCart="toggleCart"
-    />
+    <Navbar @loginpage="showModal" />
 
-    <div class="flex">
-      <!-- Filter Panel -->
-      <FilterPanel v-if="isFilterOpen" @close="toggleFilter" />
+    <Modal :isOpen="isModalOpen" @close="closeModal">
+      <div class="flex justify-center mb-4">
+        <button @click="activeComponent = 'Login'" :class="{ 'bg-blue-500 text-white': activeComponent === 'Login', 'text-blue-500 hover:underline': activeComponent !== 'Login' }" class="p-2 rounded mr-2">Bejelentkezés</button>
+        <button @click="activeComponent = 'Register'" :class="{ 'bg-blue-500 text-white': activeComponent === 'Register', 'text-blue-500 hover:underline': activeComponent !== 'Register' }" class="p-2 rounded">Regisztráció</button>
+      </div>
+      <component :is="activeComponent" @success="handleAuthSuccess" @switch="switchComponent" />
+    </Modal>
 
-      <!-- Product List -->
-      <main class="flex-1 p-6">
-        <RouterView @addToCart="addItemToCart" />
-      </main>
-    </div>
-
-    <!-- Cart Panel -->
-    <CartPanel
-      :isOpen="isCartOpen"
-      :cartItems="cartItems"
-      @close="toggleCart"
-      @remove-item="removeItemFromCart"
-    />
+    <router-view />
   </div>
 </template>
 
 <script>
+import Modal from './components/Modal.vue';
+import Login from './components/Login.vue';
+import Register from './components/Register.vue';
 import Navbar from './components/Navbar.vue';
-import FilterPanel from './components/FilterPanel.vue';
-import CartPanel from './components/CartPanel.vue';
 
 export default {
-  components: {
-    Navbar,
-    FilterPanel,
-    CartPanel,
-  },
+  components: { Modal, Login, Register, Navbar },
   data() {
     return {
-      isFilterOpen: false,
-      isCartOpen: false,
-      cartItems: [],
+      isModalOpen: false,
+      activeComponent: 'Login', // Start with login form
     };
   },
   methods: {
-    toggleFilter() {
-      this.isFilterOpen = !this.isFilterOpen;
+    showModal() {
+      this.isModalOpen = true;
     },
-    toggleCart() {
-      this.isCartOpen = !this.isCartOpen;
+    closeModal() {
+      this.isModalOpen = false;
     },
-    addItemToCart(product) {
-      const existingItem = this.cartItems.find((item) => item.id === product.id);
-      if (existingItem) {
-        alert('Ez a termék már a kosárban van!');
-      } else {
-        this.cartItems.push(product);
-        alert(`${product.name} hozzáadva a kosárhoz!`);
-      }
+    switchComponent(componentName) {
+      this.activeComponent = componentName;
     },
-    removeItemFromCart(item) {
-      const index = this.cartItems.findIndex((cartItem) => cartItem.id === item.id);
-      if (index !== -1) {
-        this.cartItems.splice(index, 1);
-      }
+    handleAuthSuccess() {
+      this.closeModal();
+      // Handle successful auth (e.g., redirect, update UI)
     },
   },
 };
 </script>
+
+<style scoped>
+.fixed {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+</style>

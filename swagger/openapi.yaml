@@ -6,6 +6,8 @@ info:
 servers:
   - url: http://backend.vm1.test
     description: VM1 backend
+  - url: http://backend.vm2.test
+    description: VM2 backend
 paths:
   /api/products:
     get:
@@ -137,40 +139,84 @@ paths:
           description: A termék nem található
   /api/register:
     post:
-      summary: Regisztráció
-      description: Új felhasználó regisztrálása.
-      operationId: register
+      summary: Felhasználó regisztráció
+      description: Új felhasználó regisztrációja név, email és jelszó megadásával. A regisztráció során a backend validálja az adatokat.
+      operationId: auth.register
       tags:
-        - Felhasználók
+        - Authentication
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserInput'
+              $ref: '#/components/schemas/UserInput' # Hivatkozás a UserInput sémára
       responses:
         '201':
-          description: Felhasználó sikeresen regisztrálva
-        '422':
-          description: Érvényességi hiba
+          description: Regisztráció sikeres
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  user:
+                    $ref: '#/components/schemas/User'
+        '400':
+          description: Hibás adatok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
   /api/login:
     post:
-      summary: Bejelentkezés
-      description: Felhasználó bejelentkezése.
-      operationId: login
+      summary: Felhasználó bejelentkezés
+      description: Bejelentkezés email/jelszó vagy név/jelszó párossal. A backend ellenőrzi, hogy a megadott adatok helyesek-e.
+      operationId: auth.login
       tags:
-        - Felhasználók
+        - Authentication
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserLoginInput'
+              type: object
+              properties:
+                identifier:
+                  type: string
+                  description: Felhasználó neve vagy email címe
+                password:
+                  type: string
+                  description: Jelszó (minimum 8 karakter)
+                  minLength: 8
+              required:
+                - identifier
+                - password
       responses:
         '200':
-          description: Sikeres bejelentkezés
+          description: Bejelentkezés sikeres
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  token:
+                    type: string
+                    description: Felhasználó hitelesítési token
         '401':
           description: Hibás bejelentkezési adatok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
   /api/logout:
     post:
       summary: Kijelentkezés
@@ -181,8 +227,40 @@ paths:
       responses:
         '204':
           description: Sikeres kijelentkezés
-components:
+components: # Csak egyszer szerepelhet a components kulcs
   schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Felhasználó azonosítója
+        name:
+          type: string
+          description: Felhasználó neve
+        email:
+          type: string
+          format: email
+          description: Felhasználó email címe
+    UserInput: # Itt a UserInput definíciója
+      type: object
+      properties:
+        name:
+          type: string
+          description: Felhasználó neve
+          maxLength: 50
+        email:
+          type: string
+          format: email
+          description: Érvényes email cím
+        password:
+          type: string
+          description: Jelszó (minimum 8 karakter)
+          minLength: 8
+      required:
+        - name
+        - email
+        - password
     Product:
       type: object
       properties:
@@ -196,78 +274,3 @@ components:
           type: string
           example: Porcelán
         description:
-          type: string
-          example: Gyönyörű, kézzel festett váza a 19. századból.
-        price:
-          type: number
-          format: float
-          example: 150.00
-        image_url:
-          type: string
-          example: https://example.com/vaza.jpg
-        stock:
-          type: integer
-          example: 10
-        category:
-          type: string
-          example: Kerámia
-        created_at:
-          type: string
-          format: date-time
-          example: "2024-12-23T08:52:29.000Z"
-        updated_at:
-          type: string
-          format: date-time
-          example: "2024-12-23T08:52:29.000Z"
-    ProductInput:
-      type: object
-      properties:
-        name:
-          type: string
-          example: Régi Váza
-        material:
-          type: string
-          example: Porcelán
-        description:
-          type: string
-          example: Gyönyörű, kézzel festett váza a 19. századból.
-        price:
-          type: number
-          format: float
-          example: 150.00
-        image_url:
-          type: string
-          example: https://example.com/vaza.jpg
-        stock:
-          type: integer
-          example: 10
-        category:
-          type: string
-          example: Kerámia
-      required:
-        - name
-        - material
-        - price
-    UserInput:
-      type: object
-      properties:
-        name:
-          type: string
-          example: Teszt Elek
-        email:
-          type: string
-          format: email
-          example: test@test.hu
-        password:
-          type: string
-          example: jelszo
-    UserLoginInput:
-      type: object
-      properties:
-        email:
-          type: string
-          format: email
-          example: test@test.hu
-        password:
-          type: string
-          example: jelszo
