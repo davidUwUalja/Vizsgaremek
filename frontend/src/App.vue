@@ -9,9 +9,11 @@
       </div>
       <component :is="activeComponent" @success="handleAuthSuccess" @switch="switchComponent" />
     </Modal>
-
+    
     <router-view />
+    <Footer />
   </div>
+  
 </template>
 
 <script>
@@ -19,9 +21,10 @@ import Modal from './components/Modal.vue';
 import Login from './components/Login.vue';
 import Register from './components/Register.vue';
 import Navbar from './components/Navbar.vue';
+import Footer from './components/Footer.vue';
 
 export default {
-  components: { Modal, Login, Register, Navbar },
+  components: { Modal, Login, Register, Navbar, Footer },
   data() {
     return {
       isModalOpen: false,
