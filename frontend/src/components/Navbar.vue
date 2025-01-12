@@ -28,7 +28,8 @@
         Kosár
       </button>
       <button
-        @click="$emit('loginpage')"  class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+        @click="$emit('loginpage')"
+        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
       >
         Bejelentkezés
       </button>
@@ -38,6 +39,6 @@
 
 <script>
 export default {
-  name: 'Navbar',
+  name: "Navbar",
 };
 </script>

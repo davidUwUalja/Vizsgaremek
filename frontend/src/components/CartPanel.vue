@@ -58,7 +58,7 @@ export default {
   },
   computed: {
     totalPrice() {
-      return this.cartItems.reduce((sum, item) => sum + item.price, 0);
+      return this.cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
     },
   },
 };
