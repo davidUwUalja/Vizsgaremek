@@ -7,6 +7,7 @@
       class="bg-white shadow-md rounded-lg overflow-hidden"
     >
       <div class="p-4">
+        <img alt="Product Image" class="w-full h-auto object-cover rounded-lg" src="../images/minijurtakesajandekok.jpg"/>
         <h3 class="font-semibold text-lg text-gray-800">{{ product.name }}</h3>
         <p class="text-gray-500">Ár: {{ product.price }} Ft</p>
         <div class="flex space-x-2 mt-4">
