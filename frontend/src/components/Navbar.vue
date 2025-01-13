@@ -2,19 +2,18 @@
   <nav class="bg-white shadow-md p-4 flex items-center justify-between">
     <div class="flex items-center">
       <button
+        v-if="$route.name === 'ProductList'"
         @click="$emit('toggleFilter')"
         class="text-gray-700 hover:bg-gray-200 p-2 rounded-md"
       >
         Szűrő
       </button>
     </div>
-
     <div class="flex space-x-3">
       <router-link to="/" class="text-gray-700 hover:text-blue-500">Főoldal</router-link>
       <router-link to="/products" class="text-gray-700 hover:text-blue-500">Termékek</router-link>
       <router-link to="/contact" class="text-gray-700 hover:text-blue-500">Kapcsolat</router-link>
     </div>
-
     <div class="flex items-center space-x-4">
       <input
         type="text"
