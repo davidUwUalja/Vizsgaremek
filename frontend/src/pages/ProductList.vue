@@ -1,23 +1,24 @@
+// ProductList.vue módosítás
 <template>
-  <div class="flex">
-    <FilterPanel
-      v-if="isFilterOpen"
-      @close="toggleFilter"
-      class="w-1/4 bg-white shadow-md p-4"
-    />
-    <div class="flex-1 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4">
-      <div
-        v-for="product in products"
-        :key="product.id"
-        class="bg-white shadow-md rounded-lg overflow-hidden"
-      >
-        <img :src="product.image" alt="Product Image" class="h-48 w-full object-cover" />
-        <div class="p-4">
-          <h3 class="font-semibold text-lg">{{ product.name }}</h3>
-          <p class="text-gray-500">{{ product.price }} Ft</p>
+  <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4">
+    <div
+      v-for="product in products"
+      :key="product.id"
+      class="bg-white shadow-md rounded-lg overflow-hidden"
+    >
+      <div class="p-4">
+        <h3 class="font-semibold text-lg text-gray-800">{{ product.name }}</h3>
+        <p class="text-gray-500">Ár: {{ product.price }} Ft</p>
+        <div class="flex space-x-2 mt-4">
+          <router-link
+            :to="`/products/${product.id}`"
+            class="px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded hover:bg-blue-600"
+          >
+            Megtekintés
+          </router-link>
           <button
             @click="addToCart(product)"
-            class="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            class="px-4 py-2 bg-green-500 text-white text-sm font-medium rounded hover:bg-green-600"
           >
             Kosárba
           </button>
@@ -28,24 +29,33 @@
 </template>
 
 <script>
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+
 export default {
   name: 'ProductList',
-  data() {
-    return {
-      isFilterOpen: false,
-      products: [
-        { id: 1, name: 'Termék 1', price: 3000, image: 'https://via.placeholder.com/150' },
-        { id: 2, name: 'Termék 2', price: 4500, image: 'https://via.placeholder.com/150' },
-      ],
+  setup() {
+    const products = ref([]);
+
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get('http://backend.vm1.test/api/products');
+        products.value = response.data.map(({ id, name, price }) => ({ id, name, price }));
+      } catch (error) {
+        console.error('Hiba a termékek betöltése során:', error);
+      }
     };
-  },
-  methods: {
-    toggleFilter() {
-      this.isFilterOpen = !this.isFilterOpen;
-    },
-    addToCart(product) {
-      this.$emit('addToCart', product);
-    },
+
+    onMounted(fetchProducts);
+
+    const addToCart = (product) => {
+      console.log('Kosárhoz adva:', product);
+    };
+
+    return {
+      products,
+      addToCart,
+    };
   },
 };
 </script>
