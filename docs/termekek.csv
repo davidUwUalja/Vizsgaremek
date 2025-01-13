@@ -1,0 +1,26 @@
+id;name;stock;Forint/db;material;Euro/db;roman lej/db;category;image_url
+1;szönyeg fali;1;120000;kotton;300;1600;szoba dísz;
+2;szönyeg nemez 100x50;3;40000;nemez;100;533;szoba dísz;
+3;párna;19;10000;gyapjú;25;133;kellék;
+4;falidísz zsebes hosszú 120x30;3;12000;nemez;30;160;szoba dísz;
+5;falidísz zsebes közepes 70x30;3;8000;nemez;20;106;szoba dísz;
+6;faldísz zsebes kicsi 60x20;4;6000;kotton;15;80;szoba dísz;
+7;ushanka sapka;20;12000;bársony;30;160;ruha;
+8;kalap;13;12000;bársony;30;160;ruha;
+9;takhia fehér;40;10000;nemez;25;133;ruha;
+10;takhia színes;29;10000;nemez;25;133;ruha;
+11;takhia baseball;10;10000;nemez;25;133;ruha;
+12;papucs gyerek;5;5000;nemez;12.5;66;ruha;
+13;"papucs; mamusz ";20;10000;nemez;25;133;ruha;
+14;hátizsák;10;16000;bársony;40;213;ruha;
+15;kendő;9;3000;selyem;7.5;40;ruha;
+16;sál;3;10000;selyem;25;133;ruha;
+17;asztal terítő;3;40000;kotton;100;533;kellék;
+18;mini jurta ;6;5000; nemez;13.5;66;szoba dísz;
+19;nemez alma;3;3000;nemez;7.5;40;szoba dísz;
+20;mellény nemez rózsaszín;1;40000;nemez;100;533;ruha;
+21;kaftán férfi;3;40000;bársony;100;533;ruha;
+22;kaftán női;6;40000;bársony;100;533;ruha;
+23;szoknya;1;50000;bársony;125;666;ruha;
+27;kardigan;1;20000;kotton;50;266;ruha;
+28;Mellény;4;80000;bársony;200;1066;ruha;

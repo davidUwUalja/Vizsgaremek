@@ -2,62 +2,37 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Laravel\Sanctum\PersonalAccessToken;
 
 class AuthController extends Controller
 {
-    public function register(Request $request)
+    public function register(RegisterRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-        ]);
-
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'name'=>$request['name'],
+            'email'=>$request['email'],
+            'password'=>Hash::make($request['password']),
         ]);
-
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-        ]);
+        return response()->json(['message' => 'Regisztráció sikeres', 'user' =>$user],201);
     }
 
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-        ]);
-    
-        if (Auth::attempt($credentials)) { // Itt történik a jelszó ellenőrzése
-            $user = Auth::user(); // A bejelentkezett felhasználó lekérdezése
-            $token = $user->createToken('auth_token')->plainTextToken;
-    
-            return response()->json([
-                'access_token' => $token,
-                'token_type' => 'Bearer',
-            ]);
-        }
-    
-        return response()->json([
-            'message' => 'Érvénytelen bejelentkezési adatok',
-        ], 401);
-    }
+        $credentials = $request->only('identifier','password');
+        $user = User::where('email',$credentials['identifier'])   
+                    ->orWhere('name',$credentials['identifier'])    
+                    ->first();
 
-    public function logout(Request $request) {
-        $request->user()->currentAccessToken()->delete();
-        return [
-            'message' => 'Sikeres kijelentkezés'
-        ];
+        if(!$user){
+            return response()->json(['message'=>'Felhasználó nem található'],404);
+        }
+        if(Hash::check($credentials['password'],$user->password)){
+            $token = $user->createToken('auth_token')->plainTextToken;
+            return response()->json(['message' =>'Sikeres bejelentkezés', 'token' =>$token],200);
+        }
+        return response()->json(['message'=>'Helytelen bejelentkezési adatok'],401);
     }
 }
