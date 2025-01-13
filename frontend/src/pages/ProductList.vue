@@ -38,13 +38,14 @@ export default {
     const products = ref([]);
 
     const fetchProducts = async () => {
-      try {
-        const response = await axios.get('http://backend.vm1.test/api/products');
-        products.value = response.data.map(({ id, name, price }) => ({ id, name, price }));
-      } catch (error) {
-        console.error('Hiba a termékek betöltése során:', error);
-      }
-    };
+  try {
+    const response = await axios.get('http://backend.vm1.test/api/products');
+    products.value = response.data.data.map(({ id, name, price }) => ({ id, name, price }));
+  } catch (error) {
+    console.error('Hiba a termékek betöltése során:', error);
+  }
+};
+
 
     onMounted(fetchProducts);
 

@@ -13,10 +13,15 @@ class ProductController extends Controller
         return ProductResource::collection(Product::all());
     }
 
-    public function show(Product $product)
+    public function show($id)
     {
+        $product = Product::find($id);
+        if (!$product) {
+            return response()->json(['message' => 'Termék nem található'], 404);
+        }
         return new ProductResource($product);
     }
+
 
     public function store(ProductRequest $request)
     {
