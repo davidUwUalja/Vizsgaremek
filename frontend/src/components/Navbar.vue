@@ -7,16 +7,16 @@
           @click="toggleLanguageMenu"
           class="text-gray-700 hover:bg-gray-200 p-2 rounded-md"
         >
-          🌐 Nyelv
+          🌐 {{ $t("language") }}
         </button>
         <div
           v-if="isLanguageMenuOpen"
           class="absolute bg-white shadow-lg rounded-md mt-2 w-32 z-10"
         >
           <ul>
-            <li class="p-2 hover:bg-gray-100 cursor-pointer">Magyar</li>
-            <li class="p-2 hover:bg-gray-100 cursor-pointer">English</li>
-            <li class="p-2 hover:bg-gray-100 cursor-pointer">Deutsch</li>
+            <li @click="changeLanguage('hu')" class="p-2 hover:bg-gray-100 cursor-pointer">Magyar</li>
+            <li @click="changeLanguage('en')"class="p-2 hover:bg-gray-100 cursor-pointer">English</li>
+            <li @click="changeLanguage('de')" class="p-2 hover:bg-gray-100 cursor-pointer">Deutsch</li>
           </ul>
         </div>
       </div>
@@ -75,6 +75,10 @@ export default {
     performSearch() {
       console.log("Keresési kifejezés:", this.searchQuery);
     },
+
+    changeLanguage(locale){
+      this.$i18n.locale = locale;
+    },
   },
 };
-</script>
+</script> 
