@@ -53,9 +53,6 @@
 
 ---
 
-### **Script**
-
-```vue
 <script>
 import Modal from "./components/Modal.vue";
 import Login from "./components/Login.vue";
