@@ -35,6 +35,14 @@
       @close="toggleFilter"
     />
 
+    <!-- Wishlist Panel -->
+    <Wishlist 
+        v-if="isWishlistOpen"
+        :wishlist="wishlist"
+        @add-to-cart="addToCart"
+        @remove-from-wishlist="removeFromWishlist"
+    />
+
     <!-- Cart Panel -->
     <CartPanel
       :isOpen="isCartOpen"

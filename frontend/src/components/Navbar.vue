@@ -41,7 +41,9 @@
       <router-link to="/contact" class="text-gray-700 hover:text-blue-500">Kapcsolat</router-link>
     </div>
 
-    <!-- Jobb oldal - Bejelentkezés és Kosár -->
+
+
+    <!-- Jobb oldal - Bejelentkezés, Kosár, Wishlist -->
     <div class="flex items-center space-x-4">
       <button
         @click="$emit('loginpage')"
@@ -55,6 +57,9 @@
       >
         🛒
       </button>
+      <button @click="$emit('toggleWishlist')" class="mx-4 text-red-500 text-xl">
+      ❤️
+    </button>
     </div>
   </nav>
 </template>
