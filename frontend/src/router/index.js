@@ -5,6 +5,7 @@ import ProductList from '../pages/ProductList.vue';
 import Login from '../components/Login.vue';
 import Register from '../components/Register.vue';
 import ProductInfos from '../pages/ProductInfos.vue';
+import BlogPage from '../pages/BlogPage.vue';
 
 const routes = [
     {
@@ -37,6 +38,12 @@ const routes = [
         path: '/register',
         name: 'Register',
         components: { default: Register, 'login-area': Register }, // Named view for modal
+        meta: { guest: true }
+    },
+    {
+        path: '/blogpage',
+        name: 'Blogpage',
+        components: { default: BlogPage, 'login-area': BlogPage }, // Named view for modal
         meta: { guest: true }
     },
 ];

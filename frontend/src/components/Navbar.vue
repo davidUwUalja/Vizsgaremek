@@ -38,7 +38,9 @@
     <div class="flex items-center space-x-6">
       <router-link to="/" class="text-gray-700 hover:text-blue-500">Főoldal</router-link>
       <router-link to="/products" class="text-gray-700 hover:text-blue-500">Termékek</router-link>
+      <router-link to="/blogpage" class="text-gray-700 hover:text-blue-500">Blog</router-link>
       <router-link to="/contact" class="text-gray-700 hover:text-blue-500">Kapcsolat</router-link>
+      
     </div>
 
 
