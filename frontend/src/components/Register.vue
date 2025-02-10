@@ -1,54 +1,84 @@
 <template>
-  <div>
-    <h2 class="text-2xl font-semibold text-center mb-4">Regisztráció</h2>
-    <form @submit.prevent="registerUser">
-      <input type="text" v-model="name" placeholder="Név" class="border rounded p-2 mb-2 w-full">
-      <input type="email" v-model="email" placeholder="Email" class="border rounded p-2 mb-2 w-full">
-      <input type="password" v-model="password" placeholder="Jelszó" class="border rounded p-2 mb-4 w-full">
-      <button type="submit" class="bg-blue-500 text-white p-2 rounded w-full">Regisztráció</button>
-      <div v-if="error" class="text-red-500 mt-2">{{ error }}</div>
-    </form>
-    <button @click="$emit('switch', 'login')" class="mt-2 text-blue-500 underline">Vissza a bejelentkezéshez</button>
-  </div>
-</template>
-
-<script>
-import { ref } from 'vue';
-
-export default {
-  setup(props, { emit }){
-      const name = ref('');
-      const email = ref('');
-      const password = ref('');
-      const error = ref(null)
-
-      const registerUser = async () => {
-          error.value = null;
-          try {
-              const response = await fetch('http://backend.vm1.test/api/register', {
-                  method: 'POST',
-                  headers: {
-                      'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify({
-                      name: name.value,
-                      email: email.value,
-                      password: password.value,
-                  }),
-              });
-              const data = await response.json();
-
-              if (response.ok) {
-                  emit('success');
-              } else {
-                  error.value = data.error || 'Sikertelen regisztráció.';
-              }
-          } catch (err) {
-              error.value = 'Hiba a regisztráció során.';
-          }
+    <div class="flex justify-center items-center min-h-screen">
+      <form @submit.prevent="register" class="w-96 p-8 bg-white shadow-md rounded-lg">
+        <h2 class="text-xl font-bold mb-4 text-gray-800">Regisztráció</h2>
+        <div>
+          <label for="name" class="block text-sm text-gray-700">Név</label>
+          <input
+            type="text"
+            v-model="name"
+            id="name"
+            class="w-full p-2 border border-gray-300 rounded-md bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          />
+        </div>
+        <div class="mt-4">
+          <label for="email" class="block text-sm text-gray-700">E-mail</label>
+          <input
+            type="email"
+            v-model="email"
+            id="email"
+            class="w-full p-2 border border-gray-300 rounded-md bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          />
+        </div>
+        <div class="mt-4">
+          <label for="password" class="block text-sm text-gray-700">Jelszó</label>
+          <input
+            type="password"
+            v-model="password"
+            id="password"
+            class="w-full p-2 border border-gray-300 rounded-md bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          />
+        </div>
+        <div class="mt-4">
+          <label for="password_confirmation" class="block text-sm text-gray-700">Jelszó megerősítése</label>
+          <input
+            type="password"
+            v-model="password_confirmation"
+            id="password_confirmation"
+            class="w-full p-2 border border-gray-300 rounded-md bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          />
+        </div>
+        <button type="submit" class="w-full mt-6 bg-blue-500 text-white p-2 rounded-md">Regisztráció</button>
+      </form>
+    </div>
+  </template>
+  
+  <script>
+  import axios from "axios";
+  import { useRouter } from "vue-router";
+  
+  export default {
+    data() {
+      return {
+        name: "",
+        email: "",
+        password: "",
+        password_confirmation: "",
       };
-
-      return { name, email, password, registerUser, error };
-  }
-};
-</script>
+    },
+    methods: {
+      async register() {
+        try {
+          const response = await axios.post("http://backend.vm1.test/api/register", {
+            name: this.name,
+            email: this.email,
+            password: this.password,
+            password_confirmation: this.password_confirmation, // Fontos: add hozzá ezt a mezőt is!
+          });
+          localStorage.setItem("token", response.data.token); 
+          this.$router.push("/landing");
+        } catch (error) {
+          if (error.response && error.response.data) {
+            console.error(error.response.data); // Hibaüzenet konzolra
+            alert("Hiba történt a regisztráció során.");
+          }
+        }
+      },
+    },
+  };
+  </script>
+  

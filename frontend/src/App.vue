@@ -62,7 +62,7 @@
 ---
 
 <script>
-import Modal from "./components/Modal.vue";
+import Modal from "./components/AuthModal.vue";
 import Login from "./components/Login.vue";
 import Register from "./components/Register.vue";
 import Navbar from "./components/Navbar.vue";
