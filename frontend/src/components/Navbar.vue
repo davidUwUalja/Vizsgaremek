@@ -7,7 +7,7 @@
           @click="toggleLanguageMenu"
           class="text-gray-700 hover:bg-gray-200 p-2 rounded-md"
         >
-          🌐 {{ $t("language")  }}
+          🌐 {{ $t("language") }}
         </button>
         <div v-if="isLanguageMenuOpen" class="absolute bg-white shadow-lg rounded-md mt-2 w-32 z-10">
           <ul>
@@ -20,7 +20,7 @@
       <div class="flex items-center border rounded-md px-2">
         <input
           type="text"
-          placeholder="Keresés..."
+          :placeholder="$t('searchPlaceholder')"
           class="outline-none text-gray-700 px-2 py-1 w-48"
           @keyup.enter="performSearch"
           v-model="searchQuery"
@@ -33,25 +33,25 @@
 
     <!-- Középső rész - Oldalak -->
     <div class="flex items-center space-x-6">
-      <router-link to="/landing" class="text-gray-700 hover:text-blue-500">Főoldal</router-link>
-      <router-link to="/products" class="text-gray-700 hover:text-blue-500">Termékek</router-link>
-      <router-link to="/blogpage" class="text-gray-700 hover:text-blue-500">Blog</router-link>
-      <router-link to="/contact" class="text-gray-700 hover:text-blue-500">Kapcsolat</router-link>
+      <router-link to="/landing" class="text-gray-700 hover:text-blue-500">{{ $t('home') }}</router-link>
+      <router-link to="/products" class="text-gray-700 hover:text-blue-500">{{ $t('products') }}</router-link>
+      <router-link to="/blogpage" class="text-gray-700 hover:text-blue-500">{{ $t('blog') }}</router-link>
+      <router-link to="/contact" class="text-gray-700 hover:text-blue-500">{{ $t('contact') }}</router-link>
     </div>
 
     <!-- Jobb oldal - Profil, Kosár, Wishlist -->
     <div class="flex items-center space-x-4">
       <button v-if="!isAuthenticated" @click="openModal" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-        Bejelentkezés
+        {{ $t('login') }}
       </button>
 
       <div v-else class="relative">
         <button @click="toggleProfileMenu" class="text-gray-700 text-xl">👤</button>
         <div v-if="isProfileMenuOpen" class="absolute right-0 bg-white shadow-lg rounded-md mt-2 w-40 z-10">
           <ul>
-            <li class="p-2 hover:bg-gray-100 cursor-pointer">Beállítások</li>
-            <li class="p-2 hover:bg-gray-100 cursor-pointer">Számlák</li>
-            <li @click="$emit('logout')" class="p-2 hover:bg-red-100 cursor-pointer text-red-500">Kilépés</li>
+            <li class="p-2 hover:bg-gray-100 cursor-pointer">{{ $t('settings') }}</li>
+            <li class="p-2 hover:bg-gray-100 cursor-pointer">{{ $t('accounts') }}</li>
+            <li @click="$emit('logout')" class="p-2 hover:bg-red-100 cursor-pointer text-red-500">{{ $t('logout') }}</li>
           </ul>
         </div>
       </div>

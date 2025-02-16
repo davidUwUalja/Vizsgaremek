@@ -5,6 +5,7 @@ import Landing from '../pages/Landing.vue';
 import Products from '../pages/ProductList.vue';
 import Contact from '../pages/Contact.vue';
 import Settings from '../pages/Settings.vue';
+import Blogpage from '../pages/BlogPage.vue';
 
 const routes = [
   { path: '/', redirect: '/landing' },
@@ -14,6 +15,8 @@ const routes = [
   { path: '/login', component: Login },
   { path: '/register', component: Register },
   { path: '/settings', component: Settings },
+  { path: '/blogpage', component: Blogpage },
+
 ];
 
 export const router = createRouter({
