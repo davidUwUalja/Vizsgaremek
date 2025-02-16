@@ -12,7 +12,8 @@ class AdminController extends Controller
 {
     public function listUsers()
     {
-        return response()->json(User::all(), 200);
+        $users = User::all();
+        return response()->json($users);
     }
 
     // Új felhasználó létrehozása

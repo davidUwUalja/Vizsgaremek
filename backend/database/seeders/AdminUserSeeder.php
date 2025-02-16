@@ -15,16 +15,14 @@ class AdminUserSeeder extends Seeder
      */
     public function run()
     {
-        // Ellenőrizzük, hogy már létezik-e admin felhasználó
         $adminExists = DB::table('users')->where('email', 'admin@admin.com')->exists();
 
         if (!$adminExists) {
-            // Ha még nincs, akkor létrehozzuk
             DB::table('users')->insert([
                 'name' => 'Admin User',
                 'email' => 'admin@admin.com',
-                'password' => Hash::make('adminpassword'), // Alap admin jelszó
-                'role' => 'admin', // Admin szerepkör
+                'password' => Hash::make('adminpwd'),
+                'role' => 'admin', 
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

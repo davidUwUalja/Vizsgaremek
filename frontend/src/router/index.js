@@ -1,56 +1,22 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Home from '../pages/Home.vue';
-import Contact from '../pages/Contact.vue';
-import ProductList from '../pages/ProductList.vue';
 import Login from '../components/Login.vue';
 import Register from '../components/Register.vue';
-import ProductInfos from '../pages/ProductInfos.vue';
-import BlogPage from '../pages/BlogPage.vue';
+import Landing from '../pages/Landing.vue';
+import Products from '../pages/ProductList.vue';
+import Contact from '../pages/Contact.vue';
+import Settings from '../pages/Settings.vue';
 
 const routes = [
-    {
-        path: '/',
-        name: 'Home',
-        component: Home,
-    },
-    {
-        path: '/products',
-        name: 'Products',
-        component: ProductList,
-    },
-    {
-        path: '/productinfos',
-        name: 'Product Infos',
-        component: ProductInfos,
-    },
-    {
-        path: '/contact',
-        name: 'Contact',
-        component: Contact,
-    },
-    {
-        path: '/login',
-        name: 'Login',
-        components: { default: Login, 'login-area': Login }, // Named view for modal
-        meta: { guest: true }
-    },
-    {
-        path: '/register',
-        name: 'Register',
-        components: { default: Register, 'login-area': Register }, // Named view for modal
-        meta: { guest: true }
-    },
-    {
-        path: '/blogpage',
-        name: 'Blogpage',
-        components: { default: BlogPage, 'login-area': BlogPage }, // Named view for modal
-        meta: { guest: true }
-    },
+  { path: '/', redirect: '/landing' },
+  { path: '/landing', component: Landing },
+  { path: '/products', component: Products },
+  { path: '/contact', component: Contact },
+  { path: '/login', component: Login },
+  { path: '/register', component: Register },
+  { path: '/settings', component: Settings },
 ];
 
-const router = createRouter({
-    history: createWebHistory(),
-    routes,
+export const router = createRouter({
+  history: createWebHistory(),
+  routes,
 });
-
-export default router;
