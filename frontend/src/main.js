@@ -4,6 +4,7 @@ import { router } from '@/router/index.js'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import { plugin, defaultConfig } from '@formkit/vue'
 import config from '../formkit.config.js'
+import i18n from './i18n';
 
 import App from '@/App.vue'
 
@@ -17,6 +18,7 @@ pinia.use(piniaPluginPersistedstate)
 app.use(router)
 app.use(plugin, defaultConfig(config))
 app.use(pinia)
+app.use(i18n);
 
 app.mount('#app')
 
