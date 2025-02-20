@@ -4,11 +4,24 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
+Route::get('/user', function (Request $request) {
+    return $request->user();
+})->middleware('auth:sanctum');
 
+Route::post('/register', [AuthController::class, 'store'])
+    ->name('register.store');
+
+Route::post('/login', [AuthController::class, 'authenticate'])
+    ->name('auth.authenticate');
+
+Route::get('/users', [UserController::class, 'index'])
+    ->middleware('auth:sanctum')
+    ->name('users.index');
+    
+/*
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/products/{id}', [ProductController::class, 'show'])->whereNumber("id");
 Route::post('/products', [ProductController::class, 'store']);
@@ -27,3 +40,4 @@ Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(functi
     Route::put('/users/{id}', [AdminController::class, 'updateUser'])->whereNumber("id");
     Route::delete('/users/{id}', [AdminController::class, 'deleteUser'])->whereNumber("id");
 });
+*/

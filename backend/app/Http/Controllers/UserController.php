@@ -3,13 +3,22 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\changePasswordRequest;
 use App\Http\Requests\UpdateUserRequest;
-use App\Models\User;
+use App\Http\Resources\UserResource;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+
+
 
 class UserController extends Controller
 {
+    public function index(){
+        Gate::authorize('list-users');
+
+        return UserResource::collection(User::all());
+    }
     public function profile(Request $request): JsonResponse
     {
         return response()->json($request->user());
