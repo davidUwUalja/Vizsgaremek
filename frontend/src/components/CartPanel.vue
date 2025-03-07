@@ -1,65 +1,69 @@
 <template>
-    <transition name="slide-in">
-      <div
-        v-if="isOpen"
-        class="fixed right-0 top-0 h-full w-1/3 bg-white shadow-lg p-4 overflow-y-auto"
-      >
-        <h2 class="text-lg font-bold mb-4">Kosár</h2>
-        <ul class="divide-y divide-gray-300">
-          <li
-            v-for="item in cartItems"
-            :key="item.id"
-            class="flex justify-between items-center py-4"
-          >
-            <div>
-              <h3 class="font-semibold">{{ item.name }}</h3>
-              <p class="text-gray-500">{{ item.price }} Ft</p>
-            </div>
-            <button
-              @click="$emit('remove-item', item)"
-              class="text-red-500 hover:text-red-700"
-            >
-              Törlés
-            </button>
-          </li>
-        </ul>
-        <div class="mt-4">
-          <p class="text-lg font-semibold">
-            Összesen: {{ totalPrice }} Ft
-          </p>
-          <button
-            class="mt-2 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-          >
-            Tovább a fizetéshez
-          </button>
+  <div class="fixed right-0 top-0 h-full w-80 bg-white shadow-lg z-40 transform transition-transform duration-300" :class="{'translate-x-0': isOpen, 'translate-x-full': !isOpen}">
+    <div class="p-4 flex flex-col h-full">
+      <div class="flex justify-between items-center pb-4 border-b">
+        <h2 class="text-xl font-semibold">{{ $t('cart') }}</h2>
+        <button @click="$emit('close')" class="text-gray-500 hover:text-gray-700">✕</button>
+      </div>
+      
+      <div class="flex-grow overflow-y-auto py-4">
+        <div v-if="items.length === 0" class="text-gray-500 text-center py-8">
+          {{ $t('ures') }}
         </div>
-        <button
-          @click="$emit('close')"
-          class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-        >
-          Bezárás
+        <div v-else class="space-y-4">
+          <div v-for="item in items" :key="item.id" class="flex justify-between items-center border-b pb-2">
+            <div>
+              <p class="font-medium">{{ item.name }}</p>
+              <p class="text-gray-600">{{ item.price }} Ft</p>
+            </div>
+            <div class="flex items-center">
+              <button @click="updateQuantity(item, -1)" class="px-2 bg-gray-200 rounded-l">-</button>
+              <span class="px-3 bg-gray-100">{{ item.quantity }}</span>
+              <button @click="updateQuantity(item, 1)" class="px-2 bg-gray-200 rounded-r">+</button>
+              <button @click="removeItem(item)" class="ml-2 text-red-500">🗑️</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="pt-4 border-t">
+        <div class="flex justify-between mb-4">
+          <span class="font-semibold">{{ $t('total') }}:</span>
+          <span class="font-bold">{{ totalPrice }} Ft</span>
+        </div>
+        <button @click="checkout" class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
+          {{ $t('checkout') }}
         </button>
       </div>
-    </transition>
-  </template>
-  
-  <script>
-  export default {
-    name: "CartPanel",
-    props: {
-      isOpen: {
-        type: Boolean,
-        required: true,
-      },
-      cartItems: {
-        type: Array,
-        required: true,
-      },
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
+    isOpen: Boolean,
+    items: {
+      type: Array,
+      default: () => []
+    }
+  },
+  computed: {
+    totalPrice() {
+      return this.items.reduce((total, item) => total + (item.price * (item.quantity || 1)), 0);
+    }
+  },
+  methods: {
+    updateQuantity(item, change) {
+      this.$emit('update-quantity', { item, change });
     },
-    computed: {
-      totalPrice() {
-        return this.cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-      },
+    removeItem(item) {
+      this.$emit('remove-item', item);
     },
-  };
-  </script>  
+    checkout() {
+      // Handle checkout logic
+      this.$emit('checkout');
+    }
+  }
+}
+</script>
