@@ -61,7 +61,6 @@ export default {
       this.$emit('remove-item', item);
     },
     checkout() {
-      // Handle checkout logic
       this.$emit('checkout');
     }
   }

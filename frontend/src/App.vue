@@ -52,18 +52,15 @@ export default {
     }
   },
   created() {
-    // Load cart and wishlist from localStorage
     this.loadStoredData();
   },
   methods: {
     loadStoredData() {
-      // Load cart items
       const storedCart = localStorage.getItem('cartItems');
       if (storedCart) {
         this.cartItems = JSON.parse(storedCart);
       }
       
-      // Load wishlist items
       const storedWishlist = localStorage.getItem('wishlist');
       if (storedWishlist) {
         this.wishlistItems = JSON.parse(storedWishlist);
@@ -106,7 +103,6 @@ export default {
       this.saveCart();
     },
     addToWishlist(item) {
-      // Check if item is already in wishlist
       const existingItem = this.wishlistItems.find(i => i.id === item.id);
       
       if (!existingItem) {
@@ -121,18 +117,14 @@ export default {
       this.saveWishlist();
     },
     moveToCart(item) {
-      // Add to cart
       this.addToCart(item);
       
-      // Remove from wishlist
       this.removeFromWishlist(item);
     },
     handleLogout() {
       this.isAuthenticated = false;
-      // Clear any user session data here
     },
     handleCheckout() {
-      // Handle checkout logic
       console.log('Processing checkout...');
     }
   }
