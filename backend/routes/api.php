@@ -21,7 +21,7 @@ Route::get('/users', [UserController::class, 'index'])
     ->middleware('auth:sanctum')
     ->name('users.index');
     
-/*
+
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/products/{id}', [ProductController::class, 'show'])->whereNumber("id");
 Route::post('/products', [ProductController::class, 'store']);
@@ -40,4 +40,4 @@ Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(functi
     Route::put('/users/{id}', [AdminController::class, 'updateUser'])->whereNumber("id");
     Route::delete('/users/{id}', [AdminController::class, 'deleteUser'])->whereNumber("id");
 });
-*/
+/**/

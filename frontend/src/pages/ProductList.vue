@@ -1,4 +1,3 @@
-// ProductList.vue módosítás
 <template>
   <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4">
     <div
@@ -9,7 +8,7 @@
       <div class="p-4">
         <img alt="Product Image" class="w-full h-auto object-cover rounded-lg" src="../images/minijurtakesajandekok.jpg"/>
         <h3 class="font-semibold text-lg text-gray-800">{{ product.name }}</h3>
-        <p class="text-gray-500">Ár: {{ product.price }} Ft</p>
+        <p class="text-gray-500">Ár: {{ product.price }} {{ currency }}</p>
         <div class="flex space-x-2 mt-4">
           <router-link
             :to="`/products/${product.id}`"
@@ -31,22 +30,27 @@
 
 <script>
 import { ref, onMounted } from 'vue';
-import axios from 'axios';
+import {http} from '@utils/http';
 
 export default {
   name: 'ProductList',
   setup() {
     const products = ref([]);
+    const locale = ref(document.documentElement.lang || 'hu');
+    const currency = ref(locale.value === 'hu' ? 'Ft' : '$'); 
 
     const fetchProducts = async () => {
-  try {
-    const response = await axios.get('http://backend.vm1.test/api/products');
-    products.value = response.data.data.map(({ id, name, price }) => ({ id, name, price }));
-  } catch (error) {
-    console.error('Hiba a termékek betöltése során:', error);
-  }
-};
-
+      try {
+        const response = await http.get('http://backend.vm1.test/api/products');
+        products.value = response.data.data.map((product) => ({
+          id: product.id,
+          name: locale.value === 'hu' ? product.name_hu : product.name_en,
+          price: locale.value === 'hu' ? product.price_hu : product.price_en,
+        }));
+      } catch (error) {
+        console.error('Hiba a termékek betöltése során:', error);
+      }
+    };
 
     onMounted(fetchProducts);
 
@@ -57,6 +61,7 @@ export default {
     return {
       products,
       addToCart,
+      currency,
     };
   },
 };

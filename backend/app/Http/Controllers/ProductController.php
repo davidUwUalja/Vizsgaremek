@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProductRequest;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Http\Resources\ProductResource;
@@ -23,7 +22,6 @@ class ProductController extends Controller
         }
         return new ProductResource($product);
     }
-
 
     public function store(StoreProductRequest $request)
     {
