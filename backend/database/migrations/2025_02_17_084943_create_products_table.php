@@ -21,7 +21,7 @@ return new class extends Migration
             $table->text('description_en')->nullable();     // A termék leírása angolul (opcionális)
             $table->decimal('price_hu', 10, 2);             // A termék ára magyar forintban (kötelező)
             $table->decimal('price_en', 10, 2);             // A termék ára angol fontban vagy dollárban (kötelező)
-            $table->string('image_url')->nullable();        // A termék képének URL-je (opcionális)
+            $table->longText('image_url')->nullable();        // A termék képének URL-je (opcionális)
             $table->integer('stock')->default(0);           // A termék raktárkészlete (alapértelmezett 0)
             $table->string('category_hu')->nullable();      // A termék kategóriája magyarul (opcionális)
             $table->string('category_en')->nullable();      // A termék kategóriája angolul (opcionális)
