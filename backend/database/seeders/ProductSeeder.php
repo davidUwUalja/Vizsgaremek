@@ -135,19 +135,137 @@ class ProductSeeder extends Seeder
 
             ],
             [
-                'name_hu' => 'Kis női táska',
+                'name_hu' => 'Közepes női táska',
+                'name_en' => 'Medium women\'s bag',
+                'material_hu' => 'bársony',
+                'material_en' => 'velvet',
+                'description_hu' => 'Közepes méretű táska nők számára sok zsebbel a minden napi használatra.',
+                'description_en' => 'Middle size bag for women with many pockets for everyday use.',
+                'price_hu' => 12000.00,
+                'price_en' => 40.00,
+                'image_url' => base64_encode(file_get_contents($imgpath . "/midbag.jpg")),
+                'stock' => 15,
+                'category_hu' => "táska",
+                'category_en' => "bag",
+            ],
+
+            [
+                'name_hu' => 'Kicsi női táska',
                 'name_en' => 'Small women\'s bag',
                 'material_hu' => 'bársony',
                 'material_en' => 'velvet',
                 'description_hu' => 'Kis méretű táska nők számára sok zsebbel a minden napi használatra.',
                 'description_en' => 'Small size bag for women with many pockets for everyday use.',
-                'price_hu' => 12000.00,
-                'price_en' => 40.00,
+                'price_hu' => 10000.00,
+                'price_en' => 35.00,
                 'image_url' => base64_encode(file_get_contents($imgpath . "/smallbag.jpg")),
                 'stock' => 15,
                 'category_hu' => "táska",
                 'category_en' => "bag",
-            ]
+            ],
+
+            [
+                'name_hu' => 'Kis szütyő',
+                'name_en' => 'Small pouch',
+                'material_hu' => 'bársony',
+                'material_en' => 'velvet',
+                'description_hu' => 'Kis szütyő apró dolgok tárolására. Nyakba akasztható.',
+                'description_en' => 'Small pouch for storing small items. Can be hung around the neck.',
+                'price_hu' => 7000.00,
+                'price_en' => 25.00,
+                'image_url' => base64_encode(file_get_contents($imgpath . "/smallpouch.jpg")),
+                'stock' => 15,
+                'category_hu' => "táska",
+                'category_en' => "bag",
+
+            ],
+
+            [
+                'name_hu' => 'Hátizsák',
+                'name_en' => 'Backpack',
+                'material_hu' => 'bársony',
+                'material_en' => 'velvet',
+                'description_hu' => 'Hátizsák sok zsebbel a mindennapi használatra.',
+                'description_en' => 'Backpack with many pockets for everyday use.',
+                'price_hu' => 12000.00,
+                'price_en' => 40.00,
+                'image_url' => base64_encode(file_get_contents($imgpath . "/bagpack.jpg")),
+                'stock' => 8,
+                'category_hu' => "táska",
+                'category_en' => "bag",
+
+
+            ],
+            [
+                'name_hu' => 'Aprós Pénztárca',
+                'name_en' => 'Small wallet for coins',
+                'material_hu' => 'bársony',
+                'material_en' => 'velvet',
+                'description_hu' => 'Pénztárca aprók tárolására',
+                'description_en' => 'Wallet for storing coins',
+                'price_hu' => 6000.00,
+                'price_en' => 20.00,
+                'image_url' => base64_encode(file_get_contents($imgpath . "/smallwallet.jpg")),
+                'stock' => 5,
+                'category_hu' => "táska",
+                'category_en' => "bag",
+
+            ],
+            [
+                'name_hu' => 'Kicsi oldal táska',
+                'name_en' => 'Small side bag',
+                'material_hu' => 'bársony',
+                'material_en' => 'velvet',
+                'description_hu' => 'Elegáns oldal táska apró dolgok tárolására. ',
+                'description_en' => 'Elegant side bag for storing small items.',
+                'price_hu' => 9000.00,
+                'price_en' => 30.00,
+                'image_url' => base64_encode(file_get_contents($imgpath . "/smallsidebag.jpg")),
+                'stock' => 5,
+                'category_hu' => "táska",
+                'category_en' => "bag",
+
+            ],
+
+            [
+                'name_hu' => 'Dísz párna',
+                'name_en' => 'Decorative pillow',
+                'material_hu' => 'bársony',
+                'material_en' => 'velvet',
+                'description_hu' => 'Dísz párna ami tökéletes a kanapéra vagy az ágyra.',
+                'description_en' => 'Decorative pillow that is perfect for the couch or bed.',
+                'price_hu' => 9000.00,
+                'price_en' => 30.00,
+                'image_url' => base64_encode(file_get_contents($imgpath . "/decorativepillow.jpg")),
+                'stock' => 5,
+                'category_hu' => "dísz",
+                'category_en' => "decoration",
+
+
+            ],
+
+            [
+                'name_hu' => 'Szemüveg tartó',
+                'name_en' => 'Glasses holder',
+                'material_hu' => 'bársony',
+                'material_en' => 'velvet',
+                'description_hu' => 'Szemüveg tartó ami tökéletes a szemüveg tárolására.',
+                'description_en' => 'Glasses holder that is perfect for storing glasses.',
+                'price_hu' => 7000.00,
+                'price_en' => 25.00,
+                'image_url' => base64_encode(file_get_contents($imgpath . "/glassholder.jpg")),
+                'stock' => 5,
+                'category_hu' => "táska",
+                'category_en' => "bag",
+
+            ],
+
+
+
+
+
+
+
         ]);
     }
 }
