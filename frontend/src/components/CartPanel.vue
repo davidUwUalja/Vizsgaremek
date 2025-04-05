@@ -1,37 +1,76 @@
 <template>
-  <div class="fixed right-0 top-0 h-full w-80 bg-white shadow-lg z-40 transform transition-transform duration-300" :class="{'translate-x-0': isOpen, 'translate-x-full': !isOpen}">
-    <div class="p-4 flex flex-col h-full">
-      <div class="flex justify-between items-center pb-4 border-b">
-        <h2 class="text-xl font-semibold">{{ $t('cart') }}</h2>
-        <button @click="$emit('close')" class="text-gray-500 hover:text-gray-700">✕</button>
+  <div
+    class="fixed right-0 top-0 h-full w-80 bg-yellow-50 shadow-xl z-40 transform transition-transform duration-300 border-l-4 border-yellow-800"
+    :class="{ 'translate-x-0': isOpen, 'translate-x-full': !isOpen }"
+  >
+    <div class="p-4 flex flex-col h-full font-serif text-yellow-900">
+      <!-- Header -->
+      <div class="flex justify-between items-center pb-4 border-b-2 border-yellow-700">
+        <h2 class="text-2xl font-bold text-yellow-800 tracking-wide">
+          {{ $t('cart') }}
+        </h2>
+        <button
+          @click="$emit('close')"
+          class="text-yellow-700 hover:text-yellow-900 transition-colors duration-200 text-xl"
+        >
+          ✕
+        </button>
       </div>
-      
+
+      <!-- Cart Items -->
       <div class="flex-grow overflow-y-auto py-4">
-        <div v-if="items.length === 0" class="text-gray-500 text-center py-8">
+        <div v-if="items.length === 0" class="text-center text-yellow-700 italic py-12">
           {{ $t('ures') }}
         </div>
         <div v-else class="space-y-4">
-          <div v-for="item in items" :key="item.id" class="flex justify-between items-center border-b pb-2">
-            <div>
-              <p class="font-medium">{{ item.name }}</p>
-              <p class="text-gray-600">{{ item.price }} Ft</p>
+          <div
+            v-for="item in items"
+            :key="item.id"
+            class="p-4 bg-white border-2 border-yellow-800 rounded-sm shadow-md hover:shadow-lg transition-shadow duration-300"
+          >
+            <div class="flex justify-between mb-2">
+              <div>
+                <p class="font-semibold text-yellow-800">{{ item.name }}</p>
+                <p class="text-yellow-700">{{ item.price }} Ft</p>
+              </div>
+              <button
+                @click="removeItem(item)"
+                class="text-red-600 hover:text-red-800 text-xl ml-2 transition-colors duration-200"
+              >
+                🗑️
+              </button>
             </div>
-            <div class="flex items-center">
-              <button @click="updateQuantity(item, -1)" class="px-2 bg-gray-200 rounded-l">-</button>
-              <span class="px-3 bg-gray-100">{{ item.quantity }}</span>
-              <button @click="updateQuantity(item, 1)" class="px-2 bg-gray-200 rounded-r">+</button>
-              <button @click="removeItem(item)" class="ml-2 text-red-500">🗑️</button>
+            <div class="flex items-center justify-end space-x-1">
+              <button
+                @click="updateQuantity(item, -1)"
+                class="px-3 py-1 bg-yellow-200 text-yellow-800 rounded-l hover:bg-yellow-300 transition"
+              >
+                −
+              </button>
+              <span class="px-4 py-1 bg-yellow-100 text-yellow-900 border border-yellow-700 rounded-sm">
+                {{ item.quantity }}
+              </span>
+              <button
+                @click="updateQuantity(item, 1)"
+                class="px-3 py-1 bg-yellow-200 text-yellow-800 rounded-r hover:bg-yellow-300 transition"
+              >
+                +
+              </button>
             </div>
           </div>
         </div>
       </div>
-      
-      <div class="pt-4 border-t">
-        <div class="flex justify-between mb-4">
-          <span class="font-semibold">{{ $t('total') }}:</span>
+
+      <!-- Total and Checkout -->
+      <div class="pt-4 border-t-2 border-yellow-700">
+        <div class="flex justify-between mb-4 text-lg font-semibold text-yellow-800">
+          <span>{{ $t('total') }}:</span>
           <span class="font-bold">{{ totalPrice }} Ft</span>
         </div>
-        <button @click="checkout" class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
+        <button
+          @click="checkout"
+          class="w-full px-4 py-3 bg-yellow-700 text-yellow-50 font-serif font-semibold rounded-sm border-2 border-yellow-800 hover:bg-yellow-900 transition-all duration-300 shadow-md hover:shadow-xl"
+        >
           {{ $t('checkout') }}
         </button>
       </div>
