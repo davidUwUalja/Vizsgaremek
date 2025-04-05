@@ -8,7 +8,7 @@
       <!-- Termék képe -->
       <img 
         alt="Product Image" 
-        class="w-full h-48 object-cover rounded-sm shadow-md filter sepia brightness-95 contrast-105 hover:scale-105 transition-transform duration-300" 
+        class="w-full h-48 object-cover rounded-sm shadow-md brightness-95 contrast-105 hover:scale-105 transition-transform duration-300" 
         :src="`data:image/jpeg;base64,${product.image_url}`" 
       />
 
