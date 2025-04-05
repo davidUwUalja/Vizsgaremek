@@ -13,15 +13,15 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('name_hu')->nullable();                      // A termék neve magyarul (kötelező)
-            $table->string('name_en')->nullable();                      // A termék neve angolul (kötelező)
-            $table->string('material_hu')->nullable();                 // A termék anyaga magyarul (kötelező)
-            $table->string('material_en')->nullable();                 // A termék anyaga angolul (kötelező)
+            $table->string('name_hu');                      // A termék neve magyarul (kötelező)
+            $table->string('name_en');                      // A termék neve angolul (kötelező)
+            $table->string('material_hu');                  // A termék anyaga magyarul (kötelező)
+            $table->string('material_en');                  // A termék anyaga angolul (kötelező)
             $table->string('description_hu')->nullable();     // A termék leírása magyarul (opcionális)
-            $table->string('description_en')->nullable();   // A termék leírása angolul (opcionális)
-            $table->double('price_hu', 10, 2)->nullable();           // A termék ára magyar forintban (kötelező)
-            $table->double('price_en', 10, 2)->nullable();            // A termék ára angol fontban vagy dollárban (kötelező)
-            $table->longText('image_url')->nullable();          // A termék képének URL-je (opcionális)
+            $table->string('description_en')->nullable();     // A termék leírása angolul (opcionális)
+            $table->double('price_hu', 10, 2);             // A termék ára magyar forintban (kötelező)
+            $table->double('price_en', 10, 2);             // A termék ára angol fontban vagy dollárban (kötelező)
+            $table->longText('image_url')->nullable();        // A termék képének URL-je (opcionális)
             $table->integer('stock')->default(0);           // A termék raktárkészlete (alapértelmezett 0)
             $table->string('category_hu')->nullable();     // A termék kategóriája magyarul (opcionális)
             $table->string('category_en')->nullable();      // A termék kategóriája angolul (opcionális)
