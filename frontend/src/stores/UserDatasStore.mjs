@@ -21,7 +21,7 @@ export const useUserStore = defineStore("user", {
         const response = await http.get("/user", {
           headers: { Authorization: `Bearer ${token}` },
         });
-        this.user = response.data; // Bejelentkezett felhasználó mentése
+        this.user = response.data;
       } catch (error) {
         console.error("Felhasználó lekérése sikertelen", error);
       }

@@ -44,7 +44,7 @@ export default {
   },
   data() {
     return {
-      isAuthenticated: false,
+      isAuthenticated: !!localStorage.getItem("token"),
       isCartOpen: false,
       isWishlistOpen: false,
       cartItems: [],
