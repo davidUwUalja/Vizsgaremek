@@ -34,7 +34,13 @@
 
       <!-- Ár -->
       <p class="text-yellow-900 mt-2 font-serif font-semibold">
-        Ár: {{ new Intl.NumberFormat(locale.value === 'hu' ? 'hu-HU' : 'en-US').format(getLocalizedField(product, 'price')) }} Ft
+        Ár: 
+        {{ 
+          new Intl.NumberFormat(locale.value === 'hu' ? 'hu-HU' : 'en-US').format(
+            getLocalizedField(product, 'price')
+          ) 
+        }} 
+        Ft
       </p>
 
       <!-- Gombok -->
@@ -57,42 +63,30 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
+import { onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { http } from '@utils/http';
+import { useProductStore } from '../stores/ProductDatasStore';
 
 export default {
   name: 'ProductList',
   setup() {
-    const products = ref([]);
+    const productStore = useProductStore();
     const { locale } = useI18n();
 
-    const fetchProducts = async () => {
-      try {
-        const response = await http.get('http://backend.vm1.test/api/products');
-        products.value = response.data.data;
-      } catch (error) {
-        console.error('Hiba a termékek betöltése során:', error);
-      }
-    };
+    onMounted(() => {
+      productStore.fetchProducts();
+    });
 
-    onMounted(fetchProducts);
+    const getLocalizedField = (product, field) => {
+      return productStore.getLocalizedField(product, field, locale.value);
+    };
 
     const addToCart = (product) => {
-      console.log('Kosárhoz adva:', product);
-    };
-
-    /**
-     * Visszaadja a lokalizált értéket a termékből.
-     * Ha nem találja a kért nyelvi mezőt, az alapértelmezett magyar mezőt adja vissza.
-     */
-    const getLocalizedField = (product, field) => {
-      // elvárva, hogy a termékobjektum property-jei pl. name_hu és name_en legyenek
-      return product[`${field}_${locale.value}`] || product[`${field}_hu`];
+      productStore.addToCart(product);
     };
 
     return {
-      products,
+      products: productStore.products,
       addToCart,
       getLocalizedField,
       locale,

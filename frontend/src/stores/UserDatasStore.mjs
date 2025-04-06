@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { http } from "../utils/http.mjs";
+import { http } from "@utils/http.mjs";
 
 export const useUserStore = defineStore("user", {
   state: () => ({
