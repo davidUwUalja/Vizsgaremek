@@ -32,15 +32,18 @@
 </template>
 
 <script>
-import Navbar from './components/Navbar.vue';
-import CartPanel from './components/CartPanel.vue';
-import WishlistPanel from './components/WishlistPanel.vue';
+import Navbar from '@components/Navbar.vue';
+import CartPanel from '@components/CartPanel.vue';
+import WishlistPanel from '@components/WishlistPanel.vue';
+import { useProductStore } from '@stores/ProductDatasStore';
 
 export default {
   components: {
     Navbar,
     CartPanel,
-    WishlistPanel
+    WishlistPanel,
+    useProductStore
+
   },
   data() {
     return {

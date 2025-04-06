@@ -1,9 +1,9 @@
 <template>
-  <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 p-6 bg-amber-50 min-h-screen">
+  <div class="grid gap-6 p-3 bg-amber-50 min-h-screen justify-items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
     <div
       v-for="product in products"
       :key="product.id"
-      class="bg-yellow-50 p-4 border-2 border-yellow-800 rounded-sm shadow-lg hover:shadow-2xl hover:border-yellow-900 transition-all duration-300 flex flex-col items-center text-center"
+      class="bg-yellow-50 p-4 border-2 border-yellow-800 rounded-sm shadow-lg hover:shadow-2xl hover:border-yellow-900 transition-all duration-300 flex flex-col items-center text-center w-80"
     >
       <!-- Termék képe -->
       <img 
@@ -35,12 +35,7 @@
       <!-- Ár -->
       <p class="text-yellow-900 mt-2 font-serif font-semibold">
         Ár: 
-        {{ 
-          new Intl.NumberFormat(locale.value === 'hu' ? 'hu-HU' : 'en-US').format(
-            getLocalizedField(product, 'price')
-          ) 
-        }} 
-        Ft
+        {{ new Intl.NumberFormat(locale.value === 'hu' ? 'hu-HU' : 'en-US').format(getLocalizedField(product, 'price')) }} Ft
       </p>
 
       <!-- Gombok -->
