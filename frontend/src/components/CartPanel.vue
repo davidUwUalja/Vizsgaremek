@@ -30,8 +30,11 @@
           >
             <div class="flex justify-between mb-2">
               <div>
-                <p class="font-semibold text-yellow-800">{{ item.name }}</p>
-                <p class="text-yellow-700">{{ item.price }} Ft</p>
+                <!-- Dinamikus név és ár -->
+                <p class="font-semibold text-yellow-800">{{ getLocalizedField(item, 'name') }}</p>
+                <p class="text-yellow-700">
+                  {{ getLocalizedField(item, 'price') * item.quantity }} {{ currencySymbol }}
+                </p>
               </div>
               <button
                 @click="removeItem(item)"
@@ -65,7 +68,9 @@
       <div class="pt-4 border-t-2 border-yellow-700">
         <div class="flex justify-between mb-4 text-lg font-semibold text-yellow-800">
           <span>{{ $t('total') }}:</span>
-          <span class="font-bold">{{ totalPrice }} Ft</span>
+          <span class="font-bold">
+            {{ totalPrice }} {{ currencySymbol }}
+          </span>
         </div>
         <button
           @click="checkout"
@@ -79,6 +84,8 @@
 </template>
 
 <script>
+import { useI18n } from 'vue-i18n';
+
 export default {
   props: {
     isOpen: Boolean,
@@ -87,14 +94,30 @@ export default {
       default: () => []
     }
   },
+  setup() {
+    const { locale } = useI18n();
+    const getLocalizedField = (item, field) => {
+      return item[`${field}_${locale.value}`] || item[`${field}_hu`];
+    };
+
+    return {
+      locale,
+      getLocalizedField
+    };
+  },
   computed: {
     totalPrice() {
-      return this.items.reduce((total, item) => total + (item.price * (item.quantity || 1)), 0);
+      return this.items.reduce((total, item) => total + (this.getLocalizedField(item, 'price') * (item.quantity || 1)), 0);
+    },
+    currencySymbol() {
+      return this.$i18n.locale === 'hu' ? 'Ft' : '$';
     }
   },
   methods: {
     updateQuantity(item, change) {
-      this.$emit('update-quantity', { item, change });
+      if (item.quantity + change > 0) {
+        this.$emit('update-quantity', { item, change });
+      }
     },
     removeItem(item) {
       this.$emit('remove-item', item);
@@ -103,5 +126,5 @@ export default {
       this.$emit('checkout');
     }
   }
-}
+};
 </script>

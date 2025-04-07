@@ -81,4 +81,14 @@
     },
   };
   </script>
+
+<route lang="json">
+  {
+      "name": "Register",
+      "meta":{
+          "title": "Regisztráció kezelése "
+      }
+  }
+  </route>
+
   

@@ -47,15 +47,15 @@
       <!-- Középső rész Desktop nézetben -->
       <div class="hidden md:flex items-center space-x-6 font-serif">
         <router-link
-          to="/landing"
+          to="/"
           class="text-yellow-800 px-3 py-2 rounded-sm hover:bg-yellow-200 transition-all duration-300 shadow-sm hover:shadow-md"
         >{{ $t('home') }}</router-link>
         <router-link
-          to="/products"
+          to="/productList"
           class="text-yellow-800 px-3 py-2 rounded-sm hover:bg-yellow-200 transition-all duration-300 shadow-sm hover:shadow-md"
         >{{ $t('products') }}</router-link>
         <router-link
-          to="/blogpage"
+          to="/blogPage"
           class="text-yellow-800 px-3 py-2 rounded-sm hover:bg-yellow-200 transition-all duration-300 shadow-sm hover:shadow-md"
         >{{ $t('blog') }}</router-link>
         <router-link
@@ -117,19 +117,19 @@
       <ul class="flex flex-col space-y-2">
         <li>
           <router-link
-            to="/landing"
+            to="/"
             class="block text-yellow-800 px-3 py-2 rounded-sm hover:bg-yellow-200 transition-all duration-300 shadow-sm hover:shadow-md"
           >{{ $t('home') }}</router-link>
         </li>
         <li>
           <router-link
-            to="/products"
+            to="/productList"
             class="block text-yellow-800 px-3 py-2 rounded-sm hover:bg-yellow-200 transition-all duration-300 shadow-sm hover:shadow-md"
           >{{ $t('products') }}</router-link>
         </li>
         <li>
           <router-link
-            to="/blogpage"
+            to="/blogPage"
             class="block text-yellow-800 px-3 py-2 rounded-sm hover:bg-yellow-200 transition-all duration-300 shadow-sm hover:shadow-md"
           >{{ $t('blog') }}</router-link>
         </li>

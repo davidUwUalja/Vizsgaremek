@@ -42,3 +42,12 @@ export default {
   },
 };
 </script>
+
+<route lang="json">
+  {
+      "name": "Login",
+      "meta":{
+          "title": "Bejelentkezés kezelése "
+      }
+  }
+  </route>

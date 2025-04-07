@@ -3,7 +3,8 @@ import { http } from "@utils/http.mjs";
 
 export const useProductStore = defineStore("product", {
   state: () => ({
-    products: []
+    products: [],
+    cartItems: []
   }),
   actions: {
     async fetchProducts() {
@@ -15,13 +16,32 @@ export const useProductStore = defineStore("product", {
       }
     },
     addToCart(product) {
-      console.log('Kosárhoz adva:', product);
+      const existingItem = this.cartItems.find(item => item.id === product.id);
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        this.cartItems.push({ ...product, quantity: 1 });
+      }
+      localStorage.setItem('cartItems', JSON.stringify(this.cartItems));
+    },
+    updateCartQuantity({ item, change }) {
+      const cartItem = this.cartItems.find(cartItem => cartItem.id === item.id);
+      if (cartItem) {
+        cartItem.quantity += change;
+        if (cartItem.quantity <= 0) {
+          this.cartItems = this.cartItems.filter(cartItem => cartItem.id !== item.id);
+        }
+        localStorage.setItem('cartItems', JSON.stringify(this.cartItems));
+      }
+    },
+    removeFromCart(item) {
+      this.cartItems = this.cartItems.filter(cartItem => cartItem.id !== item.id);
+      localStorage.setItem('cartItems', JSON.stringify(this.cartItems));
     }
   },
   getters: {
     getLocalizedField: () => {
       return (product, field, locale) => {
-        // elvárva, hogy a termékobjektum property-jei pl. name_hu és name_en legyenek
         return product[`${field}_${locale}`] || product[`${field}_hu`];
       };
     }

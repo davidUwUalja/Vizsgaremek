@@ -38,95 +38,64 @@ import WishlistPanel from '@components/WishlistPanel.vue';
 import { useProductStore } from '@stores/ProductDatasStore';
 
 export default {
+  async mounted() {
+    await useProductStore().fetchProducts();
+  },
   components: {
     Navbar,
     CartPanel,
     WishlistPanel,
-    useProductStore
-
+  },
+  computed: {
+    // A kosár elemeket mostantól a store tartalmazza
+    cartItems() {
+      return useProductStore().cartItems;
+    }
   },
   data() {
     return {
       isAuthenticated: !!localStorage.getItem("token"),
       isCartOpen: false,
       isWishlistOpen: false,
-      cartItems: [],
       wishlistItems: []
     }
   },
   created() {
-    this.loadStoredData();
+    const storedWishlist = localStorage.getItem('wishlist');
+    if (storedWishlist) {
+      this.wishlistItems = JSON.parse(storedWishlist);
+    }
   },
   methods: {
-    loadStoredData() {
-      const storedCart = localStorage.getItem('cartItems');
-      if (storedCart) {
-        this.cartItems = JSON.parse(storedCart);
-      }
-      
-      const storedWishlist = localStorage.getItem('wishlist');
-      if (storedWishlist) {
-        this.wishlistItems = JSON.parse(storedWishlist);
-      }
-    },
-    saveCart() {
-      localStorage.setItem('cartItems', JSON.stringify(this.cartItems));
-    },
-    saveWishlist() {
-      localStorage.setItem('wishlist', JSON.stringify(this.wishlistItems));
-    },
-    addToCart(item) {
-      const existingItem = this.cartItems.find(i => i.id === item.id);
-      
-      if (existingItem) {
-        existingItem.quantity = (existingItem.quantity || 1) + 1;
-      } else {
-        this.cartItems.push({ ...item, quantity: 1 });
-      }
-      
-      this.saveCart();
-      this.isCartOpen = true;
-    },
-    updateCartQuantity({ item, change }) {
-      const index = this.cartItems.findIndex(i => i.id === item.id);
-      if (index !== -1) {
-        const newQuantity = (this.cartItems[index].quantity || 1) + change;
-        
-        if (newQuantity <= 0) {
-          this.cartItems.splice(index, 1);
-        } else {
-          this.cartItems[index].quantity = newQuantity;
-        }
-        
-        this.saveCart();
-      }
-    },
-    removeFromCart(item) {
-      this.cartItems = this.cartItems.filter(i => i.id !== item.id);
-      this.saveCart();
-    },
     addToWishlist(item) {
       const existingItem = this.wishlistItems.find(i => i.id === item.id);
-      
       if (!existingItem) {
         this.wishlistItems.push(item);
-        this.saveWishlist();
+        localStorage.setItem('wishlist', JSON.stringify(this.wishlistItems));
       }
-      
       this.isWishlistOpen = true;
     },
     removeFromWishlist(item) {
       this.wishlistItems = this.wishlistItems.filter(i => i.id !== item.id);
-      this.saveWishlist();
+      localStorage.setItem('wishlist', JSON.stringify(this.wishlistItems));
     },
     moveToCart(item) {
-      this.addToCart(item);
-      
+      const productStore = useProductStore();
+      productStore.addToCart(item);
       this.removeFromWishlist(item);
     },
     handleLogout() {
       this.isAuthenticated = false;
     },
+    updateCartQuantity({ item, change }) {
+    const productStore = useProductStore();
+    productStore.updateCartQuantity({ item, change });
+  },
+  removeFromCart(item) {
+    const productStore = useProductStore();
+    productStore.removeFromCart(item);
+  },
+  
     handleCheckout() {
       console.log('Processing checkout...');
     }
