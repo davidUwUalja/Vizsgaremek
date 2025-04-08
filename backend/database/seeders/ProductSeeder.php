@@ -259,6 +259,22 @@ class ProductSeeder extends Seeder
                 'category_en' => "bag",
 
             ],
+            [
+                'name_hu' => 'Asztal terítő',
+                'name_en' => 'Table cloth',
+                'material_hu' => 'pamut',
+                'material_en' => 'cotton',
+                'description_hu' => 'Dísz asztal terítő virág mintával.',
+                'description_en' => 'Decorative tablecloth with flower pattern.',
+                'price_hu' => 15000.00,
+                'price_en' => 50.00,
+                'image_url' => base64_encode(file_get_contents($imgpath . "/tablecloth.jpg")),
+                'stock' => 5,
+                'category_hu' => "táska",
+                'category_en' => "bag",
+
+            ],
+
 
 
 
