@@ -7,7 +7,10 @@ export const blogMessages = {
         noComments: "Nincsenek hozzászólások.",
         namePlaceholder: "Név",
         messagePlaceholder: "Írd be az üzeneted",
-        submitButton: "Küldés"
+        submitButton: "Küldés",
+        readMore: "Olvass tovább",
+        viewProducts: "Termékek megtekintése",
+
     },
     en: {
         WebshopBlog: "Webshop Blog",
@@ -17,7 +20,10 @@ export const blogMessages = {
         noComments: "No comments.",
         namePlaceholder: "Name",
         messagePlaceholder: "Enter your message",
-        submitButton: "Submit"
+        submitButton: "Submit",
+        readMore: "Read More",
+        viewProducts: "View Products",
+
     },
     de: {
         WebshopBlog: "Webshop Blog",
@@ -27,6 +33,10 @@ export const blogMessages = {
         noComments: "Keine Kommentare.",
         namePlaceholder: "Name",
         messagePlaceholder: "Geben Sie Ihre Nachricht ein",
-        submitButton: "Senden"
+        submitButton: "Senden",
+        readMore: "Read More",
+        viewProducts: "Termékek megtekintése",
+
+
     }
 };

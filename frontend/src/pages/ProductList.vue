@@ -19,7 +19,7 @@
 
       <!-- Anyag -->
       <p class="text-sm text-yellow-900 mt-1 italic">
-        Anyag: {{ getLocalizedField(product, 'material') }}
+        {{ $t('material') }} dsads: {{ getLocalizedField(product, 'material') }}
       </p>
 
       <!-- Leírás (ha van) -->

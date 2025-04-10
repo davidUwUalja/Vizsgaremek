@@ -19,7 +19,7 @@
 
       <!-- Anyag -->
       <p class="text-sm text-yellow-900 mt-1 italic">
-        Anyag: {{ getLocalizedField(product, 'material') }}
+        {{ $t('material') }}: {{ getLocalizedField(product, 'material') }}
       </p>
 
       <!-- Leírás (ha van) -->
@@ -29,12 +29,12 @@
 
       <!-- Kategória (ha van) -->
       <p v-if="getLocalizedField(product, 'category')" class="text-xs text-yellow-700 mt-1 font-mono">
-        Kategória: {{ getLocalizedField(product, 'category') }}
+        {{ $t('category') }}: {{ getLocalizedField(product, 'category') }}
       </p>
 
       <!-- Ár -->
       <p class="text-yellow-900 mt-2 font-serif font-semibold">
-        Ár: 
+        {{ $t('price') }}: 
         {{ new Intl.NumberFormat(locale.value === 'hu' ? 'hu-HU' : 'en-US').format(getLocalizedField(product, 'price')) }} Ft
       </p>
 
@@ -44,13 +44,13 @@
           :to="`/products/${product.id}`"
           class="px-4 py-2 bg-yellow-700 text-yellow-50 font-serif text-sm rounded-sm hover:bg-yellow-900 border border-yellow-800 shadow-md transition-all duration-300"
         >
-          Megtekintés
+        {{ $t('viewDetails') }}
         </router-link>
         <button
           @click="addToCart(product)"
           class="px-4 py-2 bg-yellow-700 text-yellow-50 font-serif text-sm rounded-sm hover:bg-yellow-900 border border-yellow-800 shadow-md transition-all duration-300"
         >
-          Kosárba
+        {{ $t('addToCart') }}:
         </button>
       </div>
     </div>

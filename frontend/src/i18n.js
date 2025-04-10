@@ -31,6 +31,7 @@ const messages = {
     ...settingsMessages.de,
     ...navbarMessages.de,
   }
+  
 };
 
 const i18n = createI18n({

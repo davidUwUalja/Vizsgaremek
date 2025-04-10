@@ -59,8 +59,9 @@
               scelerisque ligula nec quam ultricies, id facilisis magna bibendum. Quisque rhoncus justo ut eros
               sollicitudin, eget gravida sapien ultrices.
             </p>
+            
             <a 
-              href="#" 
+              href="#/products" 
               class="inline-block mt-4 px-6 py-2 bg-yellow-700 text-yellow-50 font-serif hover:bg-yellow-900 transition-colors duration-300 border border-yellow-800 shadow-md rounded-sm"
             >
               {{ $t('viewProducts') }}
