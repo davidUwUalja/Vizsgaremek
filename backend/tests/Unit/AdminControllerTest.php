@@ -7,11 +7,23 @@ use App\Http\Requests\CreateUserRequest;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class AdminControllerTest extends TestCase
 {
-    use RefreshDatabase; // Reset the database after each test
+    use RefreshDatabase; 
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        
+        $admin = User::factory()->create([
+            'role' => 'admin'
+        ]);
+        
+        Sanctum::actingAs($admin, ['admin']);
+    }
 
     /**
      * Test listing all users
@@ -20,21 +32,18 @@ class AdminControllerTest extends TestCase
      */
     public function test_list_users()
     {
-        // Create test users
         $users = User::factory()->count(3)->create();
         
-        // Call the API endpoint
-        $response = $this->getJson('/api/admin/users');
+        $response = $this->getJson('/admin/users');
         
-        // Assert response
         $response->assertStatus(200);
-        $response->assertJsonCount(3);
+        $response->assertJsonCount(4); 
         
-        // Verify user data is returned correctly
         $responseData = $response->json();
-        $this->assertEquals($users[0]->id, $responseData[0]['id']);
-        $this->assertEquals($users[0]->name, $responseData[0]['name']);
-        $this->assertEquals($users[0]->email, $responseData[0]['email']);
+
+        $foundUser = collect($responseData)->firstWhere('id', $users[0]->id);
+        $this->assertEquals($users[0]->name, $foundUser['name']);
+        $this->assertEquals($users[0]->email, $foundUser['email']);
     }
 
     /**
@@ -51,10 +60,8 @@ class AdminControllerTest extends TestCase
             'role' => 'customer',
         ];
         
-        // Call the API endpoint
-        $response = $this->postJson('/api/admin/users', $userData);
+        $response = $this->postJson('/admin/users', $userData);
         
-        // Assert response
         $response->assertStatus(201);
         $response->assertJsonFragment([
             'name' => 'Test User',
@@ -62,14 +69,12 @@ class AdminControllerTest extends TestCase
             'role' => 'customer',
         ]);
         
-        // Verify user was actually created in the database
         $this->assertDatabaseHas('users', [
             'name' => 'Test User',
             'email' => 'test@example.com',
             'role' => 'customer',
         ]);
         
-        // Verify password was hashed
         $user = User::where('email', 'test@example.com')->first();
         $this->assertTrue(Hash::check('password123', $user->password));
     }
@@ -81,7 +86,7 @@ class AdminControllerTest extends TestCase
      */
     public function test_create_user_with_invalid_data()
     {
-        // Invalid email and short password
+
         $userData = [
             'name' => 'Invalid User',
             'email' => 'not-an-email',
@@ -89,14 +94,11 @@ class AdminControllerTest extends TestCase
             'role' => 'invalid-role',
         ];
         
-        // Call the API endpoint
-        $response = $this->postJson('/api/admin/users', $userData);
+        $response = $this->postJson('/admin/users', $userData);
         
-        // Assert validation fails
         $response->assertStatus(422);
         $response->assertJsonValidationErrors(['email', 'password', 'role']);
         
-        // Verify no user was created
         $this->assertDatabaseMissing('users', [
             'name' => 'Invalid User',
         ]);
@@ -109,7 +111,6 @@ class AdminControllerTest extends TestCase
      */
     public function test_update_user_with_valid_data()
     {
-        // Create a test user
         $user = User::factory()->create([
             'name' => 'Original Name',
             'email' => 'original@example.com',
@@ -121,18 +122,15 @@ class AdminControllerTest extends TestCase
             'role' => 'admin',
         ];
         
-        // Call the API endpoint
-        $response = $this->putJson("/api/admin/users/{$user->id}", $updateData);
+        $response = $this->putJson("/admin/users/{$user->id}", $updateData);
         
-        // Assert response
         $response->assertStatus(200);
         $response->assertJsonFragment([
             'name' => 'Updated Name',
-            'email' => 'original@example.com', // Email unchanged
+            'email' => 'original@example.com',
             'role' => 'admin',
         ]);
         
-        // Verify database was updated
         $this->assertDatabaseHas('users', [
             'id' => $user->id,
             'name' => 'Updated Name',
@@ -148,7 +146,6 @@ class AdminControllerTest extends TestCase
      */
     public function test_update_user_password()
     {
-        // Create a test user
         $user = User::factory()->create([
             'password' => Hash::make('original-password'),
         ]);
@@ -157,13 +154,10 @@ class AdminControllerTest extends TestCase
             'password' => 'new-password123',
         ];
         
-        // Call the API endpoint
-        $response = $this->putJson("/api/admin/users/{$user->id}", $updateData);
+        $response = $this->putJson("/admin/users/{$user->id}", $updateData);
         
-        // Assert response
         $response->assertStatus(200);
-        
-        // Verify password was updated and hashed
+
         $updatedUser = User::find($user->id);
         $this->assertTrue(Hash::check('new-password123', $updatedUser->password));
         $this->assertFalse(Hash::check('original-password', $updatedUser->password));
@@ -182,10 +176,8 @@ class AdminControllerTest extends TestCase
             'name' => 'Will Not Update',
         ];
         
-        // Call the API endpoint
-        $response = $this->putJson("/api/admin/users/{$nonExistentId}", $updateData);
+        $response = $this->putJson("/admin/users/{$nonExistentId}", $updateData);
         
-        // Assert 404 Not Found
         $response->assertStatus(404);
     }
 
@@ -196,22 +188,18 @@ class AdminControllerTest extends TestCase
      */
     public function test_delete_user()
     {
-        // Create a test user
         $user = User::factory()->create();
         
-        // Verify user exists before deletion
+
         $this->assertDatabaseHas('users', [
             'id' => $user->id,
         ]);
         
-        // Call the API endpoint
-        $response = $this->deleteJson("/api/admin/users/{$user->id}");
+        $response = $this->deleteJson("/admin/users/{$user->id}");
         
-        // Assert response
         $response->assertStatus(200);
         $response->assertJson(['message' => 'Felhasználó törölve']);
         
-        // Verify user no longer exists in database
         $this->assertDatabaseMissing('users', [
             'id' => $user->id,
         ]);
@@ -226,11 +214,28 @@ class AdminControllerTest extends TestCase
     {
         $nonExistentId = 9999;
         
-        // Call the API endpoint
-        $response = $this->deleteJson("/api/admin/users/{$nonExistentId}");
+        $response = $this->deleteJson("/admin/users/{$nonExistentId}");
         
-        // Assert 404 Not Found
         $response->assertStatus(404);
+    }
+
+    /**
+     * Test accessing admin routes without admin role
+     *
+     * @return void
+     */
+    public function test_access_denied_without_admin_role()
+    {
+        $user = User::factory()->create([
+            'role' => 'customer'
+        ]);
+        
+        Sanctum::actingAs($user, ['customer']);
+        
+        $this->getJson('/admin/users')->assertForbidden();
+        $this->postJson('/admin/users', [])->assertForbidden();
+        $this->putJson('/admin/users/1', [])->assertForbidden();
+        $this->deleteJson('/admin/users/1')->assertForbidden();
     }
 
     /**
@@ -240,7 +245,6 @@ class AdminControllerTest extends TestCase
      */
     public function test_create_user_request_validation()
     {
-        // Create a mock request with valid data
         $validData = [
             'name' => 'Valid User',
             'email' => 'valid@example.com',
@@ -248,27 +252,23 @@ class AdminControllerTest extends TestCase
             'role' => 'admin',
         ];
         
-        $request = CreateUserRequest::create('/api/admin/users', 'POST', $validData);
+        $request = CreateUserRequest::create('/admin/users', 'POST', $validData);
         
-        // The request should pass validation
         $this->assertTrue($request->authorize());
         $this->assertTrue($request->passes());
         
-        // Create a mock request with invalid data
         $invalidData = [
-            'name' => '',  // Empty name
-            'email' => 'invalid', // Invalid email
-            'password' => 'short', // Too short password
-            'role' => 'invalid-role', // Invalid role
+            'name' => '',  
+            'email' => 'invalid', 
+            'password' => 'short', 
+            'role' => 'invalid-role', 
         ];
         
-        $request = CreateUserRequest::create('/api/admin/users', 'POST', $invalidData);
+        $request = CreateUserRequest::create('/admin/users', 'POST', $invalidData);
         
-        // The request should fail validation
-        $this->assertTrue($request->authorize()); // Authorization should still pass
-        $this->assertFalse($request->passes()); // But validation should fail
+        $this->assertTrue($request->authorize()); 
+        $this->assertFalse($request->passes()); 
         
-        // Check specific validation errors
         $errors = $request->validator->errors()->toArray();
         $this->assertArrayHasKey('name', $errors);
         $this->assertArrayHasKey('email', $errors);
