@@ -24,7 +24,13 @@ export const useUserStore = defineStore("user", {
         this.user = response.data;
       } catch (error) {
         console.error("Felhasználó lekérése sikertelen", error);
+        this.logout(); // Ha a token érvénytelen, kijelentkezés
       }
+    },
+
+    logout() {
+      this.user = null; // Felhasználói adatok törlése
+      localStorage.removeItem("token"); // Token törlése
     },
   },
 });

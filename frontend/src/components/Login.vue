@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import {http} from "@utils/http";
 
 export default {
   data() {
@@ -28,7 +28,7 @@ export default {
   methods: {
     async login() {
       try {
-        const response = await axios.post("http://backend.vm1.test/api/login", {
+        const response = await http.post("http://backend.vm1.test/api/login", {
           email: this.email,
           password: this.password,
         });
