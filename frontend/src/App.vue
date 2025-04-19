@@ -39,9 +39,6 @@ import { useProductStore } from '@stores/ProductDatasStore';
 import { useUserStore } from '@stores/UserDatasStore';
 
 export default {
-  async mounted() {
-    await useProductStore().fetchProducts();
-  },
   components: {
     Navbar,
     CartPanel,
@@ -62,6 +59,7 @@ export default {
   },
   created() {
     const userStore = useUserStore();
+    const productStore = useProductStore(); // Hozzáadva a productStore
     const token = localStorage.getItem("token");
 
     if (token) {
@@ -69,6 +67,9 @@ export default {
     } else {
       userStore.logout(); // Ha nincs token, törölje az adatokat
     }
+
+    // Termékek betöltése a productStore-ból
+    productStore.fetchProducts();
 
     const storedWishlist = localStorage.getItem("wishlist");
     if (storedWishlist) {

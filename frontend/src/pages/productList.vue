@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import { onMounted } from 'vue';
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useProductStore } from '@stores/ProductDatasStore';
 
@@ -68,9 +68,7 @@ export default {
     const productStore = useProductStore();
     const { locale } = useI18n();
 
-    onMounted(() => {
-      productStore.fetchProducts();
-    });
+    const products = computed(() => productStore.products);
 
     const getLocalizedField = (product, field) => {
       return productStore.getLocalizedField(product, field, locale.value);
@@ -81,7 +79,7 @@ export default {
     };
 
     return {
-      products: productStore.products,
+      products,
       addToCart,
       getLocalizedField,
       locale,
