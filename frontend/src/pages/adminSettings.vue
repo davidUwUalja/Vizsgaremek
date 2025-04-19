@@ -81,7 +81,7 @@
 
 <script setup>
 import { ref, reactive } from 'vue'
-import { useUserStore } from '@/stores/UserDatasStore.mjs'
+import { useUserStore } from '@stores/UserDatasStore.mjs'
 import { useRouter } from 'vue-router'
 import { http } from '@utils/http'
 
