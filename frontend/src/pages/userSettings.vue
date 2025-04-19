@@ -37,3 +37,11 @@ export default {
   },
 };
 </script>
+<route lang="json">
+  {
+      "name": "userSettings",
+      "meta":{
+          "title": "User beállítások"
+      }
+  }
+</route>

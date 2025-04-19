@@ -48,6 +48,10 @@ export default {
     cartItems() {
       return useProductStore().cartItems;
     },
+    isAuthenticated() {
+    const userStore = useUserStore();
+    return !!userStore.user; // Csak akkor igaz, ha a felhasználói adatok betöltődtek
+    },
   },
   data() {
     return {

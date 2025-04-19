@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import {http} from "@utils/http";
+import { http } from "@utils/http";
 
 export default {
   data() {
@@ -32,7 +32,7 @@ export default {
           email: this.email,
           password: this.password,
         });
-        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("token", response.data.data.token);
         this.$router.push("/landing"); // Maradunk a Landing oldalon
         window.location.reload(); // Navbar frissítése
       } catch (error) {

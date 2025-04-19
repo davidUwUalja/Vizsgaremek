@@ -83,7 +83,7 @@
             email: this.email,
             password: this.password,
           });
-          localStorage.setItem("token", response.data.token);
+          localStorage.setItem("token", response.data.data.token);
           this.closeModal();
           window.location.reload();
         } catch (error) {
