@@ -1,5 +1,6 @@
 <template>
-  <div class="min-h-screen bg-amber-50 p-6 flex flex-col items-center">
+  <BaseLayout>
+    <div class="min-h-screen bg-amber-50 p-6 flex flex-col items-center">
     <div class="max-w-5xl w-full bg-yellow-50 p-8 shadow-xl rounded-sm border-4 border-double border-yellow-700">
       <h1 class="text-5xl font-serif font-bold text-center text-yellow-900 mb-8 tracking-wide">
         {{ $t('WebshopBlog') }}
@@ -122,11 +123,15 @@
       </div>
     </div>
   </div>
+  </BaseLayout>
 </template>
 
 <script>
+import BaseLayout from '@layouts/BaseLayout.vue';
+
 export default {
   name: 'Blog',
+  components:{BaseLayout},
   data() {
     return {
       form: {

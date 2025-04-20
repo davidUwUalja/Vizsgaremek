@@ -1,5 +1,6 @@
 <template>
-  <div class="flex justify-center items-center min-h-screen bg-amber-50 p-6">
+ <BaseLayout>
+ <div class="flex justify-center items-center min-h-screen bg-amber-50 p-6">
     <div class="bg-yellow-50 p-10 rounded-sm shadow-xl border-4 border-double border-yellow-700 max-w-4xl w-full">
 
       <h1 class="text-5xl font-serif font-bold text-center text-yellow-900 mb-8 tracking-wide">
@@ -49,10 +50,15 @@
 
     </div>
   </div>
+ </BaseLayout>
 </template>
 
 <script>
+import BaseLayout from '@layouts/BaseLayout.vue';
+
+
 export default {
   name: 'Landing',
+  components:{BaseLayout},
 };
 </script>

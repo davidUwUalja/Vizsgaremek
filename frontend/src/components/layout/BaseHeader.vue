@@ -1,57 +1,149 @@
 <template>
-  <nav class="bg-white dark:bg-gray-800">
-    <div class="flex justify-between p-3 border-b-2 flex-wrap dark:border-none">
-      <RouterLink to="/" class="flex items-center space-x-3">
-        <span class="self-center text-2xl font-semibold dark:text-white">Feladat</span>
-      </RouterLink>
-      <button class="block md:hidden" @click="toggleMenu">
-        <svg
-          class="w-5 h-5 dark:text-white"
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 17 14"
-        >
-          <path
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M1 1h15M1 7h15M1 13h15"
-          />
-        </svg>
-      </button>
-      <div class="w-full md:block md:w-auto" :class="{hidden: !menuOpen}">
-        <ul class="menu">
-          <li class="menuitem"><RouterLink to="#">1. oldal</RouterLink></li>
-        </ul>
-      </div>
+    <div>
+      <Navbar 
+      :isAuthenticated="isAuthenticated" 
+      @logout="handleLogout" 
+      @toggleCart="isCartOpen = !isCartOpen"
+      @toggleWishlist="isWishlistOpen = !isWishlistOpen"
+    />
+  <CartPanel 
+      :isOpen="isCartOpen" 
+      :items="cartItems"
+      @close="isCartOpen = false"
+      @update-quantity="updateCartQuantity"
+      @remove-item="removeFromCart"
+      @checkout="handleCheckout"
+    />
+    
+    <WishlistPanel
+      :isOpen="isWishlistOpen"
+      :items="wishlistItems"
+      @close="isWishlistOpen = false"
+      @move-to-cart="moveToCart"
+      @remove-item="removeFromWishlist"
+    />
     </div>
-  </nav>
 </template>
 
-<script setup>
-import { ref } from 'vue'
-
-const menuOpen = ref(false)
-
-function toggleMenu() {
-  menuOpen.value = !menuOpen.value
+<script>
+import Navbar from '@components/Navbar.vue';
+import CartPanel from '@components/CartPanel.vue';
+import WishlistPanel from '@components/WishlistPanel.vue';
+import { useProductStore } from '@stores/ProductDatasStore';
+import AuthModal from '@/components/AuthModal.vue';
+import { useUserStore } from '@/stores/UserDatasStore.mjs';
+import { http } from '@utils/http'
+export default {
+  components: { AuthModal,
+    CartPanel,
+    Navbar,
+    WishlistPanel, },
+  data() {
+    return {
+      isLanguageMenuOpen: false,
+      isProfileMenuOpen:  false,
+      isModalOpen:        false,
+      isMobileMenuOpen:   false,
+      searchQuery:        '',
+      isCartOpen: false,
+      isWishlistOpen: false,
+      wishlistItems: [],
+    }
+  },
+  computed: {
+    cartItems() {
+      return useProductStore().cartItems;
+    },
+    isAuthenticated() {
+      return !!localStorage.getItem('token')
+    },
+    userStore() {
+      return useUserStore()
+    },
+    userRole() {
+      return this.userStore.user?.role || null
+    },
+    isAdmin() {
+      return this.userRole === 'admin'
+    },
+    settingsRoute() {
+      return this.isAdmin
+        ? { name: 'adminSettings' }
+        : { name: 'settings' }
+    },
+  },
+  created() {
+    if (this.isAuthenticated && !this.userStore.user) {
+      // beállítjuk az axios default header-t
+      http.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
+      this.userStore.fetchUser()
+      
+    }
+    else{
+      this.userStore.logout();
+    }
+    const storedWishlist = localStorage.getItem("wishlist");
+    if (storedWishlist) {
+      this.wishlistItems = JSON.parse(storedWishlist);
+    }
+    
+  },
+  methods: {
+    toggleLanguageMenu() {
+      this.isLanguageMenuOpen = !this.isLanguageMenuOpen
+    },
+    toggleProfileMenu() {
+      this.isProfileMenuOpen = !this.isProfileMenuOpen
+    },
+    toggleMobileMenu() {
+      this.isMobileMenuOpen = !this.isMobileMenuOpen
+    },
+    performSearch() {
+      console.log('Keresés:', this.searchQuery)
+    },
+    changeLanguage(lang) {
+      this.$i18n.locale = lang
+      this.isLanguageMenuOpen = false
+    },
+    openModal() {
+      this.isModalOpen = true
+    },
+    closeModal() {
+      this.isModalOpen = false
+    },
+    handleLogout() {
+      localStorage.removeItem('token')
+      this.userStore.$reset()
+      this.$router.push({ name: 'login' })
+    },
+    addToWishlist(item) {
+      const existingItem = this.wishlistItems.find((i) => i.id === item.id);
+      if (!existingItem) {
+        this.wishlistItems.push(item);
+        localStorage.setItem("wishlist", JSON.stringify(this.wishlistItems));
+      }
+      this.isWishlistOpen = true;
+    },
+    removeFromWishlist(item) {
+      this.wishlistItems = this.wishlistItems.filter((i) => i.id !== item.id);
+      localStorage.setItem("wishlist", JSON.stringify(this.wishlistItems));
+    },
+    moveToCart(item) {
+      const productStore = useProductStore();
+      productStore.addToCart(item);
+      this.removeFromWishlist(item);
+    },
+    updateCartQuantity({ item, change }) {
+      const productStore = useProductStore();
+      productStore.updateCartQuantity({ item, change });
+    },
+    removeFromCart(item) {
+      const productStore = useProductStore();
+      productStore.removeFromCart(item);
+    },
+    handleCheckout() {
+      console.log("Processing checkout...");
+    },
+  },
 }
 </script>
-
-<style scoped>
-.menu {
-  @apply flex flex-col p-4;
-  @apply md:flex-row md:p-0 md:space-x-8;
-}
-.menuitem {
-  @apply block py-2 px-3 text-gray-500;
-  @apply hover:bg-blue-400 hover:text-white rounded p-2;
-}
-
-.menuitem:has(.active){
-  @apply text-blue-500;
-  @apply hover:text-white;
-}
-</style>

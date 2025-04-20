@@ -1,5 +1,8 @@
 <template>
-  <div class="grid gap-6 p-3 bg-amber-50 min-h-screen justify-items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+
+
+  <BaseLayout>
+    <div class="grid gap-6 p-3 bg-amber-50 min-h-screen justify-items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
     <div
       v-for="product in products"
       :key="product.id"
@@ -55,15 +58,18 @@
       </div>
     </div>
   </div>
+  </BaseLayout>
 </template>
 
 <script>
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useProductStore } from '@stores/ProductDatasStore';
+import BaseLayout from '@layouts/BaseLayout.vue';
 
 export default {
   name: 'ProductList',
+  components:{BaseLayout},
   setup() {
     const productStore = useProductStore();
     const { locale } = useI18n();

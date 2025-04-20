@@ -1,5 +1,5 @@
 <template>
-  <nav class="bg-yellow-50 shadow-lg p-4 border-b-4 border-yellow-700">
+    <nav class="bg-yellow-50 shadow-lg p-4 border-b-4 border-yellow-700">
     <div class="flex items-center justify-between">
       <!-- Bal oldal: Nyelvváltó + Keresés -->
       <div class="flex items-center space-x-6">
@@ -108,12 +108,17 @@
 </template>
 
 <script>
-import AuthModal from '@/components/AuthModal.vue'
-import { useUserStore } from '@/stores/UserDatasStore.mjs'
+import CartPanel from '@components/CartPanel.vue';
+import WishlistPanel from '@components/WishlistPanel.vue';
+import { useProductStore } from '@stores/ProductDatasStore';
+import AuthModal from '@/components/AuthModal.vue';
+import { useUserStore } from '@/stores/UserDatasStore.mjs';
 import { http } from '@utils/http'
 export default {
   name: 'Navbar',
-  components: { AuthModal },
+  components: { AuthModal,
+    CartPanel,
+    WishlistPanel, },
   data() {
     return {
       isLanguageMenuOpen: false,
