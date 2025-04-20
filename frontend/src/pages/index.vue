@@ -14,7 +14,7 @@
       <div class="flex flex-col md:flex-row justify-center gap-6 mb-12">
 
         <router-link
-          to="/products"
+          to="/productList"
           class="px-8 py-4 bg-yellow-700 text-yellow-50 font-serif font-semibold rounded-sm border-2 border-yellow-800 shadow-md
                  hover:bg-yellow-900 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 text-center"
         >
