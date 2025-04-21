@@ -4,7 +4,6 @@
     :class="{ 'translate-x-0': isOpen, 'translate-x-full': !isOpen }"
   >
     <div class="p-4 flex flex-col h-full font-serif text-yellow-900">
-      <!-- Header -->
       <div class="flex justify-between items-center pb-4 border-b-2 border-yellow-700">
         <h2 class="text-2xl font-bold text-yellow-800 tracking-wide">
           {{ $t('cart') }}
@@ -17,7 +16,6 @@
         </button>
       </div>
 
-      <!-- Cart Items -->
       <div class="flex-grow overflow-y-auto py-4">
         <div v-if="items.length === 0" class="text-center text-yellow-700 italic py-12">
           {{ $t('ures') }}
@@ -30,7 +28,6 @@
           >
             <div class="flex justify-between mb-2">
               <div>
-                <!-- Dinamikus név és ár -->
                 <p class="font-semibold text-yellow-800">{{ getLocalizedField(item, 'name') }}</p>
                 <p class="text-yellow-700">
                   {{ getLocalizedField(item, 'price') * item.quantity }} {{ currencySymbol }}
@@ -64,7 +61,6 @@
         </div>
       </div>
 
-      <!-- Total and Checkout -->
       <div class="pt-4 border-t-2 border-yellow-700">
         <div class="flex justify-between mb-4 text-lg font-semibold text-yellow-800">
           <span>{{ $t('total') }}:</span>
@@ -75,6 +71,7 @@
         <button
           @click="checkout"
           class="w-full px-4 py-3 bg-yellow-700 text-yellow-50 font-serif font-semibold rounded-sm border-2 border-yellow-800 hover:bg-yellow-900 transition-all duration-300 shadow-md hover:shadow-xl"
+          :disabled="items.length === 0"
         >
           {{ $t('checkout') }}
         </button>
@@ -123,7 +120,9 @@ export default {
       this.$emit('remove-item', item);
     },
     checkout() {
-      this.$emit('checkout');
+      if (this.items.length > 0) {
+        this.$emit('checkout');
+      }
     }
   }
 };

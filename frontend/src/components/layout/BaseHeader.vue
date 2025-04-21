@@ -1,12 +1,12 @@
 <template>
-    <div>
-      <Navbar 
+  <div>
+    <Navbar 
       :isAuthenticated="isAuthenticated" 
       @logout="handleLogout" 
       @toggleCart="isCartOpen = !isCartOpen"
       @toggleWishlist="isWishlistOpen = !isWishlistOpen"
     />
-  <CartPanel 
+    <CartPanel 
       :isOpen="isCartOpen" 
       :items="cartItems"
       @close="isCartOpen = false"
@@ -22,22 +22,34 @@
       @move-to-cart="moveToCart"
       @remove-item="removeFromWishlist"
     />
-    </div>
+    
+    <CartCheckout 
+      v-if="isCheckoutOpen"
+      :totalPrice="calculateTotalPrice()"
+      @close="isCheckoutOpen = false"
+      @confirm-payment="processPayment"
+    />
+  </div>
 </template>
 
 <script>
 import Navbar from '@components/Navbar.vue';
 import CartPanel from '@components/CartPanel.vue';
 import WishlistPanel from '@components/WishlistPanel.vue';
+import CartCheckout from '@/components/CartCheckout.vue'; 
 import { useProductStore } from '@stores/ProductDatasStore';
 import AuthModal from '@/components/AuthModal.vue';
 import { useUserStore } from '@/stores/UserDatasStore.mjs';
 import { http } from '@utils/http'
+
 export default {
-  components: { AuthModal,
+  components: { 
+    AuthModal,
     CartPanel,
+    CartCheckout, 
     Navbar,
-    WishlistPanel, },
+    WishlistPanel,
+  },
   data() {
     return {
       isLanguageMenuOpen: false,
@@ -47,6 +59,7 @@ export default {
       searchQuery:        '',
       isCartOpen: false,
       isWishlistOpen: false,
+      isCheckoutOpen: false, 
       wishlistItems: [],
     }
   },
@@ -74,7 +87,6 @@ export default {
   },
   created() {
     if (this.isAuthenticated && !this.userStore.user) {
-      // beállítjuk az axios default header-t
       http.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
       this.userStore.fetchUser()
       
@@ -87,6 +99,11 @@ export default {
       this.wishlistItems = JSON.parse(storedWishlist);
     }
     
+    const productStore = useProductStore();
+    const storedCartItems = localStorage.getItem('cartItems');
+    if (storedCartItems && productStore.cartItems.length === 0) {
+      productStore.cartItems = JSON.parse(storedCartItems);
+    }
   },
   methods: {
     toggleLanguageMenu() {
@@ -143,7 +160,25 @@ export default {
     },
     handleCheckout() {
       console.log("Processing checkout...");
+      this.isCartOpen = false; 
+      this.isCheckoutOpen = true; 
     },
+    
+    calculateTotalPrice() {
+      return this.cartItems.reduce((total, item) => {
+        const price = item[`price_${this.$i18n.locale}`] || item.price_hu;
+        return total + (price * (item.quantity || 1));
+      }, 0);
+    },
+    
+    processPayment() {
+      alert('Payment processed successfully!');
+      
+      const productStore = useProductStore();
+      productStore.clearCart();
+      
+      this.isCheckoutOpen = false;
+    }
   },
 }
 </script>

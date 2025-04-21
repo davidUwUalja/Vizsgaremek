@@ -37,6 +37,10 @@ export const useProductStore = defineStore("product", {
     removeFromCart(item) {
       this.cartItems = this.cartItems.filter(cartItem => cartItem.id !== item.id);
       localStorage.setItem('cartItems', JSON.stringify(this.cartItems));
+    },
+    clearCart() {
+      this.cartItems = [];
+      localStorage.setItem('cartItems', JSON.stringify([]));
     }
   },
   getters: {
