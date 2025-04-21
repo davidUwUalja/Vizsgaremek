@@ -30,7 +30,7 @@ class AdminControllerTest extends TestCase
         $response = $this->getJson('/api/admin/users');
 
         $response->assertStatus(200)
-                 ->assertJsonCount(4); // 3 created + 1 admin user authenticated
+                 ->assertJsonCount(4);
     }
 
     public function test_create_user_successfully()
