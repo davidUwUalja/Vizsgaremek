@@ -3,7 +3,7 @@ import { http } from "@utils/http.mjs";
 
 export const useUserStore = defineStore("user", {
   state: () => ({
-    user: null, // Csak a bejelentkezett felhasználó adatait tárolja
+    user: null,
   }),
 
   getters: {
@@ -24,13 +24,13 @@ export const useUserStore = defineStore("user", {
         this.user = response.data;
       } catch (error) {
         console.error("Felhasználó lekérése sikertelen", error);
-        this.logout(); // Ha a token érvénytelen, kijelentkezés
+        this.logout();
       }
     },
 
     logout() {
-      this.user = null; // Felhasználói adatok törlése
-      localStorage.removeItem("token"); // Token törlése
+      this.user = null;
+      localStorage.removeItem("token");
     },
   },
 });
