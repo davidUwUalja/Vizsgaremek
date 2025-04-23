@@ -5,14 +5,14 @@
       @click="toggleFilter"
       class="fixed top-28 left-4 z-50 px-3 py-2 bg-yellow-700 text-yellow-50 font-serif text-sm rounded-full hover:bg-yellow-900 border border-yellow-800 shadow-md transition-all duration-300 flex items-center justify-center"
     >
-      <span v-if="!showFilter" class="material-icons text-lg">filter_alt</span>
-      <span v-else class="material-icons text-lg">close</span>
+      <span v-if="!showFilter" class="material-icons text-lg">🛠️</span>
+      <span v-else class="material-icons text-lg">X</span>
     </button>
 
     <!-- Filter Sidebar -->
     <div
-      class="fixed top-0 left-0 h-full bg-yellow-50 border-r-2 border-yellow-800 shadow-lg transition-transform duration-300 z-40"
-      :class="{ '-translate-x-full': !showFilter, 'translate-x-0': showFilter }"
+      class="absolute top-0 left-0 h-full bg-yellow-50 border-r-2 border-yellow-800 shadow-lg transition-transform duration-300 z-40"
+      :class="{ hidden: !showFilter }"
       style="width: 300px;"
     >
       <div class="p-4 relative">
@@ -54,13 +54,8 @@
     <!-- Product Grid -->
     <div
       class="grid gap-6 p-3 bg-amber-50 min-h-screen justify-items-center"
-      :class="{
-        'grid-cols-1': windowWidth < 600,
-        'grid-cols-2': windowWidth >= 600 && windowWidth < 900,
-        'grid-cols-3': windowWidth >= 900 && windowWidth < 1200,
-        'grid-cols-4': windowWidth >= 1200 && windowWidth < 1500,
-        'grid-cols-5': windowWidth >= 1500,
-      }"
+      :class="gridClasses"
+      :style="{ marginLeft: showFilter ? '300px' : '0' }"
     >
       <div
         v-for="product in filteredProducts"
@@ -202,6 +197,27 @@ export default {
       windowWidth.value = window.innerWidth;
     };
 
+    const gridClasses = computed(() => {
+      const baseClasses = {
+        'grid-cols-1': windowWidth.value < 650,
+        'grid-cols-2': windowWidth.value >= 650 && windowWidth.value < 1000,
+        'grid-cols-3': windowWidth.value >= 1000 && windowWidth.value < 1330,
+        'grid-cols-4': windowWidth.value >= 1330 && windowWidth.value < 1600,
+        'grid-cols-5': windowWidth.value >= 1600,
+      };
+
+      if (showFilter.value) {
+        // Reduce the number of columns by 1 when the filter is open
+        delete baseClasses['grid-cols-5'];
+        baseClasses['grid-cols-4'] = windowWidth.value >= 1600;
+        baseClasses['grid-cols-3'] = windowWidth.value >= 1330 && windowWidth.value < 1600;
+        baseClasses['grid-cols-2'] = windowWidth.value >= 1000 && windowWidth.value < 1330;
+        baseClasses['grid-cols-1'] = windowWidth.value < 1000;
+      }
+
+      return baseClasses;
+    });
+
     onMounted(() => {
       window.addEventListener('resize', updateWindowWidth);
     });
@@ -219,6 +235,7 @@ export default {
       showFilter,
       toggleFilter,
       windowWidth,
+      gridClasses,
     };
   },
 };
