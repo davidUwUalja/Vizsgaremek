@@ -1,29 +1,47 @@
-// ProductFilter.vue
 <template>
-  <div class="p-4 bg-gray-100 border rounded-md shadow-md">
-    <h3 class="text-lg font-semibold mb-4">{{ $t('filterTitle') }}</h3>
+  <div class="p-4 bg-gray-100 border rounded-md shadow-md dark:bg-gray-800 dark:border-gray-700">
+    <h3 class="text-lg font-semibold mb-4 dark:text-gray-100">{{ $t('filterTitle') }}</h3>
 
-    <!-- Category Filter -->
+    <!-- Category Checkboxes -->
     <div class="mb-4">
-      <label for="category" class="block text-sm font-medium text-gray-700">{{ $t('category') }}</label>
-      <select
-        id="category"
-        v-model="local.category"
-        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-yellow-500 focus:border-yellow-500"
-      >
-        <option value="">{{ $t('allCategories') }}</option>
-        <option v-for="cat in categories" :key="cat" :value="cat">{{ cat }}</option>
-      </select>
+      <p class="font-medium mb-2 dark:text-gray-200">{{ $t('category') }}</p>
+      <div class="space-y-2">
+        <label v-for="cat in categories" :key="cat" class="flex items-center dark:text-gray-200">
+          <input
+            type="checkbox"
+            :value="cat"
+            v-model="local.categories"
+            class="mr-2 rounded focus:ring-yellow-500 dark:focus:ring-yellow-400"
+          />
+          <span>{{ cat }}</span>
+        </label>
+      </div>
     </div>
 
-    <!-- Price Range Filter -->
+    <!-- Material Checkboxes -->
+    <div class="mb-4">
+      <p class="font-medium mb-2 dark:text-gray-200">{{ $t('material') }}</p>
+      <div class="space-y-2">
+        <label v-for="mat in materials" :key="mat" class="flex items-center dark:text-gray-200">
+          <input
+            type="checkbox"
+            :value="mat"
+            v-model="local.materials"
+            class="mr-2 rounded focus:ring-yellow-500 dark:focus:ring-yellow-400"
+          />
+          <span>{{ mat }}</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Price Range -->
     <div>
-      <label for="priceRange" class="block text-sm font-medium text-gray-700">{{ $t('priceRange') }}</label>
+      <label for="priceRange" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ $t('priceRange') }}</label>
       <select
         id="priceRange"
         v-model="selected"
         @change="onRangeChange"
-        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-yellow-500 focus:border-yellow-500"
+        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-yellow-500 focus:border-yellow-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
       >
         <option :value="null">--</option>
         <option v-for="r in priceRanges" :key="r.label" :value="r">{{ r.label }}</option>
@@ -39,12 +57,14 @@ import { useI18n } from 'vue-i18n';
 export default {
   name: 'ProductFilter',
   props: {
-    categories: { type: Array, required: true }
+    categories: { type: Array, required: true },
+    materials: { type: Array, required: true }
   },
   emits: ['filterChanged'],
   setup(props, { emit }) {
     const { locale } = useI18n();
-    const local = ref({ category: '', minPrice: null, maxPrice: null });
+
+    const local = ref({ categories: [], materials: [], minPrice: null, maxPrice: null });
     const selected = ref(null);
 
     const priceRanges = computed(() =>
@@ -74,12 +94,9 @@ export default {
       emit('filterChanged', { ...local.value });
     };
 
-    watch(
-      () => local.value.category,
-      () => emit('filterChanged', { ...local.value })
-    );
+    watch(local, () => emit('filterChanged', { ...local.value }), { deep: true });
 
-    return { local, selected, priceRanges, onRangeChange };
+    return { local, selected, priceRanges };
   }
 };
 </script>
