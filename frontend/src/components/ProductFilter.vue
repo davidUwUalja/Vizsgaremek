@@ -1,98 +1,85 @@
+// ProductFilter.vue
 <template>
   <div class="p-4 bg-gray-100 border rounded-md shadow-md">
-    <h3 class="text-lg font-semibold mb-4">{{ $t('Szűrő') }}</h3>
+    <h3 class="text-lg font-semibold mb-4">{{ $t('filterTitle') }}</h3>
 
     <!-- Category Filter -->
     <div class="mb-4">
-      <label for="category" class="block text-sm font-medium text-gray-700">
-        {{ $t('category') }}
-      </label>
+      <label for="category" class="block text-sm font-medium text-gray-700">{{ $t('category') }}</label>
       <select
         id="category"
-        v-model="filters.category"
+        v-model="local.category"
         class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-yellow-500 focus:border-yellow-500"
       >
         <option value="">{{ $t('allCategories') }}</option>
-        <option
-          v-for="category in localizedCategories"
-          :key="category"
-          :value="category"
-        >
-          {{ category }}
-        </option>
+        <option v-for="cat in categories" :key="cat" :value="cat">{{ cat }}</option>
       </select>
     </div>
 
-    <!-- Price Filter -->
+    <!-- Price Range Filter -->
     <div>
-      <label for="price" class="block text-sm font-medium text-gray-700">
-        {{ $t('priceRange') }}
-      </label>
-      <div class="flex space-x-2 mt-1">
-        <input
-          type="number"
-          v-model.number="filters.minPrice"
-          placeholder="{{ $t('minPrice') }}"
-          class="w-full border-gray-300 rounded-md shadow-sm focus:ring-yellow-500 focus:border-yellow-500"
-        />
-        <input
-          type="number"
-          v-model.number="filters.maxPrice"
-          placeholder="{{ $t('maxPrice') }}"
-          class="w-full border-gray-300 rounded-md shadow-sm focus:ring-yellow-500 focus:border-yellow-500"
-        />
-      </div>
+      <label for="priceRange" class="block text-sm font-medium text-gray-700">{{ $t('priceRange') }}</label>
+      <select
+        id="priceRange"
+        v-model="selected"
+        @change="onRangeChange"
+        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-yellow-500 focus:border-yellow-500"
+      >
+        <option :value="null">--</option>
+        <option v-for="r in priceRanges" :key="r.label" :value="r">{{ r.label }}</option>
+      </select>
     </div>
   </div>
 </template>
 
 <script>
-import { computed } from 'vue';
+import { ref, watch, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 export default {
   name: 'ProductFilter',
   props: {
-    categories: {
-      type: Array,
-      required: true,
-    },
-    onFilterChange: {
-      type: Function,
-      required: true,
-    },
+    categories: { type: Array, required: true }
   },
-  setup(props) {
-    const { locale, t } = useI18n();
+  emits: ['filterChanged'],
+  setup(props, { emit }) {
+    const { locale } = useI18n();
+    const local = ref({ category: '', minPrice: null, maxPrice: null });
+    const selected = ref(null);
 
-    const filters = {
-      category: '',
-      minPrice: null,
-      maxPrice: null,
-    };
-
-    const localizedCategories = computed(() =>
-      props.categories.map((category) =>
-        t(`categories.${category}`)
-      )
+    const priceRanges = computed(() =>
+      locale.value === 'hu'
+        ? [
+            { label: '1000 - 5000 Ft', min: 1000, max: 5000 },
+            { label: '5001 - 10000 Ft', min: 5001, max: 10000 },
+            { label: '10001 - 30000 Ft', min: 10001, max: 30000 },
+            { label: '30001 - 200000 Ft', min: 30001, max: 200000 }
+          ]
+        : [
+            { label: '$5 - $20', min: 5, max: 20 },
+            { label: '$21 - $50', min: 21, max: 50 },
+            { label: '$51 - $150', min: 51, max: 150 },
+            { label: '$151 - $1000', min: 151, max: 1000 }
+          ]
     );
 
-    const updateFilters = () => {
-      props.onFilterChange(filters);
+    const onRangeChange = () => {
+      if (selected.value) {
+        local.value.minPrice = selected.value.min;
+        local.value.maxPrice = selected.value.max;
+      } else {
+        local.value.minPrice = null;
+        local.value.maxPrice = null;
+      }
+      emit('filterChanged', { ...local.value });
     };
 
-    return {
-      filters,
-      localizedCategories,
-      updateFilters,
-      t,
-    };
-  },
-  watch: {
-    filters: {
-      handler: 'updateFilters',
-      deep: true,
-    },
-  },
+    watch(
+      () => local.value.category,
+      () => emit('filterChanged', { ...local.value })
+    );
+
+    return { local, selected, priceRanges, onRangeChange };
+  }
 };
 </script>
