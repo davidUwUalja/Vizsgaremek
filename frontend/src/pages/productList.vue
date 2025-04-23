@@ -5,7 +5,7 @@
     <button
       v-if="!showFilter"
       @click="toggleFilter"
-      class="fixed top-28 left-4 z-50 px-3 py-2 bg-yellow-700 text-yellow-50 font-serif text-sm rounded-full hover:bg-yellow-900 border border-yellow-800 shadow-md transition-all duration-300 flex items-center justify-center dark:bg-yellow-600 dark:border-yellow-500 dark:text-gray-100"
+      class="fixed top-28 left-4 z-50 px-3 py-2 bg-yellow-700 text-yellow-50 font-serif text-sm rounded-full hover:bg-yellow-900 border border-yellow-800 shadow-md transition-all duration-300"
     >
       <span class="material-icons text-lg">🛠️</span>
     </button>
@@ -28,81 +28,70 @@
         <ProductFilter
           :categories="availableCategories"
           :materials="availableMaterials"
-          @filterChanged="applyFilters"
+          @apply="applyFilters"
         />
       </div>
     </div>
 
-    <!-- Toast notification stack -->
+    <!-- Toasts -->
     <div class="fixed top-4 right-4 z-50 space-y-2">
       <div
-        v-for="(toast, index) in toasts"
-        :key="index"
-        class="bg-green-100 border-l-4 border-green-700 text-green-800 p-4 shadow-lg rounded-sm flex items-center transition-all duration-300 dark:bg-green-900 dark:text-green-100 dark:border-green-500"
+        v-for="(toast, i) in toasts"
+        :key="i"
+        class="bg-green-100 border-l-4 border-green-700 text-green-800 p-4 shadow-lg rounded-sm flex items-center"
       >
-        <div class="flex-shrink-0 mr-2">✅</div>
+        <div class="mr-2">✅</div>
         <div class="flex-1">{{ toast.message }}</div>
-        <button @click="removeToast(index)" class="ml-4 text-green-800 hover:text-green-900 dark:text-green-200">
-          ✖️
-        </button>
+        <button @click="removeToast(i)" class="ml-4">✖️</button>
       </div>
     </div>
 
     <!-- Product Grid -->
     <div
-      class="grid gap-6 p-3 bg-amber-50 min-h-screen justify-items-center transition-all duration-300 dark:bg-gray-800"
+      class="grid gap-6 p-3 bg-amber-50 min-h-screen justify-items-center"
       :class="gridClasses"
       :style="{ marginLeft: showFilter ? '300px' : '0' }"
     >
       <div
         v-for="product in filteredProducts"
         :key="product.id"
-        class="bg-yellow-50 p-4 border-2 border-yellow-800 rounded-sm shadow-lg hover:shadow-2xl hover:border-yellow-900 transition-all duration-300 flex flex-col items-center text-center w-80 dark:bg-gray-700 dark:border-gray-600"
+        class="relative bg-yellow-50 p-4 border-2 border-yellow-800 rounded-sm shadow-lg w-80 h-[550px] flex flex-col"
       >
-        <!-- Product Image -->
+        <!-- Image -->
         <img
           alt="Product Image"
-          class="w-full h-48 object-cover rounded-sm shadow-md brightness-95 contrast-105 hover:scale-105 transition-transform duration-300"
+          class="w-full h-48 object-cover rounded-sm shadow-md"
           :src="`data:image/jpeg;base64,${product.image_url}`"
         />
-
-        <!-- Product Name -->
-        <h3 class="text-xl font-serif font-semibold text-yellow-800 mt-4 border-b-2 border-yellow-700 pb-1 w-full dark:text-yellow-200 dark:border-yellow-500">
-          🛒 {{ getLocalizedField(product, 'name') }}
-        </h3>
-
-        <!-- Material -->
-        <p class="text-sm text-yellow-900 mt-1 italic dark:text-gray-300">
-          🧵 {{ $t('material') }}: {{ getLocalizedField(product, 'material') }}
-        </p>
-
-        <!-- Description -->
-        <p v-if="getLocalizedField(product, 'description')" class="text-sm text-yellow-800 mt-2 dark:text-gray-200">
-          📝 {{ getLocalizedField(product, 'description') }}
-        </p>
-
-        <!-- Category -->
-        <p v-if="getLocalizedField(product, 'category')" class="text-xs text-yellow-700 mt-1 font-mono dark:text-gray-400">
-          📂 {{ $t('category') }}: {{ getLocalizedField(product, 'category') }}
-        </p>
-
-        <!-- Price -->
-        <p class="text-yellow-900 mt-2 font-serif font-semibold dark:text-gray-100">
-          💰 {{ $t('price') }}:
-          {{ new Intl.NumberFormat(locale === 'hu' ? 'hu-HU' : 'en-US').format(getLocalizedField(product, 'price')) }} {{ currency }}
-        </p>
-
-        <!-- Buttons -->
-        <div class="flex space-x-2 mt-4 w-full justify-center">
+        <!-- Details -->
+        <div class="mt-4 flex-grow overflow-hidden">
+          <h3 class="text-xl font-serif font-semibold text-yellow-800 border-b-2 border-yellow-700 pb-1 w-full">
+            🛒 {{ getLocalizedField(product, 'name') }}
+          </h3>
+          <p class="text-sm text-yellow-900 italic mt-1">
+            🧵 {{ $t('material') }}: {{ getLocalizedField(product, 'material') }}
+          </p>
+          <p v-if="getLocalizedField(product, 'description')" class="text-sm text-yellow-800 mt-1 overflow-hidden">
+            📝 {{ getLocalizedField(product, 'description') }}
+          </p>
+          <p v-if="getLocalizedField(product, 'category')" class="text-xs text-yellow-700 font-mono mt-1">
+            📂 {{ $t('category') }}: {{ getLocalizedField(product, 'category') }}
+          </p>
+          <p class="text-yellow-900 font-serif font-semibold mt-2">
+            💰 {{ $t('price') }}: {{ formatPrice(getLocalizedField(product, 'price')) }} {{ currency }}
+          </p>
+        </div>
+        <!-- Buttons fixed 4px from edges -->
+        <div class="absolute bottom-1 left-1 right-1 flex space-x-2 justify-center">
           <router-link
             :to="`/products/${product.id}`"
-            class="px-4 py-2 bg-yellow-700 text-yellow-50 font-serif text-sm rounded-sm hover:bg-yellow-900 border border-yellow-800 shadow-md transition-all duration-300 dark:bg-yellow-600 dark:border-yellow-500 dark:text-gray-100"
+            class="flex-1 text-center px-2 py-1 bg-yellow-700 text-yellow-50 text-sm rounded-sm hover:bg-yellow-900"
           >
             🔍 {{ $t('viewDetails') }}
           </router-link>
           <button
             @click="handleAddToCart(product)"
-            class="px-4 py-2 bg-yellow-700 text-yellow-50 font-serif text-sm rounded-sm hover:bg-yellow-900 border border-yellow-800 shadow-md transition-all duration-300 dark:bg-yellow-600 dark:border-yellow-500 dark:text-gray-100"
+            class="flex-1 text-center px-2 py-1 bg-yellow-700 text-yellow-50 text-sm rounded-sm hover:bg-yellow-900"
           >
             ➕ {{ $t('addToCart') }}
           </button>
@@ -124,55 +113,53 @@ export default {
   components: { BaseLayout, ProductFilter },
   setup() {
     const productStore = useProductStore();
-    const { locale, t } = useI18n();
-
+    const { locale } = useI18n();
     const products = computed(() => productStore.products);
     const toasts = ref([]);
     const filters = ref({ categories: [], materials: [], minPrice: null, maxPrice: null });
 
-    const availableCategories = computed(() =>
-      [...new Set(products.value.map(p => getLocalizedField(p, 'category')))].sort()
-    );
-    const availableMaterials = computed(() =>
-      [...new Set(products.value.map(p => getLocalizedField(p, 'material')))].sort()
-    );
+    const availableCategories = computed(() => {
+      const cats = products.value.map(p => getLocalizedField(p, 'category'));
+      return [...new Set(cats)];
+    });
+    const availableMaterials = computed(() => {
+      const mats = products.value.map(p => getLocalizedField(p, 'material'));
+      return [...new Set(mats)];
+    });
 
     const getLocalizedField = (product, field) =>
       productStore.getLocalizedField(product, field, locale.value);
+    const formatPrice = price =>
+      new Intl.NumberFormat(locale.value === 'hu' ? 'hu-HU' : 'en-US').format(price);
 
     const filteredProducts = computed(() =>
       products.value.filter(p => {
         const cat = getLocalizedField(p, 'category');
         const mat = getLocalizedField(p, 'material');
-        const categoryMatch = !filters.value.categories.length || filters.value.categories.includes(cat);
-        const materialMatch = !filters.value.materials.length || filters.value.materials.includes(mat);
+        const matchCategory = !filters.value.categories.length || filters.value.categories.includes(cat);
+        const matchMaterial = !filters.value.materials.length || filters.value.materials.includes(mat);
         const price = getLocalizedField(p, 'price');
-        const priceMatch = (!filters.value.minPrice || price >= filters.value.minPrice) &&
-                           (!filters.value.maxPrice || price <= filters.value.maxPrice);
-        return categoryMatch && materialMatch && priceMatch;
+        const matchPrice =
+          (filters.value.minPrice == null || price >= filters.value.minPrice) &&
+          (filters.value.maxPrice == null || price <= filters.value.maxPrice);
+        return matchCategory && matchMaterial && matchPrice;
       })
     );
 
     const applyFilters = newFilters => { filters.value = { ...newFilters }; };
-
     const handleAddToCart = product => {
       productStore.addToCart(product);
-      const message = `${getLocalizedField(product, 'name')} - ${t('addedToCart')}`;
-      const toast = { message };
-      toasts.value.push(toast);
-      setTimeout(() => {
-        const idx = toasts.value.indexOf(toast);
-        if (idx !== -1) toasts.value.splice(idx, 1);
-      }, 3000);
+      toasts.value.push({ message: `${getLocalizedField(product, 'name')} added to cart` });
+      setTimeout(() => toasts.value.shift(), 3000);
     };
-
-    const removeToast = idx => { toasts.value.splice(idx, 1); };
+    const removeToast = idx => toasts.value.splice(idx, 1);
 
     const showFilter = ref(false);
-    const toggleFilter = () => { showFilter.value = !showFilter.value; };
+    const toggleFilter = () => (showFilter.value = !showFilter.value);
 
     const windowWidth = ref(window.innerWidth);
-    const updateWindowWidth = () => { windowWidth.value = window.innerWidth; };
+    const updateWindowWidth = () => (windowWidth.value = window.innerWidth);
+    onMounted(() => window.addEventListener('resize', updateWindowWidth));
 
     const gridClasses = computed(() => {
       if (windowWidth.value < (showFilter.value ? 1000 : 650)) return 'grid-cols-1';
@@ -180,9 +167,6 @@ export default {
       if (windowWidth.value < (showFilter.value ? 1600 : 1330)) return 'grid-cols-3';
       return showFilter.value ? 'grid-cols-4' : 'grid-cols-5';
     });
-
-    onMounted(() => window.addEventListener('resize', updateWindowWidth));
-
     const currency = computed(() => (locale.value === 'hu' ? 'Ft' : '$'));
 
     return {
@@ -190,6 +174,7 @@ export default {
       availableMaterials,
       filteredProducts,
       getLocalizedField,
+      formatPrice,
       handleAddToCart,
       removeToast,
       applyFilters,
@@ -197,11 +182,9 @@ export default {
       showFilter,
       toggleFilter,
       gridClasses,
-      locale: locale.value,
       currency,
-      t
+      locale
     };
   }
 };
 </script>
-

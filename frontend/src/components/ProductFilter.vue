@@ -2,7 +2,7 @@
   <div class="p-4 bg-gray-100 border rounded-md shadow-md dark:bg-gray-800 dark:border-gray-700">
     <h3 class="text-lg font-semibold mb-4 dark:text-gray-100">{{ $t('filterTitle') }}</h3>
 
-    <!-- Category Checkboxes -->
+    <!-- Category -->
     <div class="mb-4">
       <p class="font-medium mb-2 dark:text-gray-200">{{ $t('category') }}</p>
       <div class="space-y-2">
@@ -18,7 +18,7 @@
       </div>
     </div>
 
-    <!-- Material Checkboxes -->
+    <!-- Material -->
     <div class="mb-4">
       <p class="font-medium mb-2 dark:text-gray-200">{{ $t('material') }}</p>
       <div class="space-y-2">
@@ -34,24 +34,29 @@
       </div>
     </div>
 
-    <!-- Price Range -->
-    <div>
-      <label for="priceRange" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ $t('priceRange') }}</label>
-      <select
-        id="priceRange"
-        v-model="selected"
-        @change="onRangeChange"
-        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-yellow-500 focus:border-yellow-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
-      >
+    <!-- Price -->
+    <div class="mb-4">
+      <label for="priceRange" class="block text-sm font-medium dark:text-gray-300">
+        {{ $t('priceRange') }}
+      </label>
+      <select id="priceRange" v-model="selected" @change="onRangeChange" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-yellow-500 focus:border-yellow-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">
         <option :value="null">--</option>
         <option v-for="r in priceRanges" :key="r.label" :value="r">{{ r.label }}</option>
       </select>
     </div>
+
+    <!-- Apply -->
+    <button
+      @click="emitApply"
+      class="w-full mt-2 px-4 py-2 bg-yellow-700 text-yellow-50 font-serif text-sm rounded-sm hover:bg-yellow-900 border border-yellow-800 shadow-md transition-all duration-300 dark:bg-yellow-600 dark:border-yellow-500 dark:text-gray-100"
+    >
+      {{ $t('applyFilters') }}
+    </button>
   </div>
 </template>
 
 <script>
-import { ref, watch, computed } from 'vue';
+import { ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 export default {
@@ -60,10 +65,9 @@ export default {
     categories: { type: Array, required: true },
     materials: { type: Array, required: true }
   },
-  emits: ['filterChanged'],
+  emits: ['apply'],
   setup(props, { emit }) {
     const { locale } = useI18n();
-
     const local = ref({ categories: [], materials: [], minPrice: null, maxPrice: null });
     const selected = ref(null);
 
@@ -91,12 +95,11 @@ export default {
         local.value.minPrice = null;
         local.value.maxPrice = null;
       }
-      emit('filterChanged', { ...local.value });
     };
 
-    watch(local, () => emit('filterChanged', { ...local.value }), { deep: true });
+    const emitApply = () => emit('apply', { ...local.value });
 
-    return { local, selected, priceRanges };
+    return { local, selected, priceRanges, onRangeChange, emitApply };
   }
 };
 </script>
