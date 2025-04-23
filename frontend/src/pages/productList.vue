@@ -3,9 +3,10 @@
     <!-- Filter Toggle Button -->
     <button
       @click="toggleFilter"
-      class="fixed top-4 left-4 z-50 px-4 py-2 bg-yellow-700 text-yellow-50 font-serif text-sm rounded-sm hover:bg-yellow-900 border border-yellow-800 shadow-md transition-all duration-300"
+      class="fixed top-28 left-4 z-50 px-3 py-2 bg-yellow-700 text-yellow-50 font-serif text-sm rounded-full hover:bg-yellow-900 border border-yellow-800 shadow-md transition-all duration-300 flex items-center justify-center"
     >
-      {{ showFilter ? $t('hideFilter') : $t('showFilter') }}
+      <span v-if="!showFilter" class="material-icons text-lg">filter_alt</span>
+      <span v-else class="material-icons text-lg">close</span>
     </button>
 
     <!-- Filter Sidebar -->
@@ -14,9 +15,15 @@
       :class="{ '-translate-x-full': !showFilter, 'translate-x-0': showFilter }"
       style="width: 300px;"
     >
-      <div class="p-4">
+      <div class="p-4 relative">
+        <button
+          @click="toggleFilter"
+          class="absolute top-4 right-4 px-2 py-1 bg-yellow-700 text-yellow-50 text-sm rounded-full hover:bg-yellow-900 border border-yellow-800 shadow-md transition-all duration-300"
+        >
+          ✖️
+        </button>
         <h3 class="text-lg font-serif font-semibold text-yellow-800 mb-4">
-          {{ $t('filterTitle') }}
+          🛠️ {{ $t('filterTitle') }}
         </h3>
         <ProductFilter
           :categories="availableCategories"
@@ -33,13 +40,13 @@
         class="bg-green-100 border-l-4 border-green-700 text-green-800 p-4 shadow-lg rounded-sm flex items-center transition-all duration-300"
       >
         <div class="flex-shrink-0 mr-2">
-          ✓
+          ✅
         </div>
         <div class="flex-1">
           {{ toast.message }}
         </div>
         <button @click="removeToast(index)" class="ml-4 text-green-800 hover:text-green-900">
-          ✕
+          ✖️
         </button>
       </div>
     </div>
@@ -48,8 +55,11 @@
     <div
       class="grid gap-6 p-3 bg-amber-50 min-h-screen justify-items-center"
       :class="{
-        'grid-cols-1 sm:grid-cols-2 md:grid-cols-3': windowWidth < 1100,
-        'lg:grid-cols-4 xl:grid-cols-5': windowWidth >= 1100,
+        'grid-cols-1': windowWidth < 600,
+        'grid-cols-2': windowWidth >= 600 && windowWidth < 900,
+        'grid-cols-3': windowWidth >= 900 && windowWidth < 1200,
+        'grid-cols-4': windowWidth >= 1200 && windowWidth < 1500,
+        'grid-cols-5': windowWidth >= 1500,
       }"
     >
       <div
@@ -66,27 +76,27 @@
 
         <!-- Product Name -->
         <h3 class="text-xl font-serif font-semibold text-yellow-800 mt-4 border-b-2 border-yellow-700 pb-1 w-full">
-          {{ getLocalizedField(product, 'name') }}
+          🛒 {{ getLocalizedField(product, 'name') }}
         </h3>
 
         <!-- Material -->
         <p class="text-sm text-yellow-900 mt-1 italic">
-          {{ $t('material') }}: {{ getLocalizedField(product, 'material') }}
+          🧵 {{ $t('material') }}: {{ getLocalizedField(product, 'material') }}
         </p>
 
         <!-- Description -->
         <p v-if="getLocalizedField(product, 'description')" class="text-sm text-yellow-800 mt-2">
-          {{ getLocalizedField(product, 'description') }}
+          📝 {{ getLocalizedField(product, 'description') }}
         </p>
 
         <!-- Category -->
         <p v-if="getLocalizedField(product, 'category')" class="text-xs text-yellow-700 mt-1 font-mono">
-          {{ $t('category') }}: {{ getLocalizedField(product, 'category') }}
+          📂 {{ $t('category') }}: {{ getLocalizedField(product, 'category') }}
         </p>
 
         <!-- Price -->
         <p class="text-yellow-900 mt-2 font-serif font-semibold">
-          {{ $t('price') }}:
+          💰 {{ $t('price') }}:
           {{ new Intl.NumberFormat(locale.value === 'hu' ? 'hu-HU' : 'en-US').format(getLocalizedField(product, 'price')) }} {{ locale.value === 'hu' ? 'Ft' : '$' }}
         </p>
 
@@ -96,13 +106,13 @@
             :to="`/products/${product.id}`"
             class="px-4 py-2 bg-yellow-700 text-yellow-50 font-serif text-sm rounded-sm hover:bg-yellow-900 border border-yellow-800 shadow-md transition-all duration-300"
           >
-            {{ $t('viewDetails') }}
+            🔍 {{ $t('viewDetails') }}
           </router-link>
           <button
             @click="handleAddToCart(product)"
             class="px-4 py-2 bg-yellow-700 text-yellow-50 font-serif text-sm rounded-sm hover:bg-yellow-900 border border-yellow-800 shadow-md transition-all duration-300"
           >
-            {{ $t('addToCart') }}
+            ➕ {{ $t('addToCart') }}
           </button>
         </div>
       </div>
