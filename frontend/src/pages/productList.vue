@@ -1,4 +1,3 @@
-// ProductList.vue
 <template>
   <BaseLayout>
     <!-- Filter Toggle Button -->
@@ -90,6 +89,12 @@
             🔍 {{ $t('viewDetails') }}
           </router-link>
           <button
+            @click="handleAddToWishlist(product)"
+            class="flex-1 text-center px-2 py-1 bg-yellow-700 text-yellow-50 text-sm rounded-sm hover:bg-yellow-900"
+          >
+            ❤️ {{ $t('addToWishlist') || 'Add to Wishlist' }}
+          </button>
+          <button
             @click="handleAddToCart(product)"
             class="flex-1 text-center px-2 py-1 bg-yellow-700 text-yellow-50 text-sm rounded-sm hover:bg-yellow-900"
           >
@@ -152,6 +157,14 @@ export default {
       toasts.value.push({ message: `${getLocalizedField(product, 'name')} added to cart` });
       setTimeout(() => toasts.value.shift(), 3000);
     };
+    
+    // New method for adding to wishlist
+    const handleAddToWishlist = product => {
+      productStore.addToWishlist(product);
+      toasts.value.push({ message: `${getLocalizedField(product, 'name')} added to wishlist` });
+      setTimeout(() => toasts.value.shift(), 3000);
+    };
+    
     const removeToast = idx => toasts.value.splice(idx, 1);
 
     const showFilter = ref(false);
@@ -176,6 +189,7 @@ export default {
       getLocalizedField,
       formatPrice,
       handleAddToCart,
+      handleAddToWishlist,
       removeToast,
       applyFilters,
       toasts,

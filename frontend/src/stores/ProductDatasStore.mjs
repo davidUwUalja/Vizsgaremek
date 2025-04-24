@@ -4,7 +4,8 @@ import { http } from "@utils/http.mjs";
 export const useProductStore = defineStore("product", {
   state: () => ({
     products: [],
-    cartItems: []
+    cartItems: [],
+    wishlistItems: []
   }),
   actions: {
     async fetchProducts() {
@@ -41,6 +42,34 @@ export const useProductStore = defineStore("product", {
     clearCart() {
       this.cartItems = [];
       localStorage.setItem('cartItems', JSON.stringify([]));
+    },
+    // New wishlist actions
+    addToWishlist(product) {
+      const existingItem = this.wishlistItems.find(item => item.id === product.id);
+      if (!existingItem) {
+        this.wishlistItems.push({ ...product });
+        localStorage.setItem('wishlist', JSON.stringify(this.wishlistItems));
+      }
+    },
+    removeFromWishlist(item) {
+      this.wishlistItems = this.wishlistItems.filter(wishlistItem => wishlistItem.id !== item.id);
+      localStorage.setItem('wishlist', JSON.stringify(this.wishlistItems));
+    },
+    moveToCart(item) {
+      this.addToCart(item);
+      this.removeFromWishlist(item);
+    },
+    // Initialize store from localStorage
+    initializeFromStorage() {
+      const storedCartItems = localStorage.getItem('cartItems');
+      if (storedCartItems) {
+        this.cartItems = JSON.parse(storedCartItems);
+      }
+      
+      const storedWishlist = localStorage.getItem('wishlist');
+      if (storedWishlist) {
+        this.wishlistItems = JSON.parse(storedWishlist);
+      }
     }
   },
   getters: {
