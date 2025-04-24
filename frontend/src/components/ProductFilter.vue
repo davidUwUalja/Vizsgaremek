@@ -74,15 +74,15 @@ export default {
     const priceRanges = computed(() =>
       locale.value === 'hu'
         ? [
-            { label: '1000 - 5000 Ft', min: 1000, max: 8000 },
-            { label: '5001 - 10000 Ft', min: 8001, max: 15000 },
-            { label: '10001 - 30000 Ft', min: 15001, max: 30000 },
+            { label: '1000 - 8000 Ft', min: 1000, max: 8000 },
+            { label: '8001 - 15000 Ft', min: 8001, max: 15000 },
+            { label: '15001 - 30000 Ft', min: 15001, max: 30000 },
             { label: '30001 - 200000 Ft', min: 30001, max: 200000 }
           ]
         : [
-            { label: '$5 - $20', min: 5, max: 30 },
-            { label: '$21 - $50', min: 31, max: 70 },
-            { label: '$51 - $150', min: 71, max: 150 },
+            { label: '$5 - $30', min: 5, max: 30 },
+            { label: '$31 - $70', min: 31, max: 70 },
+            { label: '$71 - $150', min: 71, max: 150 },
             { label: '$151 - $1000', min: 151, max: 1000 }
           ]
     );
