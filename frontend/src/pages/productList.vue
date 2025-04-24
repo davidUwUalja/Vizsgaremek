@@ -106,7 +106,7 @@ import { ref, computed, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useProductStore } from '@stores/ProductDatasStore';
 import BaseLayout from '@layouts/BaseLayout.vue';
-import ProductFilter from '@/components/ProductFilter.vue';
+import ProductFilter from '@components/ProductFilter.vue';
 
 export default {
   name: 'ProductList',
