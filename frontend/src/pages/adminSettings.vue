@@ -184,7 +184,7 @@ const isLoadingContacts = ref(true)
 const fetchContacts = async () => {
   try {
     const response = await http.get('/contact')
-    contacts.value = response.data
+    contacts.value = response.data.data
   } catch (error) {
     console.error('Hiba az üzenetek lekérésekor:', error)
   } finally {
