@@ -107,7 +107,8 @@ export default {
       cvv: '',
       selectedCurrency: 'HUF',
       convertedPrice: 0,
-      exchangeRate: 370, // 1 USD = 370 HUF
+      exchangeRate: 370, 
+      originalCurrency: 'HUF',
     };
   },
   computed: {
@@ -116,14 +117,24 @@ export default {
     },
   },
   mounted() {
-    this.convertedPrice = this.totalPrice; // initial
+    this.originalCurrency = this.$i18n.locale === 'hu' ? 'HUF' : 'USD';
+    this.selectedCurrency = this.originalCurrency;
+    this.convertedPrice = this.totalPrice;
   },
   methods: {
     convertPrice() {
-      if (this.selectedCurrency === 'USD') {
-        this.convertedPrice = this.totalPrice / this.exchangeRate;
-      } else {
+      if (this.selectedCurrency === this.originalCurrency) {
         this.convertedPrice = this.totalPrice;
+      } else if (this.selectedCurrency === 'USD') {
+        this.convertedPrice =
+          this.originalCurrency === 'HUF'
+            ? this.totalPrice / this.exchangeRate
+            : this.totalPrice;
+      } else {
+        this.convertedPrice =
+          this.originalCurrency === 'USD'
+            ? this.totalPrice * this.exchangeRate
+            : this.totalPrice;
       }
     },
     confirmPayment() {
