@@ -125,20 +125,6 @@ export default {
     const formatPrice = price =>
       new Intl.NumberFormat(locale.value === 'hu' ? 'hu-HU' : 'en-US').format(price);
 
-    const filteredProducts = computed(() =>
-      products.value.filter(p => {
-        const cat = getLocalizedField(p, 'category');
-        const mat = getLocalizedField(p, 'material');
-        const matchCategory = !filters.value.categories.length || filters.value.categories.includes(cat);
-        const matchMaterial = !filters.value.materials.length || filters.value.materials.includes(mat);
-        const price = getLocalizedField(p, 'price');
-        const matchPrice =
-          (filters.value.minPrice == null || price >= filters.value.minPrice) &&
-          (filters.value.maxPrice == null || price <= filters.value.maxPrice);
-        return matchCategory && matchMaterial && matchPrice;
-      })
-    );
-
     const applyFilters = newFilters => { filters.value = { ...newFilters }; };
     const handleAddToCart = product => {
       productStore.addToCart(product);

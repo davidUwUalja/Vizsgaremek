@@ -25,17 +25,6 @@
             </ul>
           </div>
         </div>
-
-        <!-- Keresőmező -->
-        <div class="flex items-center border-2 border-yellow-700 rounded-sm px-2 bg-white shadow-sm">
-          <input
-            v-model="searchQuery"
-            @keyup.enter="performSearch"
-            :placeholder="$t('searchPlaceholder')"
-            class="outline-none text-yellow-900 px-2 py-1 w-32 sm:w-48 bg-transparent font-serif placeholder-yellow-600"
-          />
-          <button @click="performSearch" class="text-yellow-800 hover:text-yellow-900 ml-2 text-xl">🔍</button>
-        </div>
       </div>
 
       <!-- Középső menü linkek (desktop) -->
@@ -125,7 +114,6 @@ export default {
       isProfileMenuOpen:  false,
       isModalOpen:        false,
       isMobileMenuOpen:   false,
-      searchQuery:        '',
     }
   },
   computed: {
@@ -163,9 +151,6 @@ export default {
     },
     toggleMobileMenu() {
       this.isMobileMenuOpen = !this.isMobileMenuOpen
-    },
-    performSearch() {
-      console.log('Keresés:', this.searchQuery)
     },
     changeLanguage(lang) {
       this.$i18n.locale = lang
