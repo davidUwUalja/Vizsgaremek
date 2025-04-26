@@ -54,7 +54,7 @@
       <div
         v-for="product in filteredProducts"
         :key="product.id"
-        class="relative bg-yellow-50 p-4 border-2 border-yellow-800 rounded-sm shadow-lg w-80 h-[550px] flex flex-col"
+        class="relative bg-yellow-50 p-4 border-2 border-yellow-800 rounded-sm shadow-lg w-80 h-[550px] flex flex-col transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:bg-yellow-100"
       >
         <!-- Image -->
         <img
@@ -71,7 +71,6 @@
             📝 {{ getLocalizedField(product, 'description') }}
           </p>
           <p class="text-yellow-900 font-serif font-semibold mt-2">
-            
             💰 {{ $t('price') }}: {{ formatPrice(getLocalizedField(product, 'price')) }} {{ currency }}
           </p>
         </div>
@@ -94,6 +93,7 @@
     </div>
   </BaseLayout>
 </template>
+
 
 <script>
 import { ref, computed, onMounted } from 'vue';
