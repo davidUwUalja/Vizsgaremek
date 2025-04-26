@@ -12,63 +12,77 @@
           ✕
         </button>
       </div>
-      
+
+      <div class="mb-4">
+        <label class="block mb-2 text-yellow-800 font-medium">
+          {{ $t('currency') || 'Currency' }}
+        </label>
+        <select
+          v-model="selectedCurrency"
+          @change="convertPrice"
+          class="border-2 border-yellow-700 p-2 rounded-sm w-full bg-white focus:outline-none focus:ring-2 focus:ring-yellow-600"
+        >
+          <option value="HUF">HUF</option>
+          <option value="USD">USD</option>
+        </select>
+      </div>
+
       <div class="mb-6 py-2 bg-yellow-100 px-4 rounded-sm border border-yellow-700">
         <p class="text-lg font-semibold text-yellow-800">
-          {{ $t('total') || 'Total' }}: {{ totalPrice }} {{ currencySymbol }}
+          {{ $t('total') || 'Total' }}: {{ convertedPrice.toFixed(2) }} {{ currencySymbol }}
         </p>
       </div>
-      
+
       <div class="space-y-4">
         <div>
           <label class="block mb-2 text-yellow-800 font-medium">
             {{ $t('cardNumber') || 'Card Number' }}
           </label>
-          <input 
-            type="text" 
-            v-model="cardNumber" 
-            class="border-2 border-yellow-700 p-2 rounded-sm w-full bg-white focus:outline-none focus:ring-2 focus:ring-yellow-600" 
-            placeholder="1234 5678 9012 3456" 
+          <input
+            type="text"
+            v-model="cardNumber"
+            class="border-2 border-yellow-700 p-2 rounded-sm w-full bg-white focus:outline-none focus:ring-2 focus:ring-yellow-600"
+            placeholder="1234 5678 9012 3456"
           />
         </div>
-        
+
         <div class="grid grid-cols-2 gap-4">
           <div>
             <label class="block mb-2 text-yellow-800 font-medium">
               {{ $t('expiryDate') || 'Expiry Date' }}
             </label>
-            <input 
-              type="text" 
-              v-model="expiryDate" 
-              class="border-2 border-yellow-700 p-2 rounded-sm w-full bg-white focus:outline-none focus:ring-2 focus:ring-yellow-600" 
-              placeholder="MM/YY" 
+            <input
+              type="text"
+              v-model="expiryDate"
+              class="border-2 border-yellow-700 p-2 rounded-sm w-full bg-white focus:outline-none focus:ring-2 focus:ring-yellow-600"
+              placeholder="MM/YY"
             />
           </div>
-          
+
           <div>
             <label class="block mb-2 text-yellow-800 font-medium">
               {{ $t('cvv') || 'CVV' }}
             </label>
-            <input 
-              type="text" 
-              v-model="cvv" 
-              class="border-2 border-yellow-700 p-2 rounded-sm w-full bg-white focus:outline-none focus:ring-2 focus:ring-yellow-600" 
-              placeholder="123" 
+            <input
+              type="text"
+              v-model="cvv"
+              class="border-2 border-yellow-700 p-2 rounded-sm w-full bg-white focus:outline-none focus:ring-2 focus:ring-yellow-600"
+              placeholder="123"
             />
           </div>
         </div>
       </div>
-      
+
       <div class="mt-6 space-y-3">
-        <button 
-          @click="confirmPayment" 
+        <button
+          @click="confirmPayment"
           class="w-full px-4 py-3 bg-yellow-700 text-yellow-50 font-serif font-semibold rounded-sm border-2 border-yellow-800 hover:bg-yellow-900 transition-all duration-300 shadow-md hover:shadow-xl"
         >
           {{ $t('Confirm') || 'Confirm Payment' }}
         </button>
-        
-        <button 
-          @click="$emit('close')" 
+
+        <button
+          @click="$emit('close')"
           class="w-full px-4 py-3 bg-red-700 text-red-50 font-serif font-semibold rounded-sm border-2 border-red-800 hover:bg-red-900 transition-all duration-300 shadow-md hover:shadow-xl"
         >
           {{ $t('Cancel') || 'Cancel' }}
@@ -91,24 +105,43 @@ export default {
       cardNumber: '',
       expiryDate: '',
       cvv: '',
+      selectedCurrency: 'HUF',
+      convertedPrice: 0,
+      exchangeRate: 370, // 1 USD = 370 HUF
     };
   },
   computed: {
     currencySymbol() {
-      return this.$i18n.locale === 'hu' ? 'Ft' : '$';
-    }
+      return this.selectedCurrency === 'HUF' ? 'Ft' : '$';
+    },
+  },
+  mounted() {
+    this.convertedPrice = this.totalPrice; // initial
   },
   methods: {
+    convertPrice() {
+      if (this.selectedCurrency === 'USD') {
+        this.convertedPrice = this.totalPrice / this.exchangeRate;
+      } else {
+        this.convertedPrice = this.totalPrice;
+      }
+    },
     confirmPayment() {
       if (this.validateForm()) {
-        this.$emit('confirm-payment');
+        this.$emit('confirm-payment', {
+          cardNumber: this.cardNumber,
+          expiryDate: this.expiryDate,
+          cvv: this.cvv,
+          currency: this.selectedCurrency,
+          amount: this.convertedPrice,
+        });
       } else {
         alert(this.$t('fillAllFields') || 'Please fill all fields correctly!');
       }
     },
     validateForm() {
       return this.cardNumber && this.expiryDate && this.cvv;
-    }
+    },
   },
 };
 </script>
