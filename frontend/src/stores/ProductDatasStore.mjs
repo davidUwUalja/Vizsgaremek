@@ -10,8 +10,16 @@ export const useProductStore = defineStore("product", {
   actions: {
     async fetchProducts() {
       try {
-        const response = await http.get('http://backend.vm1.test/api/products');
+        const response = await http.get('/products');
         this.products = response.data.data;
+      } catch (error) {
+        console.error('Hiba a termékek betöltése során:', error);
+      }
+    },
+    async fetchProduct(id) {
+      try {
+        const response = await http.get('/products', id);
+        return response.data.data;
       } catch (error) {
         console.error('Hiba a termékek betöltése során:', error);
       }

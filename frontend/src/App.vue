@@ -8,11 +8,16 @@
   
   import { useProductStore } from '@stores/ProductDatasStore';
   import { useUserStore } from '@stores/UserDatasStore';
-  
+  import { mapActions } from 'pinia';
+
   export default {
-    async mounted(){
-      await useProductStore().fetchProducts();
-    }
+    methods: {
+      ...mapActions(useProductStore, ['fetchProducts']),
+      
+    },
+    mounted() {
+      this.fetchProducts();
+    },
   }
   
   </script>

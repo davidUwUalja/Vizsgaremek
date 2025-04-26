@@ -137,7 +137,6 @@ export default {
   },
   created() {
     if (this.isAuthenticated && !this.userStore.user) {
-      // beállítjuk az axios default header-t
       http.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
       this.userStore.fetchUser()
     }

@@ -71,17 +71,18 @@
             📝 {{ getLocalizedField(product, 'description') }}
           </p>
           <p class="text-yellow-900 font-serif font-semibold mt-2">
+            
             💰 {{ $t('price') }}: {{ formatPrice(getLocalizedField(product, 'price')) }} {{ currency }}
           </p>
         </div>
         <!-- Buttons fixed 4px from edges -->
         <div class="absolute bottom-1 left-1 right-1 flex space-x-2 justify-center">
-          <router-link
-            :to="`/products/${product.id}`"
+          <RouterLink
+            :to="{name: 'ProductDetail', params:{id: product.id }}"
             class="flex-1 text-center px-2 py-1 bg-yellow-700 text-yellow-50 text-sm rounded-sm hover:bg-yellow-900"
           >
             🔍 {{ $t('viewDetails') }}
-          </router-link>
+          </RouterLink>
           <button
             @click="handleAddToCart(product)"
             class="flex-1 text-center px-2 py-1 bg-yellow-700 text-yellow-50 text-sm rounded-sm hover:bg-yellow-900"
@@ -102,7 +103,7 @@ import BaseLayout from '@layouts/BaseLayout.vue';
 import ProductFilter from '@components/ProductFilter.vue';
 
 export default {
-  name: 'ProductList',
+  name: 'productList',
   components: { BaseLayout, ProductFilter },
   setup() {
     const productStore = useProductStore();
@@ -124,6 +125,20 @@ export default {
       productStore.getLocalizedField(product, field, locale.value);
     const formatPrice = price =>
       new Intl.NumberFormat(locale.value === 'hu' ? 'hu-HU' : 'en-US').format(price);
+
+    const filteredProducts = computed(() =>
+      products.value.filter(p => {
+        const cat = getLocalizedField(p, 'category');
+        const mat = getLocalizedField(p, 'material');
+        const matchCategory = !filters.value.categories.length || filters.value.categories.includes(cat);
+        const matchMaterial = !filters.value.materials.length || filters.value.materials.includes(mat);
+        const price = getLocalizedField(p, 'price');
+        const matchPrice =
+          (filters.value.minPrice == null || price >= filters.value.minPrice) &&
+          (filters.value.maxPrice == null || price <= filters.value.maxPrice);
+        return matchCategory && matchMaterial && matchPrice;
+      })
+    );
 
     const applyFilters = newFilters => { filters.value = { ...newFilters }; };
     const handleAddToCart = product => {
@@ -167,3 +182,6 @@ export default {
   }
 };
 </script>
+<route lang="yaml">
+  name: productList  
+</route>
