@@ -69,7 +69,7 @@
 </template>
   
 <script>
-import axios from 'axios';
+import {http} from '@utils/http';
 import BaseLayout from '@layouts/BaseLayout.vue';
   
 export default {
@@ -91,8 +91,8 @@ export default {
       this.successMessage = '';
       this.errorMessage = '';
   
-      axios
-        .post('/api/contact', {
+      http
+        .post('/contact', {
           name: this.name,
           email: this.email,
           message: this.message
