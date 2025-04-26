@@ -1,6 +1,45 @@
 <template>
   <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
     <div class="p-8">
+
+      <!-- Üzenetek blokk -->
+      <div class="max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-xl p-8 mb-8">
+        <h1 class="text-3xl font-bold text-center text-gray-900 dark:text-white mb-6">
+          Beérkezett üzenetek
+        </h1>
+        <div v-if="isLoadingContacts" class="text-center py-4 text-gray-600 dark:text-gray-300">
+          Üzenetek betöltése...
+        </div>
+        <div v-else>
+          <div v-if="contacts.length === 0" class="text-center text-gray-600 dark:text-gray-300">
+            Nincs új üzenet.
+          </div>
+          <div v-else class="space-y-4">
+            <div
+              v-for="contact in contacts"
+              :key="contact.id"
+              class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm bg-gray-50 dark:bg-gray-700"
+            >
+              <div class="flex justify-between items-center">
+                <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-100">
+                  {{ contact.name }}
+                </h2>
+                <span class="text-sm text-gray-500 dark:text-gray-300">
+                  {{ formatDate(contact.created_at) }}
+                </span>
+              </div>
+              <p class="mt-2 text-gray-700 dark:text-gray-200">
+                <strong>Email:</strong> {{ contact.email }}
+              </p>
+              <p class="mt-2 text-gray-700 dark:text-gray-200">
+                {{ contact.message }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Termék feltöltési blokk -->
       <div class="max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-xl p-8">
         <h1 class="text-3xl font-bold text-center text-gray-900 dark:text-white mb-6">
           Antik tárgy feltöltése
@@ -80,7 +119,7 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { useUserStore } from '@stores/UserDatasStore.mjs'
 import { useRouter } from 'vue-router'
 import { http } from '@utils/http'
@@ -88,6 +127,7 @@ import { http } from '@utils/http'
 const userStore = useUserStore()
 const router = useRouter()
 
+// Termékfeltöltés adatmodel
 const product = reactive({
   name_hu: '',
   name_en: '',
@@ -106,6 +146,7 @@ const product = reactive({
 const successMessage = ref('')
 const errorMessage = ref('')
 
+// File feltöltés kezelése
 const handleFileUpload = (event) => {
   const file = event.target.files[0]
   const reader = new FileReader()
@@ -135,6 +176,30 @@ const logout = () => {
   userStore.logout()
   router.push('/login')
 }
+
+// Üzenetek lekérése
+const contacts = ref([])
+const isLoadingContacts = ref(true)
+
+const fetchContacts = async () => {
+  try {
+    const response = await http.get('/contact')
+    contacts.value = response.data
+  } catch (error) {
+    console.error('Hiba az üzenetek lekérésekor:', error)
+  } finally {
+    isLoadingContacts.value = false
+  }
+}
+
+const formatDate = (dateString) => {
+  const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }
+  return new Date(dateString).toLocaleString(undefined, options)
+}
+
+onMounted(() => {
+  fetchContacts()
+})
 </script>
 
 <route lang="json">

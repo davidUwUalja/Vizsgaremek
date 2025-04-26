@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
@@ -20,6 +21,11 @@ Route::post('/login', [AuthController::class, 'authenticate'])
 Route::get('/users', [UserController::class, 'index'])
     ->middleware('auth:sanctum')
     ->name('users.index');
+
+Route::post('/contact', [ContactController::class, 'store'])
+    ->name('contact.store');
+Route::get('/contact', [ContactController::class, 'index'])
+    ->name('contact.index');
     
 
 Route::get('/products', [ProductController::class, 'index']);
