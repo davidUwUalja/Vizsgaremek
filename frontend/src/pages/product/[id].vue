@@ -1,6 +1,6 @@
 <template>
   <BaseLayout>
-    <div class="max-w-4xl mx-auto mt-10 p-6 bg-yellow-50 border-2 border-yellow-800 rounded-md shadow-lg flex flex-col md:flex-row">
+    <div class="max-w-4xl mx-auto mt-10 p-6  dark:bg-white bg-yellow-50 border-2 border-yellow-800 rounded-md shadow-lg flex flex-col md:flex-row">
       <!-- Product image -->
       <img
         alt="Product Image"
@@ -40,7 +40,7 @@
             @click="handleAddToWishlist(product)"
             class="flex-1 px-4 py-2 bg-yellow-700 text-yellow-50 text-sm rounded-sm hover:bg-yellow-900 transition"
           >
-            ❤️ {{ $t('addToWishlist') || 'Add to Wishlist' }}
+            ❤️ {{ $t('addToWishlist') }}
           </button>
         </div>
       </div>

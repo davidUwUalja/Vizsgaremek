@@ -1,16 +1,16 @@
 <template>
   <div class="flex justify-center items-center min-h-screen">
     <form @submit.prevent="login" class="w-96 p-8 bg-white shadow-md rounded-lg">
-      <h2 class="text-xl font-bold mb-4 text-gray-800">Bejelentkezés</h2>
+      <h2 class="text-xl font-bold mb-4 text-gray-800">{{$t('login')}}</h2>
       <div>
         <label for="email" class="block text-sm text-gray-700">E-mail</label>
         <input type="email" v-model="email" id="email" class="w-full p-2 border rounded-md" required />
       </div>
       <div class="mt-4">
-        <label for="password" class="block text-sm text-gray-700">Jelszó</label>
+        <label for="password" class="block text-sm text-gray-700">{{$t('password')}}</label>
         <input type="password" v-model="password" id="password" class="w-full p-2 border rounded-md" required />
       </div>
-      <button type="submit" class="w-full mt-6 bg-blue-500 text-white p-2 rounded-md">Bejelentkezés</button>
+      <button type="submit" class="w-full mt-6 bg-blue-500 text-white p-2 rounded-md">{{$t('login')}}</button>
     </form>
   </div>
 </template>

@@ -7,7 +7,7 @@
       <!-- Header -->
       <div class="flex justify-between items-center pb-4 border-b-2 border-yellow-700">
         <h2 class="text-2xl font-bold text-yellow-800 tracking-wide">
-          {{ $t('wishlist') || 'Wishlist' }}
+          {{ $t('wishlist')}}
         </h2>
         <button
           @click="$emit('close')"
@@ -20,7 +20,7 @@
       <!-- Wishlist Items -->
       <div class="flex-grow overflow-y-auto py-4">
         <div v-if="wishlistItems.length === 0" class="text-center text-yellow-700 italic py-12">
-          {{ $t('ures') || 'A kívánságlista üres.' }}
+          {{ $t('empty') || 'A kívánságlista üres.' }}
         </div>
         <div v-else class="space-y-4">
           <div
@@ -37,13 +37,13 @@
                 @click="moveToCart(item)"
                 class="flex-1 px-3 py-2 bg-yellow-700 text-yellow-50 text-sm rounded-sm hover:bg-yellow-900 transition-colors duration-300 border border-yellow-800 shadow"
               >
-                {{ $t('addToCart') || 'Kosárba' }}
+                {{ $t('addToCart')}}
               </button>
               <button
                 @click="removeItem(item)"
                 class="flex-1 px-3 py-2 bg-red-600 text-white text-sm rounded-sm hover:bg-red-700 transition-colors duration-300 border border-red-800 shadow"
               >
-                {{ $t('remove') || 'Eltávolítás' }}
+                {{ $t('remove')}}
               </button>
             </div>
           </div>

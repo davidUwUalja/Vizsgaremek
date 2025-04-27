@@ -5,7 +5,12 @@ import { contactMessages } from './i18n/contactTranslator';
 import { productListMessages } from './i18n/productListTranslator';
 import { settingsMessages } from './i18n/settingsTranslator';
 import { navbarMessages } from './i18n/navbarTranslator';
-
+import { cartCheckoutMessages } from './i18n/CartCheckoutTranslator';
+import { cartPanelMessages } from './i18n/CartPanelTranslator';
+import { productFilterMessages } from './i18n/productFilterTranslator';
+import { wishlistPanelMessages } from './i18n/wishlistPanelTranslator';
+import { productDetailsMessages } from './i18n/productDetailsTranslator';
+import { loginMessages } from './i18n/loginTranslator';
 const messages = {
   hu: {
     ...landingMessages.hu,
@@ -14,6 +19,12 @@ const messages = {
     ...productListMessages.hu,
     ...settingsMessages.hu,
     ...navbarMessages.hu,
+    ...cartCheckoutMessages.hu,
+    ...cartPanelMessages.hu,
+    ...productFilterMessages.hu,
+    ...wishlistPanelMessages.hu,
+    ...productDetailsMessages.hu,
+    ...loginMessages.hu,
   },
   en: {
     ...landingMessages.en,
@@ -22,6 +33,13 @@ const messages = {
     ...productListMessages.en,
     ...settingsMessages.en,
     ...navbarMessages.en,
+    ...cartCheckoutMessages.en,
+    ...cartPanelMessages.en,
+    ...productFilterMessages.en,
+    ...wishlistPanelMessages.en,
+    ...productDetailsMessages.en,
+    ...loginMessages.en,
+
   },
   de: {
     ...landingMessages.de,
@@ -31,7 +49,7 @@ const messages = {
     ...settingsMessages.de,
     ...navbarMessages.de,
   }
-  
+
 };
 
 const i18n = createI18n({

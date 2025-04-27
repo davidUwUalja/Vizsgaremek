@@ -18,7 +18,7 @@
 
       <div class="flex-grow overflow-y-auto py-4">
         <div v-if="items.length === 0" class="text-center text-yellow-700 italic py-12">
-          {{ $t('ures') }}
+          {{ $t('empty') }}
         </div>
         <div v-else class="space-y-4">
           <div

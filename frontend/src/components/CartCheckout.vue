@@ -3,7 +3,7 @@
     <div class="bg-yellow-50 p-6 rounded-lg shadow-lg w-96 border-2 border-yellow-800">
       <div class="flex justify-between items-center mb-4 pb-2 border-b-2 border-yellow-700">
         <h2 class="text-2xl font-bold text-yellow-800 tracking-wide font-serif">
-          {{ $t('payment') || 'Checkout' }}
+          {{ $t('payment')}}
         </h2>
         <button
           @click="$emit('close')"
@@ -61,7 +61,7 @@
 
           <div>
             <label class="block mb-2 text-yellow-800 font-medium">
-              {{ $t('cvv') || 'CVV' }}
+              CCV
             </label>
             <input
               type="text"
