@@ -46,4 +46,6 @@ Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(functi
     Route::put('/users/{id}', [AdminController::class, 'updateUser'])->whereNumber("id");
     Route::delete('/users/{id}', [AdminController::class, 'deleteUser'])->whereNumber("id");
 });
+
+Route::post('/orders', [OrderController::class, 'store']);
 /**/
