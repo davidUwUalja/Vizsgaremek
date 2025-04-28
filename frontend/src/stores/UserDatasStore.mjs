@@ -5,13 +5,11 @@ export const useUserStore = defineStore("user", {
   state: () => ({
     user: null,
   }),
-
   getters: {
     getUserData(state) {
       return state.user ? { ...state.user } : null;
     },
   },
-
   actions: {
     async fetchUser() {
       const token = localStorage.getItem("token");
@@ -27,7 +25,6 @@ export const useUserStore = defineStore("user", {
         this.logout();
       }
     },
-
     logout() {
       this.user = null;
       localStorage.removeItem("token");

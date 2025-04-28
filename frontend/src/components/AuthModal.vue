@@ -103,16 +103,48 @@ methods: {
         password: this.password,
         password_confirmation: this.password_confirmation,
       });
-      localStorage.setItem("token", response.data.data.token);
 
-      // Fetch and store user data
-      const userStore = useUserStore();
-      await userStore.fetchUser();
+      // Token keresése a válaszból
+      let token = response.data.token || (response.data.data && response.data.data.token);
+      if (token) {
+        localStorage.setItem("token", token);
 
-      this.closeModal();
-      window.location.reload();
+        const userStore = useUserStore();
+        await userStore.fetchUser();
+
+        this.closeModal();
+        window.location.reload();
+      } else {
+        // Ha nincs token, próbáljunk automatikusan beléptetni!
+        try {
+          const loginResponse = await http.post("/login", {
+            email: this.email,
+            password: this.password,
+          });
+          const loginToken = loginResponse.data.token || (loginResponse.data.data && loginResponse.data.data.token);
+          if (loginToken) {
+            localStorage.setItem("token", loginToken);
+
+            const userStore = useUserStore();
+            await userStore.fetchUser();
+
+            this.closeModal();
+            window.location.reload();
+          } else {
+            alert("Regisztráció sikeres, de nem sikerült automatikusan belépni!");
+          }
+        } catch (loginError) {
+          alert("Regisztráció sikerült, de a belépés nem! Próbálj meg belépni manuálisan.");
+        }
+      }
     } catch (error) {
-      alert("Hiba történt a regisztráció során.");
+      // Itt érdemes kiírni a backendtől kapott hibát is
+      if (error.response && error.response.data && error.response.data.errors) {
+        const errors = error.response.data.errors;
+        alert(Object.values(errors).flat().join('\n'));
+      } else {
+        alert("Hiba történt a regisztráció során.");
+      }
     }
   },
   toggleMode() {
