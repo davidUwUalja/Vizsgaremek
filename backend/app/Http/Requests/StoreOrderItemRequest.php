@@ -14,10 +14,10 @@ class StoreOrderItemRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'order_id'  => 'required|exists:orders,id',
-            'product_id' => 'required|exists:products,id',
-            'quantity' => 'required|integer|max:50',
-            'price' => 'required|integer|max:50',
+            'order_id' => ['required','exists:orders,id'],
+            'product_id' =>['required','exists:products,id'],
+            'quantity'  => ['required','integer|max:50'],
+            'price' => ['required','integer','max:50'],
         ];
     }
 }

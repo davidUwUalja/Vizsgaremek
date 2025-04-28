@@ -14,9 +14,9 @@ class StoreOrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => 'required|exists:users,id',
-            'total_price' => 'required|integer|max:50',
-            'status' => 'sometimes|string|in:pending,completed,cancelled', 
+            'user_id' => ['required','exists:users,id'],
+            'total_price' => ['required','integer','max:50'],
+            'status' => ['sometimes','string','in:pending,completed,cancelled'], 
         ];
     }
 }

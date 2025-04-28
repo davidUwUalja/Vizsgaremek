@@ -14,10 +14,10 @@ class UpdateOrderItemRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'order_id' => 'required|exists:orders,id',
-            'product_id' => 'required|exists:products,id',
-            'quantity'  => 'required|integer|min:1',
-            'price' => 'required|integer|min:0',
+            'order_id' => ['required','exists:orders,id'],
+            'product_id' =>['required','exists:products,id'],
+            'quantity'  => ['required','integer|max:50'],
+            'price' => ['required','integer','max:50'],
         ];
     }
 }
