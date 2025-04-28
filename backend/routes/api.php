@@ -47,5 +47,9 @@ Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(functi
     Route::delete('/users/{id}', [AdminController::class, 'deleteUser'])->whereNumber("id");
 });
 
+Route::get('/orders', [OrderController::class, 'index']);
 Route::post('/orders', [OrderController::class, 'store']);
+Route::get('/orders/{order}', [OrderController::class, 'show'])->whereNumber('order');
+Route::put('/orders/{order}', [OrderController::class, 'update'])->whereNumber('order');
+Route::delete('/orders/{order}', [OrderController::class, 'destroy'])->whereNumber('order');
 /**/

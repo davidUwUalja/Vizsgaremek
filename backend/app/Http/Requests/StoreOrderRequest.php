@@ -8,15 +8,21 @@ class StoreOrderRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true; 
+        return true;
     }
 
     public function rules(): array
     {
         return [
-            'user_id' => ['required','exists:users,id'],
-            'total_price' => ['required','integer','max:50'],
-            'status' => ['sometimes','string','in:pending,completed,cancelled'], 
+            'user_id' => ['required', 'exists:users,id'],
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'max:255'],
+            'address' => ['required', 'max:255'],
+            'city' => ['required', 'string', 'max:255'],
+            'zip' => ['required', 'integer', 'max:4'],
+            'currency' => ['required', 'string', 'in:HUF,USD'],
+            'total_price' => ['required', 'integer', 'min:0'],
+            'status' => ['sometimes', 'string', 'in:pending,completed,cancelled'],
         ];
     }
 }

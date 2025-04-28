@@ -185,6 +185,9 @@
 </template>
 
 <script>
+import { useOrderDatasStore } from '@/stores/OrderDatasStore.mjs';
+import { ref, computed } from 'vue';
+
 export default {
   props: {
     totalPrice: {
@@ -192,273 +195,241 @@ export default {
       required: true,
     },
   },
-  data() {
-    return {
+  setup(props, { emit }) {
+    const orderStore = useOrderDatasStore();
+
+    const fullName = ref('');
+    const email = ref('');
+    const streetAddress = ref('');
+    const city = ref('');
+    const zipCode = ref('');
+    const cardNumber = ref('');
+    const expiryDate = ref('');
+    const cvv = ref('');
+    const selectedCurrency = ref('HUF');
+    const convertedPrice = ref(props.totalPrice);
+    const exchangeRate = 370;
+    const originalCurrency = 'HUF';
+
+    const errors = ref({
       fullName: '',
       email: '',
-      
       streetAddress: '',
       city: '',
       zipCode: '',
-      
       cardNumber: '',
       expiryDate: '',
       cvv: '',
-      selectedCurrency: 'HUF',
-      convertedPrice: 0,
-      exchangeRate: 370, 
-      originalCurrency: 'HUF',
-      
-      errors: {
-        fullName: '',
-        email: '',
-        streetAddress: '',
-        city: '',
-        zipCode: '',
-        cardNumber: '',
-        expiryDate: '',
-        cvv: '',
+    });
+
+    const currencySymbol = computed(() => {
+      return selectedCurrency.value === 'HUF' ? 'Ft' : '$';
+    });
+
+    const isFormValid = computed(() => {
+      return (
+        fullName.value &&
+        email.value &&
+        streetAddress.value &&
+        city.value &&
+        zipCode.value &&
+        cardNumber.value &&
+        expiryDate.value &&
+        cvv.value &&
+        !Object.values(errors.value).some(error => error)
+      );
+    });
+
+    const convertPrice = () => {
+      if (selectedCurrency.value === originalCurrency) {
+        convertedPrice.value = props.totalPrice;
+      } else if (selectedCurrency.value === 'USD') {
+        convertedPrice.value = props.totalPrice / exchangeRate;
+      } else {
+        convertedPrice.value = props.totalPrice;
       }
     };
-  },
-  computed: {
-    currencySymbol() {
-      return this.selectedCurrency === 'HUF' ? 'Ft' : '$';
-    },
-    isFormValid() {
-      return (
-        this.fullName && 
-        this.email && 
-        this.streetAddress && 
-        this.city && 
-        this.zipCode && 
-        this.cardNumber && 
-        this.expiryDate && 
-        this.cvv &&
-        !Object.values(this.errors).some(error => error)
-      );
-    }
-  },
-  mounted() {
-    this.originalCurrency = 'HUF';
-    this.selectedCurrency = this.originalCurrency;
-    this.convertedPrice = this.totalPrice;
-  },
-  methods: {
-    validateName() {
-      const nameRegex = /^[A-Za-z\s]+$/;
-      if (!this.fullName) {
-        this.errors.fullName = 'Name is required';
-      } else if (!nameRegex.test(this.fullName)) {
-        this.errors.fullName = 'Only letters are allowed';
-        this.fullName = this.fullName.replace(/[^A-Za-z\s]/g, '');
-      } else {
-        this.errors.fullName = '';
-      }
-    },
-    
-    validateEmail() {
-      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-      if (!this.email) {
-        this.errors.email = 'Email is required';
-      } else if (!emailRegex.test(this.email)) {
-        this.errors.email = 'Please enter a valid email address';
-      } else {
-        this.errors.email = '';
-      }
-    },
-    
-    validateCity() {
-      const cityRegex = /^[A-Za-z\s]+$/;
-      if (!this.city) {
-        this.errors.city = 'City is required';
-      } else if (!cityRegex.test(this.city)) {
-        this.errors.city = 'Only letters are allowed';
-        this.city = this.city.replace(/[^A-Za-z\s]/g, '');
-      } else {
-        this.errors.city = '';
-      }
-    },
-    
-    validateZipCode() {
-      const zipRegex = /^[0-9]+$/;
-      if (!this.zipCode) {
-        this.errors.zipCode = 'Postal code is required';
-      } else if (!zipRegex.test(this.zipCode)) {
-        this.errors.zipCode = 'Only numbers are allowed';
-        this.zipCode = this.zipCode.replace(/[^0-9]/g, '');
-      } else if (this.zipCode.length !== 4) {
-        this.errors.zipCode = 'Postal code must be exactly 4 digits';
-      } else {
-        this.errors.zipCode = '';
-      }
-    },
-    
-    formatCardNumber() {
-      let value = this.cardNumber.replace(/\D/g, '');
-      
-      if (!/^\d*$/.test(value)) {
-        this.errors.cardNumber = 'Only numbers are allowed';
-      } else {
-        this.errors.cardNumber = '';
-      }
-      
-      let formattedValue = '';
-      for (let i = 0; i < value.length; i++) {
-        if (i > 0 && i % 4 === 0) {
-          formattedValue += ' ';
-        }
-        formattedValue += value[i];
-      }
-      
-      this.cardNumber = formattedValue;
-      
-      if (value.length > 0 && value.length < 16) {
-        this.errors.cardNumber = 'Card number must be 16 digits';
-      } else {
-        this.errors.cardNumber = '';
-      }
-    },
-    
-    formatExpiryDate() {
-      let value = this.expiryDate.replace(/\D/g, '');
-      
-      if (value.length > 0) {
-        if (value.length <= 2) {
-          this.expiryDate = value;
-        } else {
-          this.expiryDate = value.substring(0, 2) + '/' + value.substring(2, 4);
-        }
-      }
-      
-      if (value.length >= 2) {
-        const month = parseInt(value.substring(0, 2));
-        if (month < 1 || month > 12) {
-          this.errors.expiryDate = 'Invalid month (must be 01-12)';
-        } else {
-          this.errors.expiryDate = '';
-        }
-      }
-    },
-    
-    validateExpiryDate() {
-      if (!this.expiryDate) {
-        this.errors.expiryDate = 'Expiry date is required';
-        return;
-      }
-      
-      if (!/^\d{2}\/\d{2}$/.test(this.expiryDate)) {
-        this.errors.expiryDate = 'Please use MM/YY format';
-        return;
-      }
-      
-      const [monthStr, yearStr] = this.expiryDate.split('/');
-      const month = parseInt(monthStr);
-      let year = parseInt(yearStr);
-      
-      year += 2000;
-      
-      const now = new Date();
-      const currentMonth = now.getMonth() + 1; 
-      const currentYear = now.getFullYear();
-      
-      if (month < 1 || month > 12) {
-        this.errors.expiryDate = 'Invalid month (must be 01-12)';
-        return;
-      }
-      
-      const lastDayOfMonth = new Date(year, month, 0).getDate();
-      const expiryDate = new Date(year, month - 1, lastDayOfMonth);
-      const today = new Date();
-      
-      today.setHours(0, 0, 0, 0);
-      
-      if (expiryDate < today) {
-        this.errors.expiryDate = 'Card has expired';
-        return;
-      }
-      
-      if (year > currentYear + 10) {
-        this.errors.expiryDate = 'Date too far in the future';
-        return;
-      }
-      
-      this.errors.expiryDate = '';
-    },
-    
-    validateCVV() {
-      this.cvv = this.cvv.replace(/\D/g, '');
-      
-      if (!this.cvv) {
-        this.errors.cvv = 'CVV is required';
-      } else if (this.cvv.length !== 3) {
-        this.errors.cvv = 'CVV must be 3 digits';
-      } else {
-        this.errors.cvv = '';
-      }
-    },
 
-    convertPrice() {
-      if (this.selectedCurrency === this.originalCurrency) {
-        this.convertedPrice = this.totalPrice;
-      } else if (this.selectedCurrency === 'USD') {
-        this.convertedPrice =
-          this.originalCurrency === 'HUF'
-            ? this.totalPrice / this.exchangeRate
-            : this.totalPrice;
+    const validateName = () => {
+      const regex = /^[A-Za-z\s]+$/;
+      if (!fullName.value) {
+        errors.value.fullName = 'Name is required';
+      } else if (!regex.test(fullName.value)) {
+        errors.value.fullName = 'Only letters are allowed';
+        fullName.value = fullName.value.replace(/[^A-Za-z\s]/g, '');
       } else {
-        this.convertedPrice =
-          this.originalCurrency === 'USD'
-            ? this.totalPrice * this.exchangeRate
-            : this.totalPrice;
+        errors.value.fullName = '';
       }
-    },
-    
-    validateAllFields() {
-      this.validateName();
-      this.validateEmail();
-      this.validateCity();
-      this.validateZipCode();
-      this.validateExpiryDate();
-      this.validateCVV();
-      
-      if (!this.streetAddress) {
-        this.errors.streetAddress = 'Street address is required';
+    };
+
+    const validateEmail = () => {
+      const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!email.value) {
+        errors.value.email = 'Email is required';
+      } else if (!regex.test(email.value)) {
+        errors.value.email = 'Enter a valid email';
       } else {
-        this.errors.streetAddress = '';
+        errors.value.email = '';
       }
-      
-      if (!this.cardNumber) {
-        this.errors.cardNumber = 'Card number is required';
-      } else if (this.cardNumber.replace(/\s/g, '').length !== 16) {
-        this.errors.cardNumber = 'Card number must be 16 digits';
+    };
+
+    const validateCity = () => {
+      const regex = /^[A-Za-z\s]+$/;
+      if (!city.value) {
+        errors.value.city = 'City is required';
+      } else if (!regex.test(city.value)) {
+        errors.value.city = 'Only letters are allowed';
+        city.value = city.value.replace(/[^A-Za-z\s]/g, '');
       } else {
-        this.errors.cardNumber = '';
+        errors.value.city = '';
       }
-    },
-    
-    confirmPayment() {
-      this.validateAllFields();
-      
-      if (this.isFormValid) {
-        this.$emit('confirm-payment', {
-          fullName: this.fullName,
-          email: this.email,
-          
-          streetAddress: this.streetAddress,
-          city: this.city,
-          zipCode: this.zipCode,
-          
-          cardNumber: this.cardNumber.replace(/\s/g, ''), 
-          expiryDate: this.expiryDate,
-          cvv: this.cvv,
-          currency: this.selectedCurrency,
-          amount: this.convertedPrice,
-        });
+    };
+
+    const validateZipCode = () => {
+      if (!zipCode.value) {
+        errors.value.zipCode = 'Postal code is required';
+      } else if (!/^\d+$/.test(zipCode.value)) {
+        errors.value.zipCode = 'Only numbers allowed';
+        zipCode.value = zipCode.value.replace(/\D/g, '');
+      } else if (zipCode.value.length !== 4) {
+        errors.value.zipCode = 'Must be exactly 4 digits';
       } else {
-        alert('Please fill all required fields correctly!');
+        errors.value.zipCode = '';
       }
-    }
+    };
+
+    const formatCardNumber = () => {
+      let value = cardNumber.value.replace(/\D/g, '');
+      let formatted = '';
+      for (let i = 0; i < value.length; i++) {
+        if (i > 0 && i % 4 === 0) formatted += ' ';
+        formatted += value[i];
+      }
+      cardNumber.value = formatted;
+
+      if (value.length !== 16) {
+        errors.value.cardNumber = 'Must be 16 digits';
+      } else {
+        errors.value.cardNumber = '';
+      }
+    };
+
+    const formatExpiryDate = () => {
+      let value = expiryDate.value.replace(/\D/g, '');
+      if (value.length >= 3) {
+        expiryDate.value = value.slice(0, 2) + '/' + value.slice(2, 4);
+      } else {
+        expiryDate.value = value;
+      }
+    };
+
+    const validateExpiryDate = () => {
+      if (!expiryDate.value) {
+        errors.value.expiryDate = 'Expiry is required';
+        return;
+      }
+      if (!/^\d{2}\/\d{2}$/.test(expiryDate.value)) {
+        errors.value.expiryDate = 'Use MM/YY format';
+        return;
+      }
+      const [mm, yy] = expiryDate.value.split('/').map(Number);
+      const expiry = new Date(2000 + yy, mm);
+      const now = new Date();
+      if (mm < 1 || mm > 12) {
+        errors.value.expiryDate = 'Invalid month';
+      } else if (expiry < now) {
+        errors.value.expiryDate = 'Card expired';
+      } else {
+        errors.value.expiryDate = '';
+      }
+    };
+
+    const validateCVV = () => {
+      cvv.value = cvv.value.replace(/\D/g, '');
+      if (!cvv.value) {
+        errors.value.cvv = 'CVV required';
+      } else if (cvv.value.length !== 3) {
+        errors.value.cvv = 'Must be 3 digits';
+      } else {
+        errors.value.cvv = '';
+      }
+    };
+
+    const validateAllFields = () => {
+      validateName();
+      validateEmail();
+      validateCity();
+      validateZipCode();
+      validateExpiryDate();
+      validateCVV();
+
+      if (!streetAddress.value) {
+        errors.value.streetAddress = 'Address required';
+      } else {
+        errors.value.streetAddress = '';
+      }
+
+      if (!cardNumber.value) {
+        errors.value.cardNumber = 'Card number required';
+      } else if (cardNumber.value.replace(/\s/g, '').length !== 16) {
+        errors.value.cardNumber = 'Must be 16 digits';
+      }
+    };
+
+    const confirmPayment = async () => {
+      validateAllFields();
+      if (isFormValid.value) {
+        const orderData = {
+          user_id: 1,
+          name: fullName.value,
+          email: email.value,
+          address: streetAddress.value,
+          city: city.value,
+          zip: zipCode.value,
+          currency: selectedCurrency.value,
+          total_price: Math.round(convertedPrice.value),
+          status: 'pending',
+        };
+
+        try {
+          await orderStore.createOrder(orderData);
+          alert('Order placed successfully!');
+          emit('close');
+        } catch (error) {
+          console.error(error);
+          alert('Failed to place order.');
+        }
+      } else {
+        alert('Please fill out the form correctly!');
+      }
+    };
+
+    return {
+      fullName,
+      email,
+      streetAddress,
+      city,
+      zipCode,
+      cardNumber,
+      expiryDate,
+      cvv,
+      selectedCurrency,
+      convertedPrice,
+      exchangeRate,
+      currencySymbol,
+      errors,
+      isFormValid,
+      convertPrice,
+      validateName,
+      validateEmail,
+      validateCity,
+      validateZipCode,
+      formatCardNumber,
+      formatExpiryDate,
+      validateExpiryDate,
+      validateCVV,
+      confirmPayment,
+    };
   },
 };
 </script>

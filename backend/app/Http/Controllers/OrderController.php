@@ -2,20 +2,48 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreOrderRequest;
 use App\Models\Order;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth; 
 
 class OrderController extends Controller
 {
-    public function store(Request $request)
+    public function index()
     {
-        $order = Order::create([
-            'user_id' => Auth::user()->id,
-            'total_price' => $request->total_price,
-            'status' => 'pending'
-        ]);
+        $orders = Order::with('user')->get();
+
+        return response()->json($orders);
+    }
+
+    public function store(StoreOrderRequest $request)
+    {
+        $validated = $request->validated();
+
+        $order = Order::create($validated);
+
+        return response()->json($order, 201);
+    }
+
+    public function show(Order $order)
+    {
+        $order->load('user');
 
         return response()->json($order);
+    }
+
+    public function update(StoreOrderRequest $request, Order $order)
+    {
+        $validated = $request->validated();
+
+        $order->update($validated);
+
+        return response()->json($order);
+    }
+
+    public function destroy(Order $order)
+    {
+        $order->delete();
+
+        return response()->json(null, 204);
     }
 }
