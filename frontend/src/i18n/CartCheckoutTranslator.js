@@ -1,5 +1,13 @@
 export const cartCheckoutMessages = {
     hu: {
+        payment: "Fizetés",
+        contactinfo: "Személyes adatok",
+        fullname: "Teljes név",
+        shipping: "Szállítási Cím",
+        street: "Utcai cím",
+        city: "Város",
+        postalcode: "Irányítószám",
+        paymentDetails: "Fizetési adatok",
         cart: "Kosár",
         empty: "ures",
         total: "Összesen",
@@ -11,6 +19,16 @@ export const cartCheckoutMessages = {
 
     },
     en: {
+        payment: "Payment",
+        contactinfo: "Contact Information",
+        fullname: "Full Name",
+        shipping: "Shipping Address",
+        street: "Street Address",
+        city: "City",
+        postalcode: "Postal Code",
+        paymentDetails: "Payment Details",
+        cart: "Cart",
+        empty: "empty",
         payment: "Checkout",
         currency: "Currency",
         total: "Total",

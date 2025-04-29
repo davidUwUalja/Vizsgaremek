@@ -6,12 +6,12 @@
       </button>
 
       <h2 class="text-xl font-bold mb-4 text-gray-800 text-center">
-        {{ isLogin ? 'Bejelentkezés' : 'Regisztráció' }}
+        {{ isLogin ? $t('login') : $t('registering') }}
       </h2>
 
       <form @submit.prevent="isLogin ? login() : register()">
         <div v-if="!isLogin">
-          <label class="block text-sm text-gray-700">Név</label>
+          <label class="block text-sm text-gray-700">{{$t('name')}}</label>
           <input 
             type="text" 
             v-model="name" 
@@ -31,7 +31,7 @@
         </div>
 
         <div class="mt-4">
-          <label class="block text-sm text-gray-700">Jelszó</label>
+          <label class="block text-sm text-gray-700">{{$t('password')}}</label>
           <input 
             type="password" 
             v-model="password" 
@@ -41,7 +41,7 @@
         </div>
 
         <div class="mt-4" v-if="!isLogin">
-          <label class="block text-sm text-gray-700">Jelszó megerősítése</label>
+          <label class="block text-sm text-gray-700">{{$t('repassword')}}</label>
           <input 
             type="password" 
             v-model="password_confirmation" 
@@ -51,12 +51,12 @@
         </div>
 
         <button type="submit" class="w-full mt-6 bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition">
-          {{ isLogin ? 'Bejelentkezés' : 'Regisztráció' }}
+          {{ isLogin ? $t('login') : $t('registering')}}
         </button>
       </form>
 
       <button @click="toggleMode" class="mt-4 text-blue-500 underline w-full text-center block hover:text-blue-700 transition">
-        {{ isLogin ? 'Nincs még fiókod? Regisztrálj!' : 'Már van fiókod? Jelentkezz be!' }}
+        {{ isLogin ? $t('register') : $t('loginMessages') }}
       </button>
     </div>
   </div>
@@ -92,7 +92,7 @@ methods: {
       this.closeModal();
       window.location.reload();
     } catch (error) {
-      alert("Hibás bejelentkezési adatok!");
+      alert($t('error'));
     }
   },
   async register() {

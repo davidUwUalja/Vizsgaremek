@@ -3,7 +3,7 @@
     <div class="bg-yellow-50 p-6 rounded-lg shadow-lg max-w-md w-full border-2 border-yellow-800 max-h-screen overflow-y-auto">
       <div class="flex justify-between items-center mb-4 pb-2 border-b-2 border-yellow-700">
         <h2 class="text-2xl font-bold text-yellow-800 tracking-wide font-serif">
-          Payment
+          {{ $t('payment') }}
         </h2>
         <button
           @click="$emit('close')"
@@ -14,11 +14,11 @@
       </div>
 
       <div class="mb-4 border-b-2 border-yellow-700 pb-4">
-        <h3 class="text-lg font-semibold text-yellow-800 mb-3">Contact Information</h3>
+        <h3 class="text-lg font-semibold text-yellow-800 mb-3"> {{ $t('contactinfo') }}</h3>
         
         <div class="mb-3">
           <label class="block mb-2 text-yellow-800 font-medium">
-            Full Name
+            {{ $t('fullname') }}
           </label>
           <input
             type="text"
@@ -32,7 +32,7 @@
 
         <div class="mb-3">
           <label class="block mb-2 text-yellow-800 font-medium">
-            Email Address
+            Email
           </label>
           <input
             type="email"
@@ -46,11 +46,11 @@
       </div>
 
       <div class="mb-4 border-b-2 border-yellow-700 pb-4">
-        <h3 class="text-lg font-semibold text-yellow-800 mb-3">Shipping Address</h3>
+        <h3 class="text-lg font-semibold text-yellow-800 mb-3"> {{ $t('shipping') }}</h3>
         
         <div class="mb-3">
           <label class="block mb-2 text-yellow-800 font-medium">
-            Street Address
+            {{ $t('street') }}
           </label>
           <input
             type="text"
@@ -64,7 +64,7 @@
         <div class="grid grid-cols-2 gap-3 mb-3">
           <div>
             <label class="block mb-2 text-yellow-800 font-medium">
-              City
+              {{ $t('city') }}
             </label>
             <input
               type="text"
@@ -78,7 +78,7 @@
 
           <div>
             <label class="block mb-2 text-yellow-800 font-medium">
-              Postal Code
+               {{ $t('postalcode') }}
             </label>
             <input
               type="text"
@@ -94,11 +94,11 @@
       </div>
 
       <div class="mb-4">
-        <h3 class="text-lg font-semibold text-yellow-800 mb-3">Payment Details</h3>
+        <h3 class="text-lg font-semibold text-yellow-800 mb-3"> {{ $t('paymentDetails') }}</h3>
         
         <div class="mb-3">
           <label class="block mb-2 text-yellow-800 font-medium">
-            Currency
+            {{ $t('currency') }}
           </label>
           <select
             v-model="selectedCurrency"
@@ -112,13 +112,13 @@
 
         <div class="mb-4 py-2 bg-yellow-100 px-4 rounded-sm border border-yellow-700">
           <p class="text-lg font-semibold text-yellow-800">
-            Total: {{ convertedPrice.toFixed(0) }} {{ currencySymbol }}
+            {{ $t('total') }}: {{ convertedPrice.toFixed(0) }} {{ currencySymbol }}
           </p>
         </div>
 
         <div class="mb-3">
           <label class="block mb-2 text-yellow-800 font-medium">
-            Card Number
+             {{ $t('cardNumber') }}
           </label>
           <input
             type="text"
@@ -134,7 +134,7 @@
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block mb-2 text-yellow-800 font-medium">
-              Expiry Date
+               {{ $t('expiryDate') }}
             </label>
             <input
               type="text"
@@ -170,14 +170,14 @@
           @click="confirmPayment"
           class="w-full px-4 py-3 bg-yellow-700 text-yellow-50 font-serif font-semibold rounded-sm border-2 border-yellow-800 hover:bg-yellow-900 transition-all duration-300 shadow-md hover:shadow-xl"
         >
-          Confirm Payment
+          {{ $t('Confirm') }}
         </button>
 
         <button
           @click="$emit('close')"
           class="w-full px-4 py-3 bg-red-700 text-red-50 font-serif font-semibold rounded-sm border-2 border-red-800 hover:bg-red-900 transition-all duration-300 shadow-md hover:shadow-xl"
         >
-          Cancel
+           {{ $t('Cancel') }}
         </button>
       </div>
     </div>
@@ -186,7 +186,8 @@
 
 <script>
 import { useOrderDatasStore } from '@/stores/OrderDatasStore.mjs';
-import { ref, computed } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 export default {
   props: {
@@ -197,6 +198,7 @@ export default {
   },
   setup(props, { emit }) {
     const orderStore = useOrderDatasStore();
+    const { locale } = useI18n(); // Nyelv figyelése
 
     const fullName = ref('');
     const email = ref('');
@@ -206,10 +208,9 @@ export default {
     const cardNumber = ref('');
     const expiryDate = ref('');
     const cvv = ref('');
-    const selectedCurrency = ref('HUF');
-    const convertedPrice = ref(props.totalPrice);
+    const selectedCurrency = ref('HUF'); // Mindig forint az alapértelmezett
+    const convertedPrice = ref(props.totalPrice); // Alapértelmezett ár forintban
     const exchangeRate = 370;
-    const originalCurrency = 'HUF';
 
     const errors = ref({
       fullName: '',
@@ -241,13 +242,65 @@ export default {
     });
 
     const convertPrice = () => {
-      if (selectedCurrency.value === originalCurrency) {
-        convertedPrice.value = props.totalPrice;
-      } else if (selectedCurrency.value === 'USD') {
-        convertedPrice.value = props.totalPrice / exchangeRate;
-      } else {
-        convertedPrice.value = props.totalPrice;
+      if(locale.value==='en') {
+        if(selectedCurrency.value === 'HUF'){
+          convertedPrice.value = props.totalPrice * exchangeRate; // Angol nyelv esetén szorozzuk meg 370-nel
+        }
+        if(selectedCurrency.value === 'USD'){
+          convertedPrice.value = props.totalPrice; // Angol nyelv esetén marad dollár
+        }
       }
+      if(locale.value==='hu') {
+        if(selectedCurrency.value === 'HUF'){
+          convertedPrice.value = props.totalPrice; // Magyar nyelv esetén marad forint
+        }
+        if(selectedCurrency.value === 'USD'){
+          convertedPrice.value = props.totalPrice / exchangeRate; // Magyar nyelv esetén osszuk el az árfolyammal
+        }
+      }
+    };
+
+    // Nyelv figyelése és ár frissítése
+    watch(locale, (newLocale) => {
+
+      if (newLocale === 'en') {
+        convertedPrice.value = props.totalPrice * exchangeRate; // Angol nyelv esetén szorozzuk meg 370-nel
+        selectedCurrency.value = 'HUF'; // Alapértelmezett valuta dollár
+      } else {
+        convertedPrice.value = props.totalPrice; // Más nyelv esetén marad forint
+        selectedCurrency.value = 'HUF'; // Alapértelmezett valuta forint
+      }
+    });
+
+    // Nyelvváltás figyelése
+    onMounted(() => {
+      const navbar = document.querySelector('nav');
+      navbar.addEventListener('languageChanged', (event) => {
+        const newLocale = event.detail;
+        if (newLocale === 'en') {
+          convertedPrice.value = props.totalPrice * exchangeRate; // Angol nyelv esetén szorozzuk meg 370-nel
+          selectedCurrency.value = 'HUF'; // Alapértelmezett valuta forint
+        } else {
+          convertedPrice.value = props.totalPrice; // Más nyelv esetén marad forint
+          selectedCurrency.value = 'HUF'; // Alapértelmezett valuta forint
+        }
+
+      });
+
+      if(locale.value === 'en') {
+        props.totalPrice = props.totalPrice * exchangeRate; // Angol nyelv esetén szorozzuk meg 370-nel
+        selectedCurrency.value = 'USD'; // Alapértelmezett valuta dollár
+      } 
+      if(locale.value === 'hu') {
+        convertedPrice.value = props.totalPrice; // Más nyelv esetén marad forint
+        selectedCurrency.value = 'HUF'; // Alapértelmezett valuta forint
+      }
+
+      logCurrentLanguage(); // Kiírja a nyelvet a konzolra, amikor a komponens betöltődik
+    });
+
+    const logCurrentLanguage = () => {
+      console.log(`Current language: ${locale.value}`);
     };
 
     const validateName = () => {
@@ -429,6 +482,7 @@ export default {
       validateExpiryDate,
       validateCVV,
       confirmPayment,
+      logCurrentLanguage,
     };
   },
 };

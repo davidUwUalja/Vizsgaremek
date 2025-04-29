@@ -17,7 +17,7 @@ export const loginMessages = {
         loginMessages: "Already have an account? Login!",
         name: "Name",
         repassword: "Confirm Password",
-        registering: "Register",
+        registering: "Registering",
 
 
 
