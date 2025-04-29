@@ -1,6 +1,6 @@
 # Weboldal Használati Útmutató
 
-Ez az útmutató segít eligazodni a weboldal főbb funkcióiban és a navigációban. A leírások és képernyőképek (ha szükséges) alapján könnyedén megismerheted, hogyan használd a weboldalt.
+Ez az útmutató segít eligazodni a weboldal főbb funkcióiban és a navigációban. A leírások alapján könnyedén megismerheted, hogyan használd a weboldalt.
 
 ---
 
@@ -11,6 +11,7 @@ Ez az útmutató segít eligazodni a weboldal főbb funkcióiban és a navigáci
 - [Navigáció](#navigáció)
 - [Fő funkciók](#fő-funkciók)
   - [Regisztráció és bejelentkezés](#regisztráció-és-bejelentkezés)
+  - [Kosár és kívánságlista használata](#kosár-és-kívánságlista-használata)
   - [Keresés és szűrés](#keresés-és-szűrés)
 - [Kapcsolat és támogatás](#kapcsolat-és-támogatás)
 
@@ -26,9 +27,9 @@ Ebben az útmutatóban bemutatjuk a weboldal főbb részeit, és lépésről lé
 
 A weboldal főoldala az első benyomásodat adja:
 
-- **Fejléc:** Tartalmazza a navigációs menüt és a bejelentkezési/regisztrációs gombokat.
-- **Navigációs menü tartalma:** Föoldal, Termékek, Blog, Kapcsolat, Kosár, Kedvenc termékek(szív).
-- **Fő tartalom:** Áttekintést nyújt a legfontosabb tartalmakról, hírekről, ajánlatokról.
+- **Fejléc:** Tartalmazza a navigációs menüt, a bejelentkezési/regisztrációs gombokat, valamint a **Kosár** és **Kívánságlista** ikonokat.
+- **Navigációs menü tartalma:** Föoldal, Termékek, Blog, Kapcsolat, Kosár, Kivánságlista (szív ikon).
+- **Fő tartalom:** Gyors gombokat (Vásárlás és Blog) és rövid információkat tartalmaz.
 
 ---
 
@@ -36,8 +37,10 @@ A weboldal főoldala az első benyomásodat adja:
 
 A weboldalon a könnyű navigáció érdekében a következő elemek állnak rendelkezésre az oldal fejlécében:
 
-- **Felső menüsor:** Itt találod a főbb oldalak linkjeit (pl. Kezdőlap, Szolgáltatások, Rólunk, Kapcsolat).
-- **Kereső funkció:** Lehetővé teszi a tartalmak gyors megtalálását kulcsszavak alapján.
+- **Felső menüsor:** Itt találod a főbb oldalak linkjeit (pl. Kezdőlap, Termékek, Blog, Kapcsolat).
+- **Filzer funkció termékeknél:** Lehetővé teszi a tartalmak gyors megtalálását kulcsszavak alapján.
+- **Kosár ikon:** Megnyitja a kosár oldalsó sávot.
+- **Kívánságlista ikon (szív):** Megtekintheted a kedvenc termékeidet.
 
 ---
 
@@ -46,19 +49,50 @@ A weboldalon a könnyű navigáció érdekében a következő elemek állnak ren
 ### Regisztráció és Bejelentkezés
 
 1. **Regisztráció:**
-   - Kattints a **Bejelentkezés** gombra, amennyiben nincs létrehozott prfoilod, egy link segítségével tudsz regisztrálni.
+   - Kattints a **Bejelentkezés** gombra, ha még nincs fiókod. A megnyíló felületen regisztrálhatsz.
 
 2. **Bejelentkezés:**
-   - Kattints a **Bejelentkezés** gombra.
    - Írd be a regisztráció során megadott e-mail címed és jelszavad.
-   - A bejelentkezés után hozzáférhetsz a személyre szabott tartalmakhoz.
+   - Sikeres bejelentkezés után elérheted a személyre szabott tartalmakat.
 
+---
+
+### Kosár és Kívánságlista Használata
+
+- **Kosár ikon:** A jobb felső sarokban található kis bevásárlókocsi ikonra kattintva megnyílik a **Kosár** sáv.
+- A kosár tartalmazza a hozzáadott termékeket, az egységárat, a mennyiségállító gombokat, valamint az **Összesen** mezőt.
+
+**Kosár példa:**
+
+- Termék: Takia, színes alap — 8000 Ft  
+- Mennyiség: növelhető vagy csökkenthető  
+- Törlés ikon: a termék eltávolításához  
+- **Pénztár** gomb: a fizetési oldalra lépéshez
+
+**Kívánságlista ikon:** 
+- A fejlécben található szív ikonra kattintva megtekintheted a kedvenc termékeidet, innen törölhetsz, vagy pedig a kosárba helyezheted át a termékeket.
+- A kivánságlista gomb a termékek "részletes megtekintése" után lesz látható.
+
+---
+
+### Fizetés Menete
+
+A **Pénztár** gomb megnyomásával a fizetési oldalra jutsz, ahol a következő adatokat kell megadnod:
+
+- **Kapcsolattartási adatok:** név, e-mail cím
+- **Szállítási adatok:** utca, város, irányítószám
+- **Fizetési adatok:**  
+  - Pénznem (választható)  
+  - Bankkártya adatok: kártyaszám, lejárat, CCV
+- **Végösszeg:** megjelenik a fizetendő összeg
+- **Confirm Payment** || Fizetés gomb: a tranzakció véglegesítéséhez
+
+---
 
 ### Keresés és Szűrés
 
-- Használd a **keresőmezőt** a kívánt tartalom gyors megtalálásához.
-- A találatok között szűrhetsz kategóriák, dátum, vagy egyéb paraméterek alapján.
-- A részletes szűrés segít abban, hogy pontosan azt találjad, amit keresel.
+- A terméklistánál szűrhetsz kategóriák, dátum vagy egyéb paraméterek szerint.
+- A részletes szűrés segít abban, hogy pontosan megtaláld a kívánt terméket.
 
 ---
 
@@ -66,8 +100,11 @@ A weboldalon a könnyű navigáció érdekében a következő elemek állnak ren
 
 Amennyiben további kérdéseid vannak vagy segítségre van szükséged, az alábbi lehetőségek állnak rendelkezésedre:
 
-- **E-mail:** 
-- **Kapcsolati űrlap:** 
+**Kapcsolati űrlap:**  
+
+- Itt add meg a neved
+- Add meg az email címed.
+- És írd meg az üzeneted.
 
 ---
 
