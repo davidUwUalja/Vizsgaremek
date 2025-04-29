@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import axios from 'axios';
+import {http} from '@utils/http';
 
 export const useOrderDatasStore = defineStore('orderDatas', {
   state: () => ({
@@ -9,7 +9,7 @@ export const useOrderDatasStore = defineStore('orderDatas', {
   actions: {
     async createOrder(orderData) {
       try {
-        const response = await axios.post('http://backend.vm1.test/api/orders', orderData);
+        const response = await http.post('orders', orderData);
         this.orders.push(response.data);
         return response.data;
       } catch (error) {
