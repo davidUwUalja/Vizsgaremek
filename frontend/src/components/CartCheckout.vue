@@ -198,7 +198,7 @@ export default {
   },
   setup(props, { emit }) {
     const orderStore = useOrderDatasStore();
-    const { locale } = useI18n(); // Nyelv figyelése
+    const { locale } = useI18n(); 
 
     const fullName = ref('');
     const email = ref('');
@@ -208,8 +208,8 @@ export default {
     const cardNumber = ref('');
     const expiryDate = ref('');
     const cvv = ref('');
-    const selectedCurrency = ref('HUF'); // Mindig forint az alapértelmezett
-    const convertedPrice = ref(props.totalPrice); // Alapértelmezett ár forintban
+    const selectedCurrency = ref('HUF'); 
+    const convertedPrice = ref(props.totalPrice); 
     const exchangeRate = 370;
 
     const errors = ref({
@@ -244,59 +244,57 @@ export default {
     const convertPrice = () => {
       if(locale.value==='en') {
         if(selectedCurrency.value === 'HUF'){
-          convertedPrice.value = props.totalPrice * exchangeRate; // Angol nyelv esetén szorozzuk meg 370-nel
+          convertedPrice.value = props.totalPrice * exchangeRate; 
         }
         if(selectedCurrency.value === 'USD'){
-          convertedPrice.value = props.totalPrice; // Angol nyelv esetén marad dollár
+          convertedPrice.value = props.totalPrice; 
         }
       }
       if(locale.value==='hu') {
         if(selectedCurrency.value === 'HUF'){
-          convertedPrice.value = props.totalPrice; // Magyar nyelv esetén marad forint
+          convertedPrice.value = props.totalPrice; 
         }
         if(selectedCurrency.value === 'USD'){
-          convertedPrice.value = props.totalPrice / exchangeRate; // Magyar nyelv esetén osszuk el az árfolyammal
+          convertedPrice.value = props.totalPrice / exchangeRate; 
         }
       }
     };
 
-    // Nyelv figyelése és ár frissítése
     watch(locale, (newLocale) => {
 
       if (newLocale === 'en') {
-        convertedPrice.value = props.totalPrice * exchangeRate; // Angol nyelv esetén szorozzuk meg 370-nel
-        selectedCurrency.value = 'HUF'; // Alapértelmezett valuta dollár
+        convertedPrice.value = props.totalPrice * exchangeRate; 
+        selectedCurrency.value = 'HUF'; 
       } else {
-        convertedPrice.value = props.totalPrice; // Más nyelv esetén marad forint
-        selectedCurrency.value = 'HUF'; // Alapértelmezett valuta forint
+        convertedPrice.value = props.totalPrice; 
+        selectedCurrency.value = 'HUF'; 
       }
     });
 
-    // Nyelvváltás figyelése
     onMounted(() => {
       const navbar = document.querySelector('nav');
       navbar.addEventListener('languageChanged', (event) => {
         const newLocale = event.detail;
         if (newLocale === 'en') {
-          convertedPrice.value = props.totalPrice * exchangeRate; // Angol nyelv esetén szorozzuk meg 370-nel
-          selectedCurrency.value = 'HUF'; // Alapértelmezett valuta forint
+          convertedPrice.value = props.totalPrice * exchangeRate; 
+          selectedCurrency.value = 'HUF'; 
         } else {
-          convertedPrice.value = props.totalPrice; // Más nyelv esetén marad forint
-          selectedCurrency.value = 'HUF'; // Alapértelmezett valuta forint
+          convertedPrice.value = props.totalPrice; 
+          selectedCurrency.value = 'HUF'; 
         }
 
       });
 
       if(locale.value === 'en') {
-        props.totalPrice = props.totalPrice * exchangeRate; // Angol nyelv esetén szorozzuk meg 370-nel
-        selectedCurrency.value = 'USD'; // Alapértelmezett valuta dollár
+        props.totalPrice = props.totalPrice * exchangeRate; 
+        selectedCurrency.value = 'USD'; 
       } 
       if(locale.value === 'hu') {
-        convertedPrice.value = props.totalPrice; // Más nyelv esetén marad forint
-        selectedCurrency.value = 'HUF'; // Alapértelmezett valuta forint
+        convertedPrice.value = props.totalPrice; 
+        selectedCurrency.value = 'HUF'; 
       }
 
-      logCurrentLanguage(); // Kiírja a nyelvet a konzolra, amikor a komponens betöltődik
+      logCurrentLanguage();
     });
 
     const logCurrentLanguage = () => {
