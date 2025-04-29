@@ -127,6 +127,11 @@ import { http } from '@utils/http'
 const userStore = useUserStore()
 const router = useRouter()
 
+// --- Védelem: csak admin léphet be ---
+if (!userStore.user || userStore.user.role !== 'admin') {
+  router.replace({ path: '/', query: { showAuth: '1' } })
+}
+
 // Termékfeltöltés adatmodel
 const product = reactive({
   name_hu: '',
@@ -174,7 +179,7 @@ const submitProduct = async () => {
 
 const logout = () => {
   userStore.logout()
-  router.push('/login')
+  router.push({ path: '/', query: { showAuth: '1' } })
 }
 
 // Üzenetek lekérése
@@ -206,7 +211,9 @@ onMounted(() => {
 {
   "name": "adminSettings",
   "meta": {
-    "title": "Admin beállítások"
+    "title": "Admin beállítások",
+    "requiresAuth": true,
+    "role": "admin"
   }
 }
 </route>

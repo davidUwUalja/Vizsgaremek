@@ -49,11 +49,18 @@
 import { useUserStore } from "@stores/UserDatasStore.mjs";
 import { onMounted } from "vue";
 import { storeToRefs } from "pinia";
+import { useRouter } from "vue-router";
 
 export default {
   setup() {
     const userStore = useUserStore();
     const { getUserData } = storeToRefs(userStore);
+    const router = useRouter();
+
+    // --- Védelem: csak customer léphet be ---
+    if (!userStore.user || userStore.user.role !== 'customer') {
+      router.replace({ path: '/', query: { showAuth: '1' } });
+    }
 
     onMounted(() => {
       userStore.fetchUser();
@@ -70,7 +77,9 @@ export default {
 {
   "name": "userSettings",
   "meta": {
-    "title": "User beállítások"
+    "title": "User beállítások",
+    "requiresAuth": true,
+    "role": "customer"
   }
 }
 </route>

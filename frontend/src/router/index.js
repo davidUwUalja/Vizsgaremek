@@ -10,6 +10,17 @@ export const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const userStore = useUserStore()
-  console.log('[ROUTER GUARD] from', from.fullPath, '→ to', to.fullPath, '   userStore.user=', userStore.user)
+  const isLoggedIn = !!userStore.user
+  const userRole = userStore.user?.role
+
+  if (to.meta.requiresAuth) {
+    if (!isLoggedIn) {
+      // Főoldalra dobjuk vissza, AuthModal-t ott jelenítjük meg
+      return next({ path: '/', query: { showAuth: '1' } })
+    }
+    if (to.meta.role && userRole !== to.meta.role) {
+      return next('/')
+    }
+  }
   next()
 })
