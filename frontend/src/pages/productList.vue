@@ -96,7 +96,7 @@
 
 
 <script>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useProductStore } from '@stores/ProductDatasStore';
 import BaseLayout from '@layouts/BaseLayout.vue';
@@ -105,7 +105,7 @@ import ProductFilter from '@components/ProductFilter.vue';
 export default {
   name: 'productList',
   components: { BaseLayout, ProductFilter },
-  setup() {
+  setup(_, { emit }) {
     const productStore = useProductStore();
     const { locale } = useI18n();
     const products = computed(() => productStore.products);
@@ -132,7 +132,9 @@ export default {
         const mat = getLocalizedField(p, 'material');
         const matchCategory = !filters.value.categories.length || filters.value.categories.includes(cat);
         const matchMaterial = !filters.value.materials.length || filters.value.materials.includes(mat);
+       
         const price = getLocalizedField(p, 'price');
+
         const matchPrice =
           (filters.value.minPrice == null || price >= filters.value.minPrice) &&
           (filters.value.maxPrice == null || price <= filters.value.maxPrice);
@@ -163,6 +165,25 @@ export default {
     });
     const currency = computed(() => (locale.value === 'hu' ? 'Ft' : '$'));
 
+    const currentCurrency = ref(locale.value === 'hu' ? 'HUF' : 'USD');
+
+    // Watch for locale changes and update currency
+    watch(locale, (newLocale) => {
+      currentCurrency.value = newLocale === 'hu' ? 'HUF' : 'USD';
+      console.log('Locale changed to:', newLocale, 'Currency updated to:', currentCurrency.value);
+    });
+
+    const toggleCurrency = () => {
+      currentCurrency.value = currentCurrency.value === 'USD' ? 'HUF' : 'USD';
+      console.log('Current Currency:', currentCurrency.value);
+      emit('currencyChanged', currentCurrency.value);
+    };
+
+    const handleCurrencyChange = (newCurrency) => {
+      console.log('Currency changed to:', newCurrency);
+      currentCurrency.value = newCurrency; // Update the currency based on the event
+    };
+
     return {
       availableCategories,
       availableMaterials,
@@ -177,7 +198,10 @@ export default {
       toggleFilter,
       gridClasses,
       currency,
-      locale
+      locale,
+      handleCurrencyChange,
+      currentCurrency,
+      toggleCurrency
     };
   }
 };

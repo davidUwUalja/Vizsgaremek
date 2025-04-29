@@ -2,6 +2,14 @@
   <div class="p-4 bg-gray-100 border rounded-md shadow-md dark:bg-gray-800 dark:border-gray-700">
     <h3 class="text-lg font-semibold mb-4 dark:text-gray-100">{{ $t('filterTitle') }}</h3>
 
+    <!-- Currency Switch Button -->
+    <button
+      @click="toggleCurrency"
+      class="mb-4 px-4 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-800 transition-all duration-300 dark:bg-blue-500 dark:hover:bg-blue-700"
+    >
+      {{ currentCurrency }}
+    </button>
+
     <!-- Category -->
     <div class="mb-4">
       <p class="font-medium mb-2 dark:text-gray-200">{{ $t('category') }}</p>
@@ -65,14 +73,25 @@ export default {
     categories: { type: Array, required: true },
     materials: { type: Array, required: true }
   },
-  emits: ['apply'],
+  emits: ['apply', 'currencyChanged'],
   setup(props, { emit }) {
     const { locale } = useI18n();
+
+    // Currency state
+    const currentCurrency = ref(locale.value === 'en' ? 'USD' : 'HUF');
+
+    // Function to toggle currency
+    const toggleCurrency = () => {
+      currentCurrency.value = currentCurrency.value === 'USD' ? 'HUF' : 'USD';
+      console.log('Current Currency:', currentCurrency.value);
+      emit('currencyChanged', currentCurrency.value);
+    };
+
     const local = ref({ categories: [], materials: [], minPrice: null, maxPrice: null });
     const selected = ref(null);
 
     const priceRanges = computed(() =>
-      locale.value === 'hu'
+      currentCurrency.value === 'HUF'
         ? [
             { label: '1000 - 8000 Ft', min: 1000, max: 8000 },
             { label: '8001 - 15000 Ft', min: 8001, max: 15000 },
@@ -99,7 +118,15 @@ export default {
 
     const emitApply = () => emit('apply', { ...local.value });
 
-    return { local, selected, priceRanges, onRangeChange, emitApply };
+    return {
+      local,
+      selected,
+      priceRanges,
+      onRangeChange,
+      emitApply,
+      currentCurrency,
+      toggleCurrency
+    };
   }
 };
 </script>
