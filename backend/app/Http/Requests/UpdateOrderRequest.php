@@ -15,14 +15,14 @@ class UpdateOrderRequest extends FormRequest
     {
         return [
             'user_id' => ['required', 'exists:users,id'],
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string'],
             'email' => ['required', 'string'],
-            'address' => ['required', 'max:255'],
-            'city' => ['required', 'string', 'max:255'],
+            'address' => ['required', 'string'],
+            'city' => ['required', 'string'],
             'zip' => ['required', 'integer', 'digits:4'],
             'currency' => ['required', 'string', 'in:HUF,USD'],
             'total_price' => ['required', 'integer', 'min:0'],
-            'status' => ['sometimes', 'string', 'in:pending,completed,cancelled'],
+            'status' => ['required', 'string', 'in:pending,completed,cancelled'],
         ];
     }
 }

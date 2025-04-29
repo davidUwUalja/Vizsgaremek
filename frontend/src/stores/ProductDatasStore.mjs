@@ -51,7 +51,6 @@ export const useProductStore = defineStore("product", {
       this.cartItems = [];
       localStorage.setItem('cartItems', JSON.stringify([]));
     },
-    // New wishlist actions
     addToWishlist(product) {
       const existingItem = this.wishlistItems.find(item => item.id === product.id);
       if (!existingItem) {
@@ -67,7 +66,6 @@ export const useProductStore = defineStore("product", {
       this.addToCart(item);
       this.removeFromWishlist(item);
     },
-    // Initialize store from localStorage
     initializeFromStorage() {
       const storedCartItems = localStorage.getItem('cartItems');
       if (storedCartItems) {
