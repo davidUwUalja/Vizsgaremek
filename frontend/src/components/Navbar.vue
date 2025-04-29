@@ -117,31 +117,44 @@ export default {
     }
   },
   computed: {
-    isAuthenticated() {
-      return !!localStorage.getItem('token')
-    },
-    userStore() {
-      return useUserStore()
-    },
-    userRole() {
-      return this.userStore.user?.role || null
-    },
-    isAdmin() {
-      return this.userRole === 'admin'
-    },
-    settingsRoute() {
-      return this.isAdmin
-        ? { name: 'adminSettings' }
-        : { name: 'settings' }
-    },
+  isAuthenticated() {
+    // Akkor tekintjük bejelentkezettnek, ha van user objektum a store-ban
+    return !!this.userStore.user;
   },
-  created() {
-    if (this.isAuthenticated && !this.userStore.user) {
-      http.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
-      this.userStore.fetchUser()
+  userStore() {
+    return useUserStore();
+  },
+  userRole() {
+    return this.userStore.user?.role || null;
+  },
+  isAdmin() {
+    return this.userRole === 'admin';
+  },
+  settingsRoute() {
+    return this.isAdmin
+      ? { name: 'adminSettings' }
+      : { name: 'settings' };
+  },
+},
+created() {
+  if (localStorage.getItem('token') && !this.userStore.user) {
+    this.userStore.fetchUser();
+  }
+},
+watch: {
+  '$route'() {
+    if (localStorage.getItem('token') && !this.userStore.user) {
+      this.userStore.fetchUser();
     }
+  }
+},
+methods: {
+
+  handleLogout() {
+    localStorage.removeItem('token');
+    this.userStore.logout(); 
+    this.$router.push({ name: 'login' });
   },
-  methods: {
     toggleLanguageMenu() {
       this.isLanguageMenuOpen = !this.isLanguageMenuOpen
     },
@@ -160,11 +173,6 @@ export default {
     },
     closeModal() {
       this.isModalOpen = false
-    },
-    handleLogout() {
-      localStorage.removeItem('token')
-      this.userStore.$reset()
-      this.$router.push({ name: 'login' })
     },
   },
 }

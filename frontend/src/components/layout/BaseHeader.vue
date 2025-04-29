@@ -40,7 +40,6 @@ import CartCheckout from '@/components/CartCheckout.vue';
 import { useProductStore } from '@stores/ProductDatasStore';
 import AuthModal from '@/components/AuthModal.vue';
 import { useUserStore } from '@/stores/UserDatasStore.mjs';
-import { http } from '@utils/http'
 
 export default {
   components: { 
@@ -68,7 +67,7 @@ export default {
       return useProductStore().cartItems;
     },
     isAuthenticated() {
-      return !!localStorage.getItem('token')
+      return !!this.userStore.user;
     },
     userStore() {
       return useUserStore()
@@ -86,19 +85,11 @@ export default {
     },
   },
   created() {
-    if (this.isAuthenticated && !this.userStore.user) {
-      http.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
-      this.userStore.fetchUser()
-      
-    }
-    else{
-      this.userStore.logout();
-    }
+    // Csak wishlist/cart töltés maradjon!
     const storedWishlist = localStorage.getItem("wishlist");
     if (storedWishlist) {
       this.wishlistItems = JSON.parse(storedWishlist);
     }
-    
     const productStore = useProductStore();
     const storedCartItems = localStorage.getItem('cartItems');
     if (storedCartItems && productStore.cartItems.length === 0) {
