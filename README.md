@@ -1,120 +1,39 @@
-# Vizsgaremek
-# Online Webshop Projekt
+# 🏺 Antik Webshop
 
-Ez a projekt egy modern online webshop fejlesztését célozza, amelyet **Vue.js**, **Laravel** technológiák segítségével valósítunk meg. A cél egy reszponzív, könnyen használható webáruház, amely lehetővé teszi a termékek böngészését, kosárba helyezését, és rendelés leadását.
+<div align="center">
 
----
+<img src="https://cdn-icons-png.flaticon.com/512/3075/3075977.png" width="120" alt="Antik Shop ikon" />
 
-## 📋 Tartalomjegyzék
+</div>
 
-1. [Áttekintés](#áttekintés)
-2. [Funkcionális követelmények](#funkcionális-követelmények)
-3. [Technológiai választás és eszközök](#technológiai-választás-és-eszközök)
-4. [Szoftverarchitektúra](#szoftverarchitektúra)
-5. [Munkamegosztás](#munkamegosztás)
-6. [Fejlesztési ütemterv](#fejlesztési-ütemterv)
+## Bemutatkozás
+
+Ez a projekt egy **kazahsztáni antik tárgyakat kínáló webshop**, amelyet a 2024-2025-ös Projektmunka keretében fejlesztettünk.  
+A célunk egy letisztult, modern, de mégis klasszikus hangulatú online piactér létrehozása, ahol a felhasználók böngészhetnek, vásárolhatnak, az admin pedig könnyedén kezelheti a termékeket és az üzeneteket.
 
 ---
 
-## 🌟 Áttekintés
+## Fő funkciók
 
-Ez a projekt egy teljes funkcionalitású webshopot biztosít, amely tartalmazza a következő alapvető funkciókat:
-- Termékek megjelenítése és szűrése.
-- Kosár kezelés (termékek hozzáadása, eltávolítása, mennyiség módosítása).
-- Rendelés leadása és nyomon követése.
-- Adminisztrátori felület a termékek és rendelések kezelésére.
-- Reszponzív felhasználói felület asztali és mobil eszközökhöz.
-
----
-
-## ⚙️ Funkcionális követelmények
-
-1. **Felhasználói regisztráció és bejelentkezés**:
-   - JWT alapú autentikáció.
-   - Profil szerkesztése és jelszókezelés.
-
-2. **Termékek kezelése**:
-   - Böngészés és szűrés kategóriák, ár és egyéb tulajdonságok alapján.
-   - Termékek részletes adatai (név, ár, leírás, képek).
-
-3. **Kosár kezelés**:
-   - Dinamikusan frissülő kosár a termékekkel.
-   - Kosár tartalmának módosítása a felületen.
-
-4. **Rendeléskezelés**:
-   - Rendelések leadása.
-   - Adminisztrátori felületen állapotkövetés.
-
-5. **Adminisztrátori funkciók**:
-   - Termékek CRUD műveletei (létrehozás, megtekintés, frissítés, törlés).
-   - Rendelések kezelése.
+- 👤 **Regisztráció, bejelentkezés, jogosultságkezelés**
+- 🛒 **Termékek böngészése, vásárlás, rendeléskezelés**
+- 🏷️ **Többnyelvű termékadatok (magyar/angol)**
+- 🖼️ **Képfeltöltés (base64, csak adatbázisban tárolva)**
+- 📬 **Kapcsolatfelvételi űrlap, admin üzenetkezelés**
+- 🛠️ **Admin felület: termékfeltöltés, készletkezelés**
 
 ---
 
-## 🛠️ Technológiai választás és eszközök
+## Technológiák
 
-### **Frontend**
-- **Vue.js**: Felhasználói felület fejlesztése.
-- **TailwindCSS**: Modern és reszponzív dizájn kialakítása.
-- **Vue Router**: Navigáció kezelése.
-- **Vue**: Állapotkezelés (pl. kosár adatok, felhasználói adatok).
-
-### **Backend**
-- **Laravel**: Alkalmazás logikája, adatbázis-kezelés, és adminisztrációs funkciók.
-- **API**: RESTful API fejlesztése a frontend és backend kommunikációhoz.
-
-### **Adatbázis**
-- **MySQL/MariaDB**: Adattárolás a felhasználók, termékek, kosarak és rendelések számára.
+- **Frontend:** Vue 3, Vite, TailwindCSS, Pinia, FormKit
+- **Backend:** Laravel 10, REST API, Sanctum Auth
+- **Adatbázis:** MySQL/MariaDB (Docker konténerben)
+- **Egyéb:** Docker Compose, artisan migrációk, seeder-ek
 
 ---
 
-## 🏗️ Szoftverarchitektúra
-
-### **Frontend (Vue.js)**
-- A termékek megjelenítése és szűrése.
-- Kosár kezelése Vue - Pinia store segítségével.
-- Felhasználók regisztrációja és bejelentkezése.
-- Reszponzív dizájn TailwindCSS-sel.
-
-### **Backend (Laravel)**
-- Felhasználók kezelése (regisztráció, bejelentkezés, adminisztráció).
-- Termékek kezelése (CRUD műveletek).
-- Rendelések nyomon követése.
-- RESTful API végpontok a kosár, termékek, és rendelések kezelésére.
-
----
-
-## 👥 Munkamegosztás
-
-1. **Frontend fejlesztés (Vue.js)**:
-   - Navigációs rendszer kialakítása (Vue Router).
-   - Termékek, kosár és szűrési funkciók implementálása.
-   - TailwindCSS alapú reszponzív dizájn.
-
-2. **Backend fejlesztés (Laravel)**:
-   - Autentikáció és felhasználókezelés.
-   - Termékek CRUD műveleteinek megvalósítása.
-   - Rendelések adatkezelése és állapotkövetése.
-   - RESTful végpontok létrehozása a frontendhez.
-   - Kosár és rendelés adatkezelése az API-n keresztül
-
-3. **Tesztelés**:
-   - Frontend és backend funkciók unit tesztjei.
-   - Integrációs tesztek a RESTful API-hoz.
-
----
-
-## 📄 Dokumentáció
-
-A teljes dokumentáció tartalmazza:
-- **Adatbázis modell**: Diagram és exportfájl.
-- **Forráskód**: GitHub repository-n keresztül elérhető.
-- **Telepítési útmutató**: Lépésről lépésre bemutatja a szoftver telepítését.
-- **Tesztelési eredmények**: Részletes jelentés a tesztek eredményeiről.
-
----
-
-## 💻 Fejlesztők
+## Fejlesztők
 
 - **Kocsis András Barnabás** 
 - **Petz Dávid** 
@@ -122,4 +41,24 @@ A teljes dokumentáció tartalmazza:
 
 ---
 
-Köszönjük, hogy megnézted a projektünket! 🚀
+## Képernyőképek
+
+<div align="center">
+  <img src="https://user-images.githubusercontent.com/placeholder/antikshop-preview.png" width="600" alt="Webshop előnézet" />
+</div>
+
+---
+
+## Indítás
+
+```sh
+./start.sh
+```
+
+A részletes leírást lásd a projekt docs mappájában, az útmutató.md file-ban!
+
+---
+
+<div align="center">
+Köszönjük, hogy kipróbálod az Antik Webshopot!  
+</div>
