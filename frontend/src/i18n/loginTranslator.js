@@ -22,10 +22,5 @@ export const loginMessages = {
         registering: "Registering",
         registerSucces: "Registration successful, but automatic login failed!",
         mistake: "An error occurred during registration!",
-
-
-
     },
-
-
 }
