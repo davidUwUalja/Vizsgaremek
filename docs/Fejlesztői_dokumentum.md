@@ -24,6 +24,7 @@ A modern, Vue.js alapú webáruház projekt, mely TailwindCSS-sel, Pinia Store-o
 - [Internacionalizáció (vue-i18n)](#internacionalizáció-vue-i18n)
 - [Stílusok (TailwindCSS)](#stílusok-tailwindcss)
 - [Fejlesztői tippek](#fejlesztői-tippek)
+- [Backend dokumentáció](#backend-dokumentáció) 
 
 ---
 
@@ -274,5 +275,223 @@ const i18n = createI18n({ locale: 'hu', messages });
 
 ---
 
-*Jó munkát a fejlesztéshez!*
+## Backend dokumentáció 
+
+Köszönöm a részletes kódot! A megadott backend alapú Laravel rendszeredhez elkészítettem egy modern, esztétikus, jól strukturált és kóddal alátámasztott `README.md` fejlesztői dokumentációt. Az alábbi tartalom megfelel a következő elvárásoknak:
+
+- Minden komponens külön magyarázattal és példakóddal szerepel.
+- A design letisztult markdown formátumban épül fel.
+- A dokumentáció követi a REST architektúra alapelveit.
+- Az engedélyezések, middleware-ek, modellek és validációk is bemutatásra kerülnek.
+
+---
+
+
+
+# 🛠️ Laravel REST API Backend – Fejlesztői Dokumentáció
+
+Ez a dokumentáció a Laravel alapú RESTful API rendszered fejlesztői áttekintése. A rendszer több entitást kezel (Felhasználó, Termék, Megrendelés, Üzenet), valamint jogosultságkezelést, middleware-eket, validációt és erőforrásokat használ modern Laravel architektúrában.
+
+---
+
+## 📁 Felépítés
+
+```
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   ├── Middleware/
+│   │   ├── Requests/
+│   │   └── Resources/
+│   ├── Models/
+│   └── Providers/
+├── database/
+│   ├── migrations/
+│   └── seeders/
+├── routes/
+│   └── api.php
+```
+
+---
+
+## 🔐 Autentikáció és Regisztráció
+
+A felhasználók az alábbi végpontokkal tudnak regisztrálni vagy bejelentkezni:
+
+```php
+Route::post('/register', [AuthController::class, 'store']);
+Route::post('/login', [AuthController::class, 'authenticate']);
+```
+
+#### Regisztrációs Validáció
+
+```php
+public function rules(): array {
+    return [
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email',
+        'password' => 'required|string|min:6|confirmed',
+    ];
+}
+```
+
+---
+
+## 👤 Felhasználó Kezelés
+
+A felhasználók lekérdezése és módosítása történhet az alábbi végpontokon keresztül:
+
+```php
+Route::get('/users', [UserController::class, 'index'])->middleware('auth:sanctum');
+Route::put('/user', [UserController::class, 'update'])->middleware('can:update,user');
+Route::delete('/user/{user}', [UserController::class, 'delete'])->middleware('role:admin');
+```
+
+📌 **Jogosultságkezelés például:**
+
+```php
+Gate::define('update-user', [UserPolicy::class, 'update']);
+```
+
+---
+
+## 📦 Termékek API
+
+A termékek CRUD műveletei az alábbi útvonalakon érhetők el:
+
+```php
+Route::get('/products', [ProductController::class, 'index']);
+Route::get('/products/{id}', [ProductController::class, 'show']);
+Route::post('/products', [ProductController::class, 'store']);
+Route::put('/products/{id}', [ProductController::class, 'update']);
+Route::delete('/products/{id}', [ProductController::class, 'destroy']);
+```
+
+🧪 **Validáció például:**
+
+```php
+'price_hu' => 'required|numeric|min:0',
+'image_url' => 'nullable|string',
+```
+
+---
+
+## 📝 Kapcsolat (Contact) API
+
+Lehetővé teszi az üzenetek küldését és listázását:
+
+```php
+Route::post('/contact', [ContactController::class, 'store']);
+Route::get('/contact', [ContactController::class, 'index']);
+```
+
+---
+
+## 🛒 Megrendelések
+
+A `StoreOrderRequest` és `OrderController` biztosítja a teljes megrendelési folyamat kezelését.
+
+```php
+Route::post('/orders', [OrderController::class, 'store']);
+Route::put('/orders/{id}', [OrderController::class, 'update']);
+Route::delete('/orders/{id}', [OrderController::class, 'destroy']);
+```
+
+### Megrendelés tábla felépítése
+
+```php
+$table->foreignId('user_id')->constrained('users');
+$table->string('status')->default('pending');
+```
+
+---
+
+## 📦 Rendelési tételek
+
+A `OrderItemController` az egyes tételek kezeléséért felel:
+
+```php
+Route::post('/order-items', [OrderItemController::class, 'store']);
+Route::put('/order-items/{id}', [OrderItemController::class, 'update']);
+```
+
+---
+
+## 🧱 Migrációk példák
+
+```php
+Schema::create('contacts', function (Blueprint $table) {
+    $table->id();
+    $table->string('name');
+    $table->string('email');
+    $table->text('message');
+    $table->timestamps();
+});
+```
+
+---
+
+## 🧬 Seederek
+
+Kezdeti adatok betöltése:
+
+```php
+$this->call([
+    AdminUserSeeder::class,
+    ProductSeeder::class,
+]);
+```
+
+---
+
+## 🧩 Middleware & Role-kezelés
+
+Role-alapú jogosultság kezelés egyedi middleware-rel:
+
+```php
+$router->aliasMiddleware('role', RoleMiddleware::class);
+```
+
+---
+
+## 📚 Resource-ok
+
+Egységes JSON-válaszok biztosítása:
+
+```php
+class ProductResource extends JsonResource {
+    public function toArray(Request $request): array {
+        return [
+            'name_hu' => $this->name_hu,
+            'price_hu' => $this->price_hu,
+            ...
+        ];
+    }
+}
+```
+
+---
+
+## ✅ Tesztelési javaslatok (pl. Postman)
+
+### Példa: Bejelentkezés
+
+```json
+POST /api/login
+{
+  "email": "admin@admin.com",
+  "password": "adminpwd"
+}
+```
+
+### Példa: Termék létrehozása
+
+```json
+POST /api/products
+Authorization: Bearer <token>
+{
+  "name_hu": "Új Termék",
+  "price_hu": 9999
+}
+
 
