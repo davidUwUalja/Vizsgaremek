@@ -1,7 +1,7 @@
 # Vizsgaremek
 # Online Webshop Projekt
 
-Ez a projekt egy modern online webshop fejlesztését célozza, amelyet **Vue.js**, **Laravel**, és **C# API** technológiák segítségével valósítunk meg. A cél egy reszponzív, könnyen használható webáruház, amely lehetővé teszi a termékek böngészését, kosárba helyezését, és rendelés leadását.
+Ez a projekt egy modern online webshop fejlesztését célozza, amelyet **Vue.js**, **Laravel** technológiák segítségével valósítunk meg. A cél egy reszponzív, könnyen használható webáruház, amely lehetővé teszi a termékek böngészését, kosárba helyezését, és rendelés leadását.
 
 ---
 
