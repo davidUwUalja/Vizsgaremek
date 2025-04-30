@@ -285,3 +285,13 @@ onMounted(() => {
   fetchOrders()
 })
 </script>
+<route lang="json">
+  {
+    "name": "adminSettings",
+    "meta": {
+      "title": "Admin beállítások",
+      "requiresAuth": true,
+      "role": "admin"
+    }
+  }
+  </route>
