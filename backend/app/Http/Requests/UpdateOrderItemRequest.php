@@ -16,8 +16,8 @@ class UpdateOrderItemRequest extends FormRequest
         return [
             'order_id' => ['required', 'exists:orders,id'],
             'name' => ['required', 'string'],
-            'quantity' => ['required', 'integer', 'min:1'],
-            'price' => ['required', 'integer', 'min:0'],
+            'quantity' => ['required', 'integer'],
+            'price' => ['required', 'integer'],
         ];
     }
 }
