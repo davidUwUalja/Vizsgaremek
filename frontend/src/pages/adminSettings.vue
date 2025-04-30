@@ -1,37 +1,35 @@
 <template>
-  <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-    <div class="p-8">
-
-      <!-- Üzenetek blokk -->
-      <div class="max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-xl p-8 mb-8">
-        <h1 class="text-3xl font-bold text-center text-gray-900 dark:text-white mb-6">
-          Beérkezett üzenetek
-        </h1>
-        <div v-if="isLoadingContacts" class="text-center py-4 text-gray-600 dark:text-gray-300">
+  <BaseLayout>
+    <div class="flex flex-col items-center min-h-screen bg-amber-50 p-6">
+      <div class="bg-yellow-50 p-10 rounded-sm shadow-xl border-4 border-double border-yellow-700 max-w-4xl w-full mb-10">
+        <h2 class="text-3xl font-serif font-bold text-center text-yellow-900 mb-8 tracking-wide">
+          Admin – Beérkezett üzenetek
+        </h2>
+        <div v-if="isLoadingContacts" class="text-center py-4 text-yellow-800">
           Üzenetek betöltése...
         </div>
         <div v-else>
-          <div v-if="contacts.length === 0" class="text-center text-gray-600 dark:text-gray-300">
+          <div v-if="contacts.length === 0" class="text-center text-yellow-800">
             Nincs új üzenet.
           </div>
           <div v-else class="space-y-4">
             <div
               v-for="contact in contacts"
               :key="contact.id"
-              class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm bg-gray-50 dark:bg-gray-700"
+              class="p-4 border border-yellow-700 rounded bg-amber-100 shadow"
             >
               <div class="flex justify-between items-center">
-                <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-100">
+                <h3 class="text-xl font-semibold text-yellow-900">
                   {{ contact.name }}
-                </h2>
-                <span class="text-sm text-gray-500 dark:text-gray-300">
+                </h3>
+                <span class="text-sm text-yellow-700">
                   {{ formatDate(contact.created_at) }}
                 </span>
               </div>
-              <p class="mt-2 text-gray-700 dark:text-gray-200">
+              <p class="mt-2 text-yellow-800">
                 <strong>Email:</strong> {{ contact.email }}
               </p>
-              <p class="mt-2 text-gray-700 dark:text-gray-200">
+              <p class="mt-2 text-yellow-800">
                 {{ contact.message }}
               </p>
             </div>
@@ -39,152 +37,89 @@
         </div>
       </div>
 
-      <!-- Termék feltöltési blokk -->
-      <div class="max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-xl p-8">
-        <h1 class="text-3xl font-bold text-center text-gray-900 dark:text-white mb-6">
-          Antik tárgy feltöltése
-        </h1>
-
-        <form @submit.prevent="submitProduct">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label class="block font-semibold text-gray-700 dark:text-gray-200">Név (HU)</label>
-              <input v-model="product.name_hu" type="text" required class="input-field" />
-            </div>
-            <div>
-              <label class="block font-semibold text-gray-700 dark:text-gray-200">Név (EN)</label>
-              <input v-model="product.name_en" type="text" required class="input-field" />
-            </div>
-            <div>
-              <label class="block font-semibold text-gray-700 dark:text-gray-200">Anyag (HU)</label>
-              <input v-model="product.material_hu" type="text" required class="input-field" />
-            </div>
-            <div>
-              <label class="block font-semibold text-gray-700 dark:text-gray-200">Anyag (EN)</label>
-              <input v-model="product.material_en" type="text" required class="input-field" />
-            </div>
-            <div class="md:col-span-2">
-              <label class="block font-semibold text-gray-700 dark:text-gray-200">Leírás (HU)</label>
-              <textarea v-model="product.description_hu" class="input-field"></textarea>
-            </div>
-            <div class="md:col-span-2">
-              <label class="block font-semibold text-gray-700 dark:text-gray-200">Leírás (EN)</label>
-              <textarea v-model="product.description_en" class="input-field"></textarea>
-            </div>
-            <div>
-              <label class="block font-semibold text-gray-700 dark:text-gray-200">Ár (Ft)</label>
-              <input v-model.number="product.price_hu" type="number" step="0.01" required class="input-field" />
-            </div>
-            <div>
-              <label class="block font-semibold text-gray-700 dark:text-gray-200">Ár (EN)</label>
-              <input v-model.number="product.price_en" type="number" step="0.01" required class="input-field" />
-            </div>
-            <div>
-              <label class="block font-semibold text-gray-700 dark:text-gray-200">Kategória (HU)</label>
-              <input v-model="product.category_hu" type="text" class="input-field" />
-            </div>
-            <div>
-              <label class="block font-semibold text-gray-700 dark:text-gray-200">Kategória (EN)</label>
-              <input v-model="product.category_en" type="text" class="input-field" />
-            </div>
-            <div>
-              <label class="block font-semibold text-gray-700 dark:text-gray-200">Raktárkészlet</label>
-              <input v-model.number="product.stock" type="number" min="0" class="input-field" />
-            </div>
-            <div class="md:col-span-2">
-              <label class="block font-semibold text-gray-700 dark:text-gray-200">Kép</label>
-              <input type="file" accept="image/*" @change="handleFileUpload" class="input-field" />
-            </div>
+      <div class="bg-yellow-50 p-10 rounded-sm shadow-xl border-4 border-double border-yellow-700 max-w-4xl w-full mb-10">
+        <h2 class="text-3xl font-serif font-bold text-center text-yellow-900 mb-8 tracking-wide">
+          Megrendelések kezelése (Admin)
+        </h2>
+        <div v-if="isLoadingOrders" class="text-center py-4 text-yellow-800">
+          Megrendelések betöltése...
+        </div>
+        <div v-else>
+          <div v-if="orders.length === 0" class="text-center text-yellow-800">
+            Nincs megrendelés.
           </div>
-
-          <div v-if="successMessage" class="mt-6 p-4 bg-green-100 text-green-700 rounded-lg shadow">
-            {{ successMessage }}
+          <div v-else class="overflow-x-auto">
+            <table class="w-full border-collapse border border-yellow-700 text-yellow-900 bg-white rounded shadow">
+              <thead class="bg-yellow-100">
+                <tr>
+                  <th class="p-3 border border-yellow-700 text-left">Időpont</th>
+                  <th class="p-3 border border-yellow-700 text-left">Név</th>
+                  <th class="p-3 border border-yellow-700 text-left">Email</th>
+                  <th class="p-3 border border-yellow-700 text-left">Állapot</th>
+                  <th class="p-3 border border-yellow-700 text-left">Összeg</th>
+                  <th class="p-3 border border-yellow-700 text-left">Szállítási cím</th>
+                  <th class="p-3 border border-yellow-700 text-left">Művelet</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="order in orders" :key="order.id" class="hover:bg-yellow-50 transition">
+                  <td class="p-3 border border-yellow-700">{{ formatDate(order.created_at) }}</td>
+                  <td class="p-3 border border-yellow-700">{{ order.name }}</td>
+                  <td class="p-3 border border-yellow-700">{{ order.email }}</td>
+                  <td class="p-3 border border-yellow-700">
+                    <span
+                      :class="{
+                        'text-green-700 font-bold': order.status === 'completed',
+                        'text-yellow-700': order.status === 'pending',
+                        'text-gray-700': order.status === 'cancelled'
+                      }"
+                    >
+                      {{ order.status }}
+                    </span>
+                  </td>
+                  <td class="p-3 border border-yellow-700">{{ order.total_price }} Ft</td>
+                  <td class="p-3 border border-yellow-700">{{ order.address }}</td>
+                  <td class="p-3 border border-yellow-700">
+                    <select
+                      v-model="order.status"
+                      @change="changeOrderStatus(order)"
+                      class="border border-yellow-700 rounded px-2 py-1"
+                    >
+                      <option value="pending">pending</option>
+                      <option value="completed">completed</option>
+                      <option value="cancelled">cancelled</option>
+                    </select>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-          <div v-if="errorMessage" class="mt-6 p-4 bg-red-100 text-red-700 rounded-lg shadow">
-            {{ errorMessage }}
-          </div>
-
-          <div class="mt-6 flex flex-col space-y-4">
-            <button type="submit" class="w-full bg-indigo-600 text-white py-3 rounded-xl hover:bg-indigo-700 transition">
-              Feltöltés
-            </button>
-            <button @click.prevent="logout" class="w-full bg-red-600 text-white font-semibold py-3 rounded-xl hover:bg-red-700 transition">
-              Kijelentkezés
-            </button>
-          </div>
-        </form>
+        </div>
       </div>
     </div>
-  </div>
+  </BaseLayout>
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useUserStore } from '@stores/UserDatasStore.mjs'
+import { useOrderDatasStore } from '@stores/OrderDatasStore.mjs'
 import { useRouter } from 'vue-router'
 import { http } from '@utils/http'
+import BaseLayout from '@layouts/BaseLayout.vue'
 
 const userStore = useUserStore()
+const orderStore = useOrderDatasStore()
 const router = useRouter()
 
-// --- Védelem: csak admin léphet be ---
 if (!userStore.user || userStore.user.role !== 'admin') {
   router.replace({ path: '/', query: { showAuth: '1' } })
 }
 
-// Termékfeltöltés adatmodel
-const product = reactive({
-  name_hu: '',
-  name_en: '',
-  material_hu: '',
-  material_en: '',
-  description_hu: '',
-  description_en: '',
-  price_hu: null,
-  price_en: null,
-  image_url: '',
-  stock: 0,
-  category_hu: '',
-  category_en: ''
-})
-
-const successMessage = ref('')
-const errorMessage = ref('')
-
-// File feltöltés kezelése
-const handleFileUpload = (event) => {
-  const file = event.target.files[0]
-  const reader = new FileReader()
-  reader.onload = (e) => {
-    product.image_url = e.target.result
-  }
-  reader.readAsDataURL(file)
-}
-
-const submitProduct = async () => {
-  try {
-    await http.post('/products', product)
-    successMessage.value = 'Termék sikeresen feltöltve!'
-    errorMessage.value = ''
-    // reset
-    Object.keys(product).forEach(key => {
-      if (typeof product[key] === 'string') product[key] = ''
-      if (typeof product[key] === 'number') product[key] = 0
-    })
-  } catch (error) {
-    successMessage.value = ''
-    errorMessage.value = 'Hiba történt a termék feltöltésekor.'
-  }
-}
-
-const logout = () => {
-  userStore.logout()
-  router.push({ path: '/', query: { showAuth: '1' } })
-}
-
-// Üzenetek lekérése
 const contacts = ref([])
 const isLoadingContacts = ref(true)
+const orders = ref([])
+const isLoadingOrders = ref(true)
 
 const fetchContacts = async () => {
   try {
@@ -197,23 +132,33 @@ const fetchContacts = async () => {
   }
 }
 
+const fetchOrders = async () => {
+  try {
+    const response = await orderStore.fetchAllOrders()
+    orders.value = response
+  } catch (error) {
+    console.error('Hiba a megrendelések lekérésekor:', error)
+  } finally {
+    isLoadingOrders.value = false
+  }
+}
+
+const changeOrderStatus = async (order) => {
+  try {
+    await orderStore.updateOrderStatus(order.id, order.status)
+    // A helyi orders tömb már frissül a v-model miatt
+  } catch (error) {
+    alert('Nem sikerült frissíteni a rendelés állapotát!');
+  }
+}
+
 const formatDate = (dateString) => {
   const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }
-  return new Date(dateString).toLocaleString(undefined, options)
+  return new Date(dateString).toLocaleString('hu-HU', options)
 }
 
 onMounted(() => {
   fetchContacts()
+  fetchOrders()
 })
 </script>
-
-<route lang="json">
-{
-  "name": "adminSettings",
-  "meta": {
-    "title": "Admin beállítások",
-    "requiresAuth": true,
-    "role": "admin"
-  }
-}
-</route>

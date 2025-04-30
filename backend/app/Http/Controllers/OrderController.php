@@ -23,19 +23,27 @@ class OrderController extends Controller
         $order = Order::create($validated);
         return response()->json($order, 201);
     }
-
-    public function show(Order $order)
+    public function update(Request $request, Order $order)
     {
-        $order->load('user');
-        return response()->json($order);
-    }
-
-    public function update(UpdateOrderRequest $request, Order $order)
-    {
-        $validated = $request->validated();
+        if ($request->has('status') && count($request->except(['_method'])) === 1) {
+            $validated = $request->validate([
+                'status' => ['required', 'string', 'in:pending,completed,cancelled'],
+            ]);
+            $order->update($validated);
+            return response()->json($order);
+        }
+    
+        $validated = app(UpdateOrderRequest::class)->validated();
         $order->update($validated);
         return response()->json($order);
     }
+
+    // public function update(UpdateOrderRequest $request, Order $order)
+    // {
+    //     $validated = $request->validated();
+    //     $order->update($validated);
+    //     return response()->json($order);
+    // }
 
     public function destroy(Order $order)
     {
