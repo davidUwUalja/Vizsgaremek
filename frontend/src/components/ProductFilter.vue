@@ -2,7 +2,7 @@
   <div class="p-4 bg-gray-100 border rounded-md shadow-md dark:bg-gray-800 dark:border-gray-700">
     <h3 class="text-lg font-semibold mb-4 dark:text-gray-100">{{ $t('filterTitle') }}</h3>
 
-    <!-- Currency Switch Button -->
+    <!-- Currency Switch Button 
     <button
       @click="toggleCurrency"
       class="mb-4 px-4 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-800 transition-all duration-300 dark:bg-blue-500 dark:hover:bg-blue-700"
@@ -10,6 +10,8 @@
       {{ currentCurrency }}
     </button>
 
+    Nincs befejezve
+-->
     <!-- Category -->
     <div class="mb-4">
       <p class="font-medium mb-2 dark:text-gray-200">{{ $t('category') }}</p>
