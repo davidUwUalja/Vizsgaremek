@@ -57,11 +57,11 @@ Ez a projekt egy teljes funkcionalitású webshopot biztosít, amely tartalmazza
 - **Vue.js**: Felhasználói felület fejlesztése.
 - **TailwindCSS**: Modern és reszponzív dizájn kialakítása.
 - **Vue Router**: Navigáció kezelése.
-- **Vuex**: Állapotkezelés (pl. kosár adatok, felhasználói adatok).
+- **Vue**: Állapotkezelés (pl. kosár adatok, felhasználói adatok).
 
 ### **Backend**
 - **Laravel**: Alkalmazás logikája, adatbázis-kezelés, és adminisztrációs funkciók.
-- **C# API**: RESTful API fejlesztése a frontend és backend kommunikációhoz.
+- **API**: RESTful API fejlesztése a frontend és backend kommunikációhoz.
 
 ### **Adatbázis**
 - **MySQL/MariaDB**: Adattárolás a felhasználók, termékek, kosarak és rendelések számára.
@@ -72,7 +72,7 @@ Ez a projekt egy teljes funkcionalitású webshopot biztosít, amely tartalmazza
 
 ### **Frontend (Vue.js)**
 - A termékek megjelenítése és szűrése.
-- Kosár kezelése Vuex segítségével.
+- Kosár kezelése Vue - Pinia store segítségével.
 - Felhasználók regisztrációja és bejelentkezése.
 - Reszponzív dizájn TailwindCSS-sel.
 
