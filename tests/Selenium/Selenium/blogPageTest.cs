@@ -4,7 +4,7 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 using System;
 
-namespace CartCheckout
+namespace BlogPage
 {
     [TestClass]
     public class BlogPageTests
