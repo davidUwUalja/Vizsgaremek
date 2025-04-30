@@ -24,6 +24,7 @@
             type="text"
             v-model="fullName"
             @input="validateName"
+            :readonly="isLoggedIn"
             class="border-2 border-yellow-700 p-2 rounded-sm w-full bg-white focus:outline-none focus:ring-2 focus:ring-yellow-600"
             placeholder="John Doe"
           />
@@ -38,6 +39,7 @@
             type="email"
             v-model="email"
             @input="validateEmail"
+            :readonly="isLoggedIn"
             class="border-2 border-yellow-700 p-2 rounded-sm w-full bg-white focus:outline-none focus:ring-2 focus:ring-yellow-600"
             placeholder="example@email.com"
           />
@@ -185,7 +187,8 @@
 </template>
 
 <script>
-import { useOrderDatasStore } from '@/stores/OrderDatasStore.mjs';
+import { useOrderDatasStore } from '@stores/OrderDatasStore.mjs';
+import { useUserStore } from '@stores/UserDatasStore.mjs';
 import { ref, computed, watch, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -198,7 +201,10 @@ export default {
   },
   setup(props, { emit }) {
     const orderStore = useOrderDatasStore();
+    const userStore = useUserStore();
     const { locale } = useI18n(); 
+
+    const isLoggedIn = computed(() => !!userStore.user);
 
     const fullName = ref('');
     const email = ref('');
@@ -261,7 +267,6 @@ export default {
     };
 
     watch(locale, (newLocale) => {
-
       if (newLocale === 'en') {
         convertedPrice.value = props.totalPrice * exchangeRate; 
         selectedCurrency.value = 'HUF'; 
@@ -272,8 +277,13 @@ export default {
     });
 
     onMounted(() => {
+      // Ha be van jelentkezve, töltsük ki automatikusan a nevet és emailt
+      if (userStore.user) {
+        fullName.value = userStore.user.name || '';
+        email.value = userStore.user.email || '';
+      }
       const navbar = document.querySelector('nav');
-      navbar.addEventListener('languageChanged', (event) => {
+      navbar && navbar.addEventListener('languageChanged', (event) => {
         const newLocale = event.detail;
         if (newLocale === 'en') {
           convertedPrice.value = props.totalPrice * exchangeRate; 
@@ -282,7 +292,6 @@ export default {
           convertedPrice.value = props.totalPrice; 
           selectedCurrency.value = 'HUF'; 
         }
-
       });
 
       if(locale.value === 'en') {
@@ -431,7 +440,7 @@ export default {
       validateAllFields();
       if (isFormValid.value) {
         const orderData = {
-          user_id: 1,
+          user_id: userStore.user ? userStore.user.id : null,
           name: fullName.value,
           email: email.value,
           address: streetAddress.value,
@@ -481,6 +490,7 @@ export default {
       validateCVV,
       confirmPayment,
       logCurrentLanguage,
+      isLoggedIn,
     };
   },
 };
