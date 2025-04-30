@@ -1,6 +1,7 @@
 <template>
   <BaseLayout>
     <div class="flex flex-col items-center min-h-screen bg-amber-50 p-6">
+      <!-- Üzenetek -->
       <div class="bg-yellow-50 p-10 rounded-sm shadow-xl border-4 border-double border-yellow-700 max-w-4xl w-full mb-10">
         <h2 class="text-3xl font-serif font-bold text-center text-yellow-900 mb-8 tracking-wide">
           Admin – Beérkezett üzenetek
@@ -37,6 +38,7 @@
         </div>
       </div>
 
+      <!-- Megrendelések -->
       <div class="bg-yellow-50 p-10 rounded-sm shadow-xl border-4 border-double border-yellow-700 max-w-4xl w-full mb-10">
         <h2 class="text-3xl font-serif font-bold text-center text-yellow-900 mb-8 tracking-wide">
           Megrendelések kezelése (Admin)
@@ -96,12 +98,85 @@
           </div>
         </div>
       </div>
+
+      <!-- Termék feltöltés -->
+      <div class="bg-yellow-50 p-10 rounded-sm shadow-xl border-4 border-double border-yellow-700 max-w-3xl w-full mb-10">
+        <h2 class="text-3xl font-serif font-bold text-center text-yellow-900 mb-8 tracking-wide">
+          Új termék feltöltése
+        </h2>
+        <form @submit.prevent="submitProduct">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block font-semibold text-yellow-800 mb-1">Név (HU)</label>
+              <input v-model="product.name_hu" type="text" required class="input-field" />
+            </div>
+            <div>
+              <label class="block font-semibold text-yellow-800 mb-1">Név (EN)</label>
+              <input v-model="product.name_en" type="text" required class="input-field" />
+            </div>
+            <div>
+              <label class="block font-semibold text-yellow-800 mb-1">Anyag (HU)</label>
+              <input v-model="product.material_hu" type="text" required class="input-field" />
+            </div>
+            <div>
+              <label class="block font-semibold text-yellow-800 mb-1">Anyag (EN)</label>
+              <input v-model="product.material_en" type="text" required class="input-field" />
+            </div>
+            <div class="md:col-span-2">
+              <label class="block font-semibold text-yellow-800 mb-1">Leírás (HU)</label>
+              <textarea v-model="product.description_hu" class="input-field"></textarea>
+            </div>
+            <div class="md:col-span-2">
+              <label class="block font-semibold text-yellow-800 mb-1">Leírás (EN)</label>
+              <textarea v-model="product.description_en" class="input-field"></textarea>
+            </div>
+            <div>
+              <label class="block font-semibold text-yellow-800 mb-1">Ár (Ft)</label>
+              <input v-model.number="product.price_hu" type="number" step="0.01" required class="input-field" />
+            </div>
+            <div>
+              <label class="block font-semibold text-yellow-800 mb-1">Ár (EN)</label>
+              <input v-model.number="product.price_en" type="number" step="0.01" required class="input-field" />
+            </div>
+            <div>
+              <label class="block font-semibold text-yellow-800 mb-1">Kategória (HU)</label>
+              <input v-model="product.category_hu" type="text" class="input-field" />
+            </div>
+            <div>
+              <label class="block font-semibold text-yellow-800 mb-1">Kategória (EN)</label>
+              <input v-model="product.category_en" type="text" class="input-field" />
+            </div>
+            <div>
+              <label class="block font-semibold text-yellow-800 mb-1">Raktárkészlet</label>
+              <input v-model.number="product.stock" type="number" min="0" class="input-field" />
+            </div>
+            <div class="md:col-span-2">
+              <label class="block font-semibold text-yellow-800 mb-1">Kép (base64, csak adatbázisban tárolva)</label>
+              <input type="file" accept="image/*" @change="handleFileUpload" class="input-field" />
+              <div v-if="product.image_url" class="mt-2">
+                <img :src="product.image_url" alt="Előnézet" class="max-h-32 rounded shadow border border-yellow-700" />
+              </div>
+            </div>
+          </div>
+          <div v-if="successMessage" class="mt-6 p-4 bg-green-100 text-green-700 rounded-lg shadow">
+            {{ successMessage }}
+          </div>
+          <div v-if="errorMessage" class="mt-6 p-4 bg-red-100 text-red-700 rounded-lg shadow">
+            {{ errorMessage }}
+          </div>
+          <div class="mt-6 flex flex-col space-y-4">
+            <button type="submit" class="w-full bg-yellow-700 text-white py-3 rounded-xl hover:bg-yellow-900 transition">
+              Feltöltés
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   </BaseLayout>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { useUserStore } from '@stores/UserDatasStore.mjs'
 import { useOrderDatasStore } from '@stores/OrderDatasStore.mjs'
 import { useRouter } from 'vue-router'
@@ -146,9 +221,57 @@ const fetchOrders = async () => {
 const changeOrderStatus = async (order) => {
   try {
     await orderStore.updateOrderStatus(order.id, order.status)
-    // A helyi orders tömb már frissül a v-model miatt
   } catch (error) {
     alert('Nem sikerült frissíteni a rendelés állapotát!');
+  }
+}
+
+// ----- TERMÉK FELTÖLTÉS -----
+const product = reactive({
+  name_hu: '',
+  name_en: '',
+  material_hu: '',
+  material_en: '',
+  description_hu: '',
+  description_en: '',
+  price_hu: null,
+  price_en: null,
+  image_url: '',
+  stock: 0,
+  category_hu: '',
+  category_en: ''
+})
+
+const successMessage = ref('')
+const errorMessage = ref('')
+
+const handleFileUpload = (event) => {
+  const file = event.target.files[0]
+  if (!file) return
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    product.image_url = e.target.result
+  }
+  reader.readAsDataURL(file)
+}
+
+const submitProduct = async () => {
+  try {
+    // Csak a base64 rész kell, ne legyen benne a "data:image/jpeg;base64," prefix
+    if (product.image_url && product.image_url.startsWith('data:')) {
+      product.image_url = product.image_url.split(',')[1]
+    }
+    await http.post('/products', product)
+    successMessage.value = 'Termék sikeresen feltöltve!'
+    errorMessage.value = ''
+    // reset
+    Object.keys(product).forEach(key => {
+      if (typeof product[key] === 'string') product[key] = ''
+      if (typeof product[key] === 'number') product[key] = 0
+    })
+  } catch (error) {
+    successMessage.value = ''
+    errorMessage.value = 'Hiba történt a termék feltöltésekor.'
   }
 }
 
