@@ -38,38 +38,19 @@ A modern, Vue.js alapú webáruház projekt, mely TailwindCSS-sel, Pinia Store-o
 
 ---
 
-## Projekt struktúra
-
-```
-src/
-├─ components/       # Újrafelhasználható UI komponensek
-├─ layouts/          # Oldal sablonok (BaseLayout)
-├─ pages/            # Oldal komponensek (Landing, ProductList, stb.)
-├─ stores/           # Pinia store-ok
-├─ locales/          # i18n fordítások
-└─ utils/            # http, segédfüggvények
-```
-
----
-
 ## Telepítés
 
 ```bash
 # klónozd a repót
-git clone https://github.com/felhasznalo/webshop.git
-cd webshop
+git clone https://github.com/davidUwUalja/Vizsgaremek
+cd Vizsgaremek
 
-# függőségek telepítése
-npm install
-```
-
----
 
 ## Futtatás
 
 ```bash
 npm run dev
-# Böngészőben: http://localhost:3000
+# Böngészőben: http://frontend.vm1.test
 ```
 
 ---
