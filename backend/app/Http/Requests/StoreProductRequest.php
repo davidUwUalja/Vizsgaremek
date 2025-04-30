@@ -14,13 +14,18 @@ class StoreProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'material' => 'required|string|max:255',
-            'price' => 'required|numeric|min:0',
-            'description' => 'nullable|string',
+            'name_hu' => 'required|string|max:255',
+            'name_en' => 'required|string|max:255',
+            'material_hu' => 'required|string|max:255',
+            'material_en' => 'required|string|max:255',
+            'description_hu' => 'nullable|string',
+            'description_en' => 'nullable|string',
+            'price_hu' => 'required|numeric|min:0',
+            'price_en' => 'required|numeric|min:0',
             'image_url' => 'nullable|string',
             'stock' => 'nullable|integer|min:0',
-            'category' => 'nullable|string'
+            'category_hu' => 'nullable|string',
+            'category_en' => 'nullable|string'
         ];
     }
 }
