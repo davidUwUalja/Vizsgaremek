@@ -8,6 +8,8 @@ export const loginMessages = {
         name: "Név",
         repassword: "Jelszó megerősítése",
         registering: "Regisztrálás",
+        halfregisterSucces: "Regisztráció sikeres, de nem sikerült automatikusan belépni!",
+        mistake: "Hiba történt a regisztráció során!",
     },
     en: {
         login: "Login",
@@ -18,6 +20,8 @@ export const loginMessages = {
         name: "Name",
         repassword: "Confirm Password",
         registering: "Registering",
+        registerSucces: "Registration successful, but automatic login failed!",
+        mistake: "An error occurred during registration!",
 
 
 

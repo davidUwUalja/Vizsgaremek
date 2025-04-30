@@ -7,12 +7,12 @@
       </button>
 
       <h2 class="text-3xl font-serif font-bold mb-6 text-yellow-900 text-center">
-        {{ isLogin ? 'Bejelentkezés' : 'Regisztráció' }}
+        {{ isLogin ? $t('login') : $t('registering') }}
       </h2>
 
       <form @submit.prevent="isLogin ? login() : register()">
         <div v-if="!isLogin" class="mb-4">
-          <label class="block text-sm text-yellow-800 font-serif mb-1">Név</label>
+          <label class="block text-sm text-yellow-800 font-serif mb-1">{{ $t('name') }}</label>
           <input
             type="text"
             v-model="name"
@@ -32,7 +32,7 @@
         </div>
 
         <div class="mb-4">
-          <label class="block text-sm text-yellow-800 font-serif mb-1">Jelszó</label>
+          <label class="block text-sm text-yellow-800 font-serif mb-1">{{ $t('password') }}</label>
           <input
             type="password"
             v-model="password"
@@ -42,7 +42,7 @@
         </div>
 
         <div v-if="!isLogin" class="mb-4">
-          <label class="block text-sm text-yellow-800 font-serif mb-1">Jelszó megerősítése</label>
+          <label class="block text-sm text-yellow-800 font-serif mb-1"> {{ $t('repassword') }}</label>
           <input
             type="password"
             v-model="password_confirmation"
@@ -52,12 +52,12 @@
         </div>
 
         <button type="submit" class="w-full mt-6 bg-yellow-700 text-yellow-50 font-serif font-semibold p-2 rounded-sm border-2 border-yellow-800 shadow-md hover:bg-yellow-900 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300">
-          {{ isLogin ? 'Bejelentkezés' : 'Regisztráció' }}
+          {{ isLogin ? $t('login') : $t('registering') }}
         </button>
       </form>
 
       <button @click="toggleMode" class="mt-6 text-yellow-800 font-serif underline w-full text-center block hover:text-yellow-900 transition">
-        {{ isLogin ? 'Nincs még fiókod? Regisztrálj!' : 'Már van fiókod? Jelentkezz be!' }}
+        {{ isLogin ?  $t('register')  :  $t('loginMessages') }}
       </button>
 
     </div>
@@ -94,7 +94,7 @@ export default {
         this.closeModal();
         window.location.reload();
       } catch (error) {
-        alert("Hibás bejelentkezési adatok!");
+        alert( $t('error'));
       }
     },
     async register() {
@@ -131,10 +131,10 @@ export default {
               this.closeModal();
               window.location.reload();
             } else {
-              alert("Regisztráció sikeres, de nem sikerült automatikusan belépni!");
+              alert( $t('halfregisterSucces') );
             }
           } catch (loginError) {
-            alert("Regisztráció sikerült, de a belépés nem! Próbálj meg belépni manuálisan.");
+            alert( $t('halfregisterSucces') );
           }
         }
       } catch (error) {
@@ -142,7 +142,7 @@ export default {
           const errors = error.response.data.errors;
           alert(Object.values(errors).flat().join("\n"));
         } else {
-          alert("Hiba történt a regisztráció során.");
+          alert( $t('mistake') );
         }
       }
     },

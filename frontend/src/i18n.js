@@ -11,6 +11,7 @@ import { productFilterMessages } from './i18n/productFilterTranslator';
 import { wishlistPanelMessages } from './i18n/wishlistPanelTranslator';
 import { productDetailsMessages } from './i18n/productDetailsTranslator';
 import { loginMessages } from './i18n/loginTranslator';
+import { blogDetailsMessages } from './i18n/blogDetailsTranslator';
 const messages = {
   hu: {
     ...landingMessages.hu,
@@ -25,6 +26,7 @@ const messages = {
     ...wishlistPanelMessages.hu,
     ...productDetailsMessages.hu,
     ...loginMessages.hu,
+    ...blogDetailsMessages.hu,
   },
   en: {
     ...landingMessages.en,
@@ -39,7 +41,7 @@ const messages = {
     ...wishlistPanelMessages.en,
     ...productDetailsMessages.en,
     ...loginMessages.en,
-
+    ...blogDetailsMessages.en,
   },
   de: {
     ...landingMessages.de,
@@ -59,3 +61,5 @@ const i18n = createI18n({
 });
 
 export default i18n;
+
+
