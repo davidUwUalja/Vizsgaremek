@@ -20,7 +20,7 @@ class StoreOrderRequest extends FormRequest
             'address' => ['required', 'string'],
             'city' => ['required', 'string'],
             'zip' => ['required', 'integer', 'digits:4'],
-            'currency' => ['required', 'integer', 'in:HUF,USD'],
+            'currency' => ['required', 'string', 'in:HUF,USD'],
             'total_price' => ['required', 'integer'],
             'status' => ['required', 'string', 'in:pending,completed,cancelled'],
         ];
