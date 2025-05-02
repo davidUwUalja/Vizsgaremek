@@ -4,7 +4,7 @@ export const cartCheckoutMessages = {
         contactinfo: "Személyes adatok",
         fullname: "Teljes név",
         shipping: "Szállítási Cím",
-        street: "Utcai cím",
+        street: "Utca, házszám",
         city: "Város",
         postalcode: "Irányítószám",
         paymentDetails: "Fizetési adatok",

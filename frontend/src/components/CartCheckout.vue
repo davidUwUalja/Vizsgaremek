@@ -1,33 +1,27 @@
 <template>
   <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-    <div class="bg-yellow-50 p-6 rounded-lg shadow-lg max-w-md w-full border-2 border-yellow-800 max-h-screen overflow-y-auto">
+    <div
+      class="bg-yellow-50 p-6 rounded-lg shadow-lg max-w-md w-full border-2 border-yellow-800 max-h-screen overflow-y-auto">
       <div class="flex justify-between items-center mb-4 pb-2 border-b-2 border-yellow-700">
         <h2 class="text-2xl font-bold text-yellow-800 tracking-wide font-serif">
           {{ $t('payment') }}
         </h2>
-        <button
-          @click="$emit('close')"
-          class="text-yellow-700 hover:text-yellow-900 transition-colors duration-200 text-xl"
-        >
+        <button @click="$emit('close')"
+          class="text-yellow-700 hover:text-yellow-900 transition-colors duration-200 text-xl">
           ✕
         </button>
       </div>
 
       <div class="mb-4 border-b-2 border-yellow-700 pb-4">
         <h3 class="text-lg font-semibold text-yellow-800 mb-3"> {{ $t('contactinfo') }}</h3>
-        
+
         <div class="mb-3">
           <label class="block mb-2 text-yellow-800 font-medium">
             {{ $t('fullname') }}
           </label>
-          <input
-            type="text"
-            v-model="fullName"
-            @input="validateName"
-            :readonly="isLoggedIn"
+          <input type="text" v-model="fullName" @input="validateName" :readonly="isLoggedIn"
             class="border-2 border-yellow-700 p-2 rounded-sm w-full bg-white focus:outline-none focus:ring-2 focus:ring-yellow-600"
-            placeholder="John Doe"
-          />
+            placeholder="John Doe" />
           <p v-if="errors.fullName" class="mt-1 text-sm text-red-600">{{ errors.fullName }}</p>
         </div>
 
@@ -35,31 +29,23 @@
           <label class="block mb-2 text-yellow-800 font-medium">
             Email
           </label>
-          <input
-            type="email"
-            v-model="email"
-            @input="validateEmail"
-            :readonly="isLoggedIn"
+          <input type="email" v-model="email" @input="validateEmail" :readonly="isLoggedIn"
             class="border-2 border-yellow-700 p-2 rounded-sm w-full bg-white focus:outline-none focus:ring-2 focus:ring-yellow-600"
-            placeholder="example@email.com"
-          />
+            placeholder="example@email.com" />
           <p v-if="errors.email" class="mt-1 text-sm text-red-600">{{ errors.email }}</p>
         </div>
       </div>
 
       <div class="mb-4 border-b-2 border-yellow-700 pb-4">
         <h3 class="text-lg font-semibold text-yellow-800 mb-3"> {{ $t('shipping') }}</h3>
-        
+
         <div class="mb-3">
           <label class="block mb-2 text-yellow-800 font-medium">
             {{ $t('street') }}
           </label>
-          <input
-            type="text"
-            v-model="streetAddress"
+          <input type="text" v-model="streetAddress"
             class="border-2 border-yellow-700 p-2 rounded-sm w-full bg-white focus:outline-none focus:ring-2 focus:ring-yellow-600"
-            placeholder="Ember utca 11"
-          />
+            placeholder="Ember utca 11" />
           <p v-if="errors.streetAddress" class="mt-1 text-sm text-red-600">{{ errors.streetAddress }}</p>
         </div>
 
@@ -68,28 +54,19 @@
             <label class="block mb-2 text-yellow-800 font-medium">
               {{ $t('city') }}
             </label>
-            <input
-              type="text"
-              v-model="city"
-              @input="validateCity"
+            <input type="text" v-model="city" @input="validateCity"
               class="border-2 border-yellow-700 p-2 rounded-sm w-full bg-white focus:outline-none focus:ring-2 focus:ring-yellow-600"
-              placeholder="City"
-            />
+              placeholder="City" />
             <p v-if="errors.city" class="mt-1 text-sm text-red-600">{{ errors.city }}</p>
           </div>
 
           <div>
             <label class="block mb-2 text-yellow-800 font-medium">
-               {{ $t('postalcode') }}
+              {{ $t('postalcode') }}
             </label>
-            <input
-              type="text"
-              v-model="zipCode"
-              @input="validateZipCode"
-              maxlength="4"
+            <input type="text" v-model="zipCode" @input="validateZipCode" maxlength="4"
               class="border-2 border-yellow-700 p-2 rounded-sm w-full bg-white focus:outline-none focus:ring-2 focus:ring-yellow-600"
-              placeholder="1234"
-            />
+              placeholder="1234" />
             <p v-if="errors.zipCode" class="mt-1 text-sm text-red-600">{{ errors.zipCode }}</p>
           </div>
         </div>
@@ -97,16 +74,13 @@
 
       <div class="mb-4">
         <h3 class="text-lg font-semibold text-yellow-800 mb-3"> {{ $t('paymentDetails') }}</h3>
-        
+
         <div class="mb-3">
           <label class="block mb-2 text-yellow-800 font-medium">
             {{ $t('currency') }}
           </label>
-          <select
-            v-model="selectedCurrency"
-            @change="convertPrice"
-            class="border-2 border-yellow-700 p-2 rounded-sm w-full bg-white focus:outline-none focus:ring-2 focus:ring-yellow-600"
-          >
+          <select v-model="selectedCurrency" @change="convertPrice"
+            class="border-2 border-yellow-700 p-2 rounded-sm w-full bg-white focus:outline-none focus:ring-2 focus:ring-yellow-600">
             <option value="HUF">HUF</option>
             <option value="USD">USD</option>
           </select>
@@ -120,33 +94,22 @@
 
         <div class="mb-3">
           <label class="block mb-2 text-yellow-800 font-medium">
-             {{ $t('cardNumber') }}
+            {{ $t('cardNumber') }}
           </label>
-          <input
-            type="text"
-            v-model="cardNumber"
-            @input="formatCardNumber"
-            maxlength="19"
+          <input type="text" v-model="cardNumber" @input="formatCardNumber" maxlength="19"
             class="border-2 border-yellow-700 p-2 rounded-sm w-full bg-white focus:outline-none focus:ring-2 focus:ring-yellow-600"
-            placeholder="1234 5678 9012 3456"
-          />
+            placeholder="1234 5678 9012 3456" />
           <p v-if="errors.cardNumber" class="mt-1 text-sm text-red-600">{{ errors.cardNumber }}</p>
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block mb-2 text-yellow-800 font-medium">
-               {{ $t('expiryDate') }}
+              {{ $t('expiryDate') }}
             </label>
-            <input
-              type="text"
-              v-model="expiryDate"
-              @input="formatExpiryDate"
-              @blur="validateExpiryDate"
-              maxlength="5"
+            <input type="text" v-model="expiryDate" @input="formatExpiryDate" @blur="validateExpiryDate" maxlength="5"
               class="border-2 border-yellow-700 p-2 rounded-sm w-full bg-white focus:outline-none focus:ring-2 focus:ring-yellow-600"
-              placeholder="MM/YY"
-            />
+              placeholder="MM/YY" />
             <p v-if="errors.expiryDate" class="mt-1 text-sm text-red-600">{{ errors.expiryDate }}</p>
           </div>
 
@@ -154,32 +117,23 @@
             <label class="block mb-2 text-yellow-800 font-medium">
               CCV
             </label>
-            <input
-              type="text"
-              v-model="cvv"
-              @input="validateCVV"
-              maxlength="3"
+            <input type="text" v-model="cvv" @input="validateCVV" maxlength="3"
               class="border-2 border-yellow-700 p-2 rounded-sm w-full bg-white focus:outline-none focus:ring-2 focus:ring-yellow-600"
-              placeholder="123"
-            />
+              placeholder="123" />
             <p v-if="errors.cvv" class="mt-1 text-sm text-red-600">{{ errors.cvv }}</p>
           </div>
         </div>
       </div>
 
       <div class="mt-6 space-y-3">
-        <button
-          @click="confirmPayment"
-          class="w-full px-4 py-3 bg-yellow-700 text-yellow-50 font-serif font-semibold rounded-sm border-2 border-yellow-800 hover:bg-yellow-900 transition-all duration-300 shadow-md hover:shadow-xl"
-        >
+        <button @click="confirmPayment"
+          class="w-full px-4 py-3 bg-yellow-700 text-yellow-50 font-serif font-semibold rounded-sm border-2 border-yellow-800 hover:bg-yellow-900 transition-all duration-300 shadow-md hover:shadow-xl">
           {{ $t('Confirm') }}
         </button>
 
-        <button
-          @click="$emit('close')"
-          class="w-full px-4 py-3 bg-red-700 text-red-50 font-serif font-semibold rounded-sm border-2 border-red-800 hover:bg-red-900 transition-all duration-300 shadow-md hover:shadow-xl"
-        >
-           {{ $t('Cancel') }}
+        <button @click="$emit('close')"
+          class="w-full px-4 py-3 bg-red-700 text-red-50 font-serif font-semibold rounded-sm border-2 border-red-800 hover:bg-red-900 transition-all duration-300 shadow-md hover:shadow-xl">
+          {{ $t('Cancel') }}
         </button>
       </div>
     </div>
@@ -189,6 +143,7 @@
 <script>
 import { useOrderDatasStore } from '@stores/OrderDatasStore.mjs';
 import { useUserStore } from '@stores/UserDatasStore.mjs';
+import { useProductStore } from '@stores/ProductDatasStore.mjs'; 
 import { ref, computed, watch, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -202,7 +157,8 @@ export default {
   setup(props, { emit }) {
     const orderStore = useOrderDatasStore();
     const userStore = useUserStore();
-    const { locale } = useI18n(); 
+    const productStore = useProductStore(); 
+    const { locale } = useI18n();
 
     const isLoggedIn = computed(() => !!userStore.user);
 
@@ -214,8 +170,8 @@ export default {
     const cardNumber = ref('');
     const expiryDate = ref('');
     const cvv = ref('');
-    const selectedCurrency = ref('HUF'); 
-    const convertedPrice = ref(props.totalPrice); 
+    const selectedCurrency = ref('HUF');
+    const convertedPrice = ref(props.totalPrice);
     const exchangeRate = 370;
 
     const errors = ref({
@@ -248,36 +204,35 @@ export default {
     });
 
     const convertPrice = () => {
-      if(locale.value==='en') {
-        if(selectedCurrency.value === 'HUF'){
-          convertedPrice.value = props.totalPrice * exchangeRate; 
+      if (locale.value === 'en') {
+        if (selectedCurrency.value === 'HUF') {
+          convertedPrice.value = props.totalPrice * exchangeRate;
         }
-        if(selectedCurrency.value === 'USD'){
-          convertedPrice.value = props.totalPrice; 
+        if (selectedCurrency.value === 'USD') {
+          convertedPrice.value = props.totalPrice;
         }
       }
-      if(locale.value==='hu') {
-        if(selectedCurrency.value === 'HUF'){
-          convertedPrice.value = props.totalPrice; 
+      if (locale.value === 'hu') {
+        if (selectedCurrency.value === 'HUF') {
+          convertedPrice.value = props.totalPrice;
         }
-        if(selectedCurrency.value === 'USD'){
-          convertedPrice.value = props.totalPrice / exchangeRate; 
+        if (selectedCurrency.value === 'USD') {
+          convertedPrice.value = props.totalPrice / exchangeRate;
         }
       }
     };
 
     watch(locale, (newLocale) => {
       if (newLocale === 'en') {
-        convertedPrice.value = props.totalPrice * exchangeRate; 
-        selectedCurrency.value = 'HUF'; 
+        convertedPrice.value = props.totalPrice * exchangeRate;
+        selectedCurrency.value = 'HUF';
       } else {
-        convertedPrice.value = props.totalPrice; 
-        selectedCurrency.value = 'HUF'; 
+        convertedPrice.value = props.totalPrice;
+        selectedCurrency.value = 'HUF';
       }
     });
 
     onMounted(() => {
-      // Ha be van jelentkezve, töltsük ki automatikusan a nevet és emailt
       if (userStore.user) {
         fullName.value = userStore.user.name || '';
         email.value = userStore.user.email || '';
@@ -286,21 +241,21 @@ export default {
       navbar && navbar.addEventListener('languageChanged', (event) => {
         const newLocale = event.detail;
         if (newLocale === 'en') {
-          convertedPrice.value = props.totalPrice * exchangeRate; 
-          selectedCurrency.value = 'HUF'; 
+          convertedPrice.value = props.totalPrice * exchangeRate;
+          selectedCurrency.value = 'HUF';
         } else {
-          convertedPrice.value = props.totalPrice; 
-          selectedCurrency.value = 'HUF'; 
+          convertedPrice.value = props.totalPrice;
+          selectedCurrency.value = 'HUF';
         }
       });
 
-      if(locale.value === 'en') {
-        props.totalPrice = props.totalPrice * exchangeRate; 
-        selectedCurrency.value = 'USD'; 
-      } 
-      if(locale.value === 'hu') {
-        convertedPrice.value = props.totalPrice; 
-        selectedCurrency.value = 'HUF'; 
+      if (locale.value === 'en') {
+        props.totalPrice = props.totalPrice * exchangeRate;
+        selectedCurrency.value = 'USD';
+      }
+      if (locale.value === 'hu') {
+        convertedPrice.value = props.totalPrice;
+        selectedCurrency.value = 'HUF';
       }
 
       logCurrentLanguage();
@@ -334,12 +289,12 @@ export default {
     };
 
     const validateCity = () => {
-      const regex = /^[A-Za-z\s]+$/;
+      const regex = /^[\p{L}\s'-]+$/u;
       if (!city.value) {
         errors.value.city = 'City is required';
       } else if (!regex.test(city.value)) {
         errors.value.city = 'Only letters are allowed';
-        city.value = city.value.replace(/[^A-Za-z\s]/g, '');
+        city.value = city.value.replace(/[^\p{L}\s'-]/gu, '');
       } else {
         errors.value.city = '';
       }
@@ -454,6 +409,7 @@ export default {
         try {
           await orderStore.createOrder(orderData);
           alert('Order placed successfully!');
+          productStore.clearCart(); 
           emit('close');
         } catch (error) {
           console.error(error);

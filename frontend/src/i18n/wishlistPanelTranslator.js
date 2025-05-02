@@ -1,6 +1,6 @@
 export const wishlistPanelMessages = {
     hu: {
-        wishlist: "wishlist",
+        wishlist: "Kivánságlista",
         empty: "Üres",
         addToCart: "Kosárba helyezés",
         remove: "Eltávolítás",
